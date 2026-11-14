@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dtgicts7ou5n4"
-path="res://.godot/imported/projectile-arsenal_rocket_plasma_e_32.png-9aadb9c022872a22ef840366ee7f9b25.ctex"
+path="res://.godot/imported/projectile-arsenal_rocket_plasma_e_32.png-0a6dda7212ca481b3db870880d2a6733.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_rocket_plasma_e_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_rocket_plasma_e_32.png-9aadb9c022872a22ef840366ee7f9b25.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_rocket_plasma_e_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_rocket_plasma_e_32.png-0a6dda7212ca481b3db870880d2a6733.ctex"]
 
 [params]
 

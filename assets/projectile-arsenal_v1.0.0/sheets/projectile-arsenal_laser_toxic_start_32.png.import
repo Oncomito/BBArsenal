@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cflribvrm5qsg"
-path="res://.godot/imported/projectile-arsenal_laser_toxic_start_32.png-2d5b3ffd0185507f71a55f8cc32e0aa4.ctex"
+path="res://.godot/imported/projectile-arsenal_laser_toxic_start_32.png-1247dfb16d6797c4e1724bad66f500e1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_toxic_start_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_laser_toxic_start_32.png-2d5b3ffd0185507f71a55f8cc32e0aa4.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_toxic_start_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_laser_toxic_start_32.png-1247dfb16d6797c4e1724bad66f500e1.ctex"]
 
 [params]
 

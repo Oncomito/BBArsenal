@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://c4en333yhb7vv"
-path="res://.godot/imported/floraphonic-fireball-whoosh-1-179125.mp3-423aa964da065c84d5105cd3c24f8263.mp3str"
+path="res://.godot/imported/floraphonic-fireball-whoosh-1-179125.mp3-6986e7af8bd5c85490d4e5f631bf9711.mp3str"
 
 [deps]
 
-source_file="res://asset/sound/floraphonic-fireball-whoosh-1-179125.mp3"
-dest_files=["res://.godot/imported/floraphonic-fireball-whoosh-1-179125.mp3-423aa964da065c84d5105cd3c24f8263.mp3str"]
+source_file="res://assets/sound/floraphonic-fireball-whoosh-1-179125.mp3"
+dest_files=["res://.godot/imported/floraphonic-fireball-whoosh-1-179125.mp3-6986e7af8bd5c85490d4e5f631bf9711.mp3str"]
 
 [params]
 

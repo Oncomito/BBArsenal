@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://crkin0v43ow8"
-path="res://.godot/imported/projectile-arsenal_laser_fire_end_32.png-adb70c5cdad948a87b1ae6bab74893bd.ctex"
+path="res://.godot/imported/projectile-arsenal_laser_fire_end_32.png-14392d61765e7d596ab54a1364a6f6a8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_fire_end_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_laser_fire_end_32.png-adb70c5cdad948a87b1ae6bab74893bd.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_fire_end_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_laser_fire_end_32.png-14392d61765e7d596ab54a1364a6f6a8.ctex"]
 
 [params]
 

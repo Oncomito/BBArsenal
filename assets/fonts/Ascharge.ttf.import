@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://dd2kupryptx4p"
-path="res://.godot/imported/Ascharge.ttf-7a8577192f2adf48cef580ee2696ca67.fontdata"
+path="res://.godot/imported/Ascharge.ttf-373e1d4541bc5669aa06cde1be4f0a1c.fontdata"
 
 [deps]
 
-source_file="res://asset/font/Ascharge.ttf"
-dest_files=["res://.godot/imported/Ascharge.ttf-7a8577192f2adf48cef580ee2696ca67.fontdata"]
+source_file="res://assets/fonts/Ascharge.ttf"
+dest_files=["res://.godot/imported/Ascharge.ttf-373e1d4541bc5669aa06cde1be4f0a1c.fontdata"]
 
 [params]
 

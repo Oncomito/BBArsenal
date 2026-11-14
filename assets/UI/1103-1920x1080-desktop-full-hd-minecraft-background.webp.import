@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cqtpj4thcqvlg"
-path="res://.godot/imported/1103-1920x1080-desktop-full-hd-minecraft-background.webp-88aa64137323b22b762b8f61248a5abc.ctex"
+path="res://.godot/imported/1103-1920x1080-desktop-full-hd-minecraft-background.webp-0ed36d5ffeee9be3a3dff25b06998d83.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/UI/1103-1920x1080-desktop-full-hd-minecraft-background.webp"
-dest_files=["res://.godot/imported/1103-1920x1080-desktop-full-hd-minecraft-background.webp-88aa64137323b22b762b8f61248a5abc.ctex"]
+source_file="res://assets/UI/1103-1920x1080-desktop-full-hd-minecraft-background.webp"
+dest_files=["res://.godot/imported/1103-1920x1080-desktop-full-hd-minecraft-background.webp-0ed36d5ffeee9be3a3dff25b06998d83.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://br2hwr05ymu2c"
-path="res://.godot/imported/projectile-arsenal_disc_crimson_32.png-180cb5de77d514cad4e742718a3eb8d8.ctex"
+path="res://.godot/imported/projectile-arsenal_disc_crimson_32.png-114af80b250a7ad67a68ecfda156e917.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_disc_crimson_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_disc_crimson_32.png-180cb5de77d514cad4e742718a3eb8d8.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_disc_crimson_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_disc_crimson_32.png-114af80b250a7ad67a68ecfda156e917.ctex"]
 
 [params]
 

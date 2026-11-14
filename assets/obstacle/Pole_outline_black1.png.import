@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://baoulwiltvy3x"
-path="res://.godot/imported/Pole_outline_black1.png-ef57035c95e59743ec75fa651cefc431.ctex"
+path="res://.godot/imported/Pole_outline_black1.png-bd9c968f500b206058c92ad090e02872.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/obstacle/Pole_outline_black1.png"
-dest_files=["res://.godot/imported/Pole_outline_black1.png-ef57035c95e59743ec75fa651cefc431.ctex"]
+source_file="res://assets/obstacle/Pole_outline_black1.png"
+dest_files=["res://.godot/imported/Pole_outline_black1.png-bd9c968f500b206058c92ad090e02872.ctex"]
 
 [params]
 

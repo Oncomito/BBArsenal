@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cgr8e25i35fhe"
-path="res://.godot/imported/projectile-arsenal_flash_energy_toxic_e_32.png-ee7f1ff1103af59f5036414eff7383c5.ctex"
+path="res://.godot/imported/projectile-arsenal_flash_energy_toxic_e_32.png-f8151228f4e4aa9410363f0cdae46672.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_flash_energy_toxic_e_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_flash_energy_toxic_e_32.png-ee7f1ff1103af59f5036414eff7383c5.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_flash_energy_toxic_e_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_flash_energy_toxic_e_32.png-f8151228f4e4aa9410363f0cdae46672.ctex"]
 
 [params]
 

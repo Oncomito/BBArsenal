@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cm58a2ex8t1k4"
-path="res://.godot/imported/projectile-arsenal_rocket_electric_e_32.png-341f9c993160eaffc12e44aacd7ffbb5.ctex"
+path="res://.godot/imported/projectile-arsenal_rocket_electric_e_32.png-6317f476b9d16938d9c06ccce299d70d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_rocket_electric_e_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_rocket_electric_e_32.png-341f9c993160eaffc12e44aacd7ffbb5.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_rocket_electric_e_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_rocket_electric_e_32.png-6317f476b9d16938d9c06ccce299d70d.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://yg6mpqglhhem"
-path="res://.godot/imported/projectile-arsenal_laser_electric_mid_32.png-b51e5aed8bca5eff64d54822b4d94af4.ctex"
+path="res://.godot/imported/projectile-arsenal_laser_electric_mid_32.png-dc94bda4b2c4604235869dbd3c826422.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_electric_mid_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_laser_electric_mid_32.png-b51e5aed8bca5eff64d54822b4d94af4.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_electric_mid_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_laser_electric_mid_32.png-dc94bda4b2c4604235869dbd3c826422.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b3ct8uwa7jll4"
-path="res://.godot/imported/projectile-arsenal_laser_shadow_mid_32.png-b35ae6c9b0e9ece759a4368332fee30d.ctex"
+path="res://.godot/imported/projectile-arsenal_laser_shadow_mid_32.png-57fbe51a3e40ea4f870fc8e4e7d1b299.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_shadow_mid_32.png"
-dest_files=["res://.godot/imported/projectile-arsenal_laser_shadow_mid_32.png-b35ae6c9b0e9ece759a4368332fee30d.ctex"]
+source_file="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_laser_shadow_mid_32.png"
+dest_files=["res://.godot/imported/projectile-arsenal_laser_shadow_mid_32.png-57fbe51a3e40ea4f870fc8e4e7d1b299.ctex"]
 
 [params]
 
