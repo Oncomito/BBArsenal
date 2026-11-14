@@ -5,6 +5,13 @@
 
 [node name="main" type="Node2D" unique_id=1102324276]
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=881775933]
+offset_left = -8175.0
+offset_top = -5135.0
+offset_right = 10008.0
+offset_bottom = 6145.0
+color = Color(0, 0, 0, 1)
+
 [node name="Levels" type="Node2D" parent="." unique_id=53004094]
 
 [node name="Level1CyberArena" parent="Levels" unique_id=908846851 instance=ExtResource("1_iuonh")]
