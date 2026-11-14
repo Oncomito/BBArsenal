@@ -25,6 +25,10 @@ AudioManager="*uid://1qhywl3ams5k"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[dotnet]
+
+project/assembly_name="HavenJakarta"
+
 [input]
 
 up={
