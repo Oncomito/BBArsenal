@@ -56,3 +56,7 @@ text = "Settings"
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_rxvc7")
 text = "exit"
+
+[connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_exit_pressed"]
