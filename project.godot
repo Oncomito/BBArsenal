@@ -20,8 +20,11 @@ config/icon="res://icon.svg"
 
 GameManager="*uid://b1ob117q78v87"
 AudioManager="*uid://1qhywl3ams5k"
+<<<<<<< HEAD
 Gamemanager="*uid://b1ob117q78v87"
 Audiomanager="*uid://1qhywl3ams5k"
+=======
+>>>>>>> 606ecd563b68ede4f200588b238c793cf461da15
 
 [display]
 
