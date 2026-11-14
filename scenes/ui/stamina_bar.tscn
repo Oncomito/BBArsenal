@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bs6j3y8q2t5nw"]
+
+[ext_resource type="Script" path="res://scenes/ui/stamina_bar.gd" id="1_stamina"]
+[ext_resource type="FontFile" uid="uid://rj7dwdgpy2oc" path="res://assets/fonts/Sandra.ttf" id="2_font"]
+
+[node name="StaminaHUD" type="CanvasLayer"]
+layer = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -65.0
+offset_right = 260.0
+grow_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.92, 1, 0.95)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+text = "STAMINA"
+
+[node name="StaminaBar" type="Control" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(226, 16)
+layout_mode = 2
+script = ExtResource("1_stamina")
