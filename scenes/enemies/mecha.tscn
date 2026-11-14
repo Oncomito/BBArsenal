@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://dy2eclfjpfkqu"]
+
+[ext_resource type="Texture2D" uid="uid://0oj75ljsqf5o" path="res://assets/mecha/mecha red.png" id="1_2n11x"]
+[ext_resource type="Script" path="res://scenes/enemies/mecha.gd" id="2_mecha_script"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3qjkr"]
+atlas = ExtResource("1_2n11x")
+region = Rect2(0, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgj0o"]
+atlas = ExtResource("1_2n11x")
+region = Rect2(70, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvs4a"]
+atlas = ExtResource("1_2n11x")
+region = Rect2(140, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1djm"]
+atlas = ExtResource("1_2n11x")
+region = Rect2(210, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdswb"]
+atlas = ExtResource("1_2n11x")
+region = Rect2(280, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l31gj"]
+atlas = ExtResource("1_2n11x")
+region = Rect2(350, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5bkd"]
+atlas = ExtResource("1_2n11x")
+region = Rect2(420, 0, 70, 70)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_18yqj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3qjkr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sgj0o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fvs4a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t1djm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdswb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l31gj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f5bkd")
+}],
+"loop": 1,
+"name": &"mecha red",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2bhf2"]
+radius = 23.0
+height = 60.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hitbox"]
+radius = 20.0
+height = 42.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hurtbox"]
+radius = 24.0
+height = 58.0
+
+[node name="Mecha" type="CharacterBody2D" groups=["enemy"]]
+script = ExtResource("2_mecha_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_18yqj")
+animation = &"mecha red"
+autoplay = "mecha red"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("CapsuleShape2D_2bhf2")
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -7)
+shape = SubResource("CapsuleShape2D_hitbox")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+position = Vector2(0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -3)
+shape = SubResource("CapsuleShape2D_hurtbox")
