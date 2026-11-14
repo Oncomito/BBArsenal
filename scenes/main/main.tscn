@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bgduf0ytwfbg5"]
+
+[node name="main" type="Node2D" unique_id=1102324276]
+
+[node name="Levels" type="Node2D" parent="." unique_id=53004094]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=593122492]
