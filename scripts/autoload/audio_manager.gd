@@ -4,7 +4,8 @@ var sounds = {
 	"fireball": preload("res://assets/sound/floraphonic-fireball-whoosh-1-179125.mp3"),
 	"blast": preload("res://assets/sound/yodguard-fire-magic-6-378641.mp3"),
 	"click": preload("res://assets/sound/universfield-click-button-140881.mp3"),
-	"ting": preload("res://assets/sound/freesound_community-glass-ting-89283.mp3")
+	"ting": preload("res://assets/sound/freesound_community-glass-ting-89283.mp3"),
+	"explode": preload("res://assets/sound/synthetic_explosion_1.wav")
 }
 
 var music_tracks = {
