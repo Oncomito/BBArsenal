@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://bgduf0ytwfbg5"]
 
 [ext_resource type="PackedScene" uid="uid://c4ryo5ntc7v3g" path="res://scenes/ui/pause_menu.tscn" id="1_hyk8p"]
-[ext_resource type="PackedScene" path="res://scenes/levels/level_1_arena.tscn" id="1_iuonh"]
+[ext_resource type="PackedScene" uid="uid://r3mujbv78cs7" path="res://scenes/levels/level_1_arena.tscn" id="1_iuonh"]
+[ext_resource type="PackedScene" uid="uid://bi8t3umgrmt4y" path="res://scenes/ui/hud.tscn" id="3_k2fmo"]
+[ext_resource type="PackedScene" uid="uid://c4ncphasnbrkd" path="res://scenes/ui/game_over.tscn" id="4_gameover"]
 
 [node name="main" type="Node2D" unique_id=1102324276]
 
@@ -10,6 +12,7 @@ offset_left = -8175.0
 offset_top = -5135.0
 offset_right = 10008.0
 offset_bottom = 6145.0
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Levels" type="Node2D" parent="." unique_id=53004094]
@@ -18,4 +21,8 @@ color = Color(0, 0, 0, 1)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=593122492]
 
+[node name="HUD" parent="UI" unique_id=1729188291 instance=ExtResource("3_k2fmo")]
+
 [node name="PauseMenu" parent="UI" unique_id=2017265473 instance=ExtResource("1_hyk8p")]
+
+[node name="GameOver" parent="UI" unique_id=1928374655 instance=ExtResource("4_gameover")]

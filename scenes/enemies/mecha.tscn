@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dy2eclfjpfkqu"]
 
 [ext_resource type="Texture2D" uid="uid://0oj75ljsqf5o" path="res://assets/mecha/mecha red.png" id="1_2n11x"]
-[ext_resource type="Script" path="res://scenes/enemies/mecha.gd" id="2_mecha_script"]
+[ext_resource type="Script" uid="uid://cmle2lvlapfdv" path="res://scenes/enemies/mecha.gd" id="2_mecha_script"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3qjkr"]
 atlas = ExtResource("1_2n11x")
@@ -56,8 +56,8 @@ animations = [{
 "texture": SubResource("AtlasTexture_f5bkd")
 }],
 "loop": 1,
-"name": &"mecha red",
-"speed": 10.0
+"name": &"walk",
+"speed": 8.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2bhf2"]
@@ -65,35 +65,43 @@ radius = 23.0
 height = 60.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hitbox"]
-radius = 20.0
+radius = 8.627514
 height = 42.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hurtbox"]
 radius = 24.0
 height = 58.0
 
-[node name="Mecha" type="CharacterBody2D" groups=["enemy"]]
+[node name="Mecha" type="CharacterBody2D" unique_id=1926874390 groups=["enemy"]]
 script = ExtResource("2_mecha_script")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=260769817]
+position = Vector2(-0.69488525, -123.694885)
+scale = Vector2(3.8944318, 3.8944318)
 sprite_frames = SubResource("SpriteFrames_18yqj")
-animation = &"mecha red"
-autoplay = "mecha red"
+animation = &"walk"
+autoplay = "walk"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=695283538]
+position = Vector2(-0.69488525, -124.694885)
+scale = Vector2(3.9121046, 3.9121046)
 shape = SubResource("CapsuleShape2D_2bhf2")
 
-[node name="Hitbox" type="Area2D" parent="."]
-position = Vector2(0, 1)
+[node name="Hitbox" type="Area2D" parent="." unique_id=1628389611]
+position = Vector2(-0.69488525, -122.694885)
+scale = Vector2(3.9121046, 3.9121046)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(0, -7)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2032168519]
+position = Vector2(-0.9954823, 22.23244)
+rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_hitbox")
 
-[node name="Hurtbox" type="Area2D" parent="."]
-position = Vector2(0, 1)
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1804870234]
+position = Vector2(-0.69488525, -122.694885)
+scale = Vector2(3.9121046, 3.9121046)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1687370211]
 position = Vector2(0, -3)
 shape = SubResource("CapsuleShape2D_hurtbox")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1501155434]

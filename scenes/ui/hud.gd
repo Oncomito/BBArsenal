@@ -1,0 +1,53 @@
+extends Control
+
+@onready var health_bar: ProgressBar = $health
+@onready var energy_bar: ProgressBar = $energy
+@onready var pause_button: Button = $Button
+
+var player: Node = null
+
+func _ready() -> void:
+	_bind_player()
+
+func _process(_delta: float) -> void:
+	if not is_instance_valid(player):
+		_bind_player()
+		return
+
+	if "health" in player and "max_health" in player:
+		health_bar.max_value = player.max_health
+		health_bar.value = player.health
+
+	if "energy" in player and "max_energy" in player:
+		energy_bar.max_value = player.max_energy
+		energy_bar.value = player.energy
+
+func _bind_player() -> void:
+	player = get_tree().get_first_node_in_group("player")
+	if not is_instance_valid(player):
+		return
+
+	if player.has_signal("health_changed") and not player.health_changed.is_connected(_on_player_health_changed):
+		player.health_changed.connect(_on_player_health_changed)
+	if player.has_signal("energy_changed") and not player.energy_changed.is_connected(_on_player_energy_changed):
+		player.energy_changed.connect(_on_player_energy_changed)
+
+	if "health" in player and "max_health" in player:
+		_on_player_health_changed(player.health, player.max_health)
+	if "energy" in player and "max_energy" in player:
+		_on_player_energy_changed(player.energy, player.max_energy)
+
+func _on_player_health_changed(current_health: float, max_health_val: float) -> void:
+	if health_bar:
+		health_bar.max_value = max_health_val
+		health_bar.value = current_health
+
+func _on_player_energy_changed(current_energy: float, max_energy_val: float) -> void:
+	if energy_bar:
+		energy_bar.max_value = max_energy_val
+		energy_bar.value = current_energy
+
+func _on_pause_button_pressed() -> void:
+	var pause_menu := get_parent().get_node_or_null("PauseMenu")
+	if pause_menu and pause_menu.has_method("toggle_pause"):
+		pause_menu.toggle_pause()
