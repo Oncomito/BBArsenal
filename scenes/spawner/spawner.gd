@@ -21,6 +21,7 @@ var is_endless: bool = false
 
 @onready var spawn_area: ReferenceRect = $ReferenceRect
 @onready var timer: Timer = $Timer
+@onready var layer: Node2D = self.get_parent()
 
 func _ready() -> void:
 	timer.timeout.connect(_on_timer_timeout)
