@@ -30,6 +30,9 @@ signal dash_count_changed(current_count: int, max_count: int)
 @export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.5
 @export var dash_damage: float = 35.0
 
+@export_group("Shield")
+@export var shield_drain_rate: float = 10.0
+
 @export_group("Camera Shake")
 @export_range(0.0, 5.0, 0.1) var shake_multiplier: float = 1.0
 @export var wall_hit_shake_min: float = 10.0
@@ -50,6 +53,7 @@ var is_dashing: bool = false
 var facing_direction: String = "down"
 var is_invulnerable: bool = false
 var is_attacking: bool = false
+var is_shield_active: bool = false
 var is_transitioning: bool = false
 var _dash_hit_enemies: Array = []
 
@@ -64,9 +68,12 @@ var flash_material: ShaderMaterial
 @onready var dash_timer: Timer = %DashTimer
 @onready var parry_timer: Timer = %ParryTimer
 @onready var hitbox: Area2D = $Hitbox
+@onready var shield: PlayerShield = $Shield
 
 func _ready() -> void:
 	add_to_group("player")
+	if has_node("Shield"):
+		shield.setup(self)
 	normal_speed = speed
 	base_acceleration = acceleration
 	health = max_health
@@ -103,6 +110,7 @@ func _physics_process(delta: float) -> void:
 		dash_cooldown_timer = maxf(dash_cooldown_timer - delta, 0.0)
 
 	_decay_bounce_boost(delta)
+	_handle_shield(delta)
 	_handle_energy_regen(delta)
 	_input_move(delta)
 
@@ -223,6 +231,9 @@ func _update_camera_shake(delta: float) -> void:
 		_shake_intensity = 0.0
 
 func _handle_energy_regen(delta: float) -> void:
+	if is_shield_active:
+		return
+
 	if energy_regen_wait_timer > 0.0:
 		energy_regen_wait_timer = maxf(energy_regen_wait_timer - delta, 0.0)
 		return
@@ -233,6 +244,41 @@ func _handle_energy_regen(delta: float) -> void:
 			is_exhausted = false
 		energy_changed.emit(energy, max_energy)
 
+func _handle_shield(delta: float) -> void:
+	if not is_shield_active:
+		return
+
+	if is_dashing or is_dead or is_transitioning:
+		_deactivate_shield()
+		return
+
+	# Kuras energy berkala selama shield aktif (toggle ON)
+	energy = maxf(energy - shield_drain_rate * delta, 0.0)
+	energy_changed.emit(energy, max_energy)
+	dash_count_changed.emit(get_dash_count(), int(ceil(max_energy / maxf(dash_energy_cost, 1.0))))
+
+	if energy <= 0.0:
+		is_exhausted = true
+		energy_regen_wait_timer = energy_exhausted_regen_delay
+		_deactivate_shield()
+
+func _toggle_shield() -> void:
+	if is_shield_active:
+		_deactivate_shield()
+	else:
+		if energy > 0.0 and not is_exhausted and not is_dashing:
+			_activate_shield()
+
+func _activate_shield() -> void:
+	is_shield_active = true
+	if is_instance_valid(shield):
+		shield.activate()
+
+func _deactivate_shield() -> void:
+	is_shield_active = false
+	if is_instance_valid(shield):
+		shield.deactivate()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if is_transitioning:
 		return
@@ -241,8 +287,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
 			_perform_dash(input_direction)
+	elif event.is_action_pressed("player_shield"):
+		if not is_dead and not get_tree().paused and not is_dashing:
+			get_viewport().set_input_as_handled()
+			_toggle_shield()
 	elif event.is_action_pressed("player_parry"):
-		if not is_dead and not get_tree().paused and not is_attacking:
+		if not is_dead and not get_tree().paused and not is_attacking and not is_shield_active:
 			get_viewport().set_input_as_handled()
 			_perform_parry()
 
@@ -300,6 +350,10 @@ func can_dash() -> bool:
 	return dash_cooldown_timer <= 0.0 and energy > 0.0
 
 func _perform_dash(input_direction: Vector2) -> void:
+	# Matikan shield seketika saat dash dilakukan
+	if is_shield_active:
+		_deactivate_shield()
+
 	dash_cooldown_timer = dash_cooldown
 	energy = maxf(energy - dash_energy_cost, 0.0)
 	if energy <= 0.0:
@@ -338,6 +392,19 @@ func _get_current_move_speed() -> float:
 
 func take_damage(amount: float) -> void:
 	if is_invulnerable:
+		return
+	if is_shield_active:
+		var energy_absorbed := amount * 1.2
+		energy = maxf(energy - energy_absorbed, 0.0)
+		energy_changed.emit(energy, max_energy)
+		dash_count_changed.emit(get_dash_count(), int(ceil(max_energy / maxf(dash_energy_cost, 1.0))))
+		camera_shake(8.0, 0.15)
+		if AudioManager:
+			AudioManager.play_sfx("blast", 2.0, -4.0)
+		if energy <= 0.0:
+			is_exhausted = true
+			energy_regen_wait_timer = energy_exhausted_regen_delay
+			_deactivate_shield()
 		return
 	if is_attacking:
 		_on_successful_parry(global_position)

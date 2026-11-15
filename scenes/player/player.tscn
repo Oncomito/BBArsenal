@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bmbs7r5mwg5av"]
 
 [ext_resource type="Script" uid="uid://diow2kbva581p" path="res://scenes/player/player.gd" id="1_dovo2"]
+<<<<<<< Updated upstream
 [ext_resource type="Texture2D" uid="uid://4t52e07mi0qt" path="res://assets/Player/Front/Crouching/Front_Crouching_Jump_1.png" id="2_46q5t"]
 [ext_resource type="Texture2D" uid="uid://44mpyids7lvb" path="res://assets/Player/Front/Crouching/Front_Crouching_Jump_2.png" id="3_5miun"]
 [ext_resource type="Texture2D" uid="uid://m6tigsjxp0t" path="res://assets/Player/Front/Crouching/Front_Crouching_Jump_3.png" id="4_7u1tp"]
@@ -22,6 +23,9 @@
 [ext_resource type="Texture2D" uid="uid://cjg7hukrri7oq" path="res://assets/Player/Right/Standing/Right_Standing_Jump_4.png" id="16_vlhku"]
 [ext_resource type="Texture2D" uid="uid://5ajryg8xk4g2" path="res://assets/Player/Back/Crouching/Back_Crouching_Jump_5.png" id="17_lhgc7"]
 [ext_resource type="Texture2D" uid="uid://dhh5eec5bdary" path="res://assets/Player/Right/Standing/Right_Standing_Jump_5.png" id="17_ws0t6"]
+=======
+[ext_resource type="PackedScene" uid="uid://df5q2n7kwv8bx" path="res://scenes/player/shield.tscn" id="2_shield"]
+>>>>>>> Stashed changes
 [ext_resource type="Texture2D" uid="uid://b0lc2wqaj1vyw" path="res://assets/Player/Front/Standing/Front_Standing_Interact_1.png" id="21_fvjb1"]
 [ext_resource type="Texture2D" uid="uid://cg3i5j8foxl8j" path="res://assets/Player/Front/Standing/Front_Standing_Interact_2.png" id="22_bysbl"]
 [ext_resource type="Texture2D" uid="uid://5yegfjtpmfbx" path="res://assets/Player/Front/Standing/Front_Standing_Interact_3.png" id="23_2wy34"]
@@ -525,6 +529,9 @@ shape = SubResource("CircleShape2D_behr0")
 [node name="Collision" type="CollisionShape2D" parent="Hurtbox" unique_id=269543325]
 position = Vector2(0, -54)
 shape = SubResource("CapsuleShape2D_1mmru")
+
+[node name="Shield" parent="." instance=ExtResource("2_shield")]
+position = Vector2(0, -54)
 
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="ParryTimer" to="." method="_on_parry_timer_timeout"]

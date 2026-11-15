@@ -40,6 +40,11 @@ func _physics_process(delta: float) -> void:
 		var player := get_tree().get_first_node_in_group("player") as Node2D
 		if is_instance_valid(player):
 			var dist := global_position.distance_to(player.global_position)
+			var is_shield_active: bool = bool(player.get("is_shield_active"))
+			if is_shield_active and dist < 70.0:
+				parry(player)
+				return
+
 			var is_attacking: bool = bool(player.get("is_attacking"))
 			if is_attacking and dist < 110.0:
 				var to_proj := global_position - player.global_position
@@ -87,6 +92,9 @@ func _on_area_entered(area: Area2D) -> void:
 	if _exploded:
 		return
 	if not is_parried:
+		if area.is_in_group("player_shield") and area.get("is_active"):
+			parry(area.get("player_ref"))
+			return
 		if area.name == "Hitbox" or area.is_in_group("player_hitbox"):
 			var player := area.get_parent()
 			if is_instance_valid(player) and player.get("is_attacking"):
