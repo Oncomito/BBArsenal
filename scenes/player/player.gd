@@ -192,18 +192,14 @@ func _handle_bounce(pre_collision_velocity: Vector2) -> void:
 	if did_bounce:
 		_bounce_lock_timer = bounce_lockout
 		if is_dashing:
-			# Accelerate speed and acceleration when dashing (with smaller, controlled boost)
 			speed = minf(maxf(speed, normal_speed * dash_speed_multiplier) * dash_bounce_factor, 4200.0)
 			acceleration = minf(maxf(acceleration, base_acceleration) * dash_bounce_acceleration_multiplier, 2800.0)
 			velocity = bounced_velocity.normalized() * speed
 		else:
-			# Normally, bouncing does not accelerate
 			speed = _get_current_move_speed()
 			acceleration = base_acceleration
 			var normal_bounce_speed := minf(pre_collision_velocity.length(), speed)
 			velocity = bounced_velocity.normalized() * normal_bounce_speed
-
-		# Update sprite direction corresponding to bounce direction
 		_update_facing_direction(velocity.normalized())
 		if is_dashing:
 			_play_animation("run_" + facing_direction)
@@ -259,7 +255,6 @@ func _handle_shield(delta: float) -> void:
 		_deactivate_shield()
 		return
 
-	# Kuras energy berkala selama shield aktif (toggle ON)
 	energy = maxf(energy - shield_drain_rate * delta, 0.0)
 	energy_changed.emit(energy, max_energy)
 	dash_count_changed.emit(get_dash_count(), int(ceil(max_energy / maxf(dash_energy_cost, 1.0))))
@@ -349,7 +344,6 @@ func _input_move(delta: float) -> void:
 				_play_animation("run_" + facing_direction)
 			elif not is_attacking:
 				_play_animation("run_" + facing_direction)
-		# ... facing and animation code unchanged
 	else:
 		if not locked:
 			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
@@ -362,7 +356,6 @@ func can_dash() -> bool:
 	return dash_cooldown_timer <= 0.0 and energy > 0.0
 
 func _perform_dash(input_direction: Vector2) -> void:
-	# Matikan shield seketika saat dash dilakukan
 	if is_shield_active:
 		_deactivate_shield()
 
@@ -551,7 +544,7 @@ func play_drop_in_animation(target_global_pos: Vector2) -> void:
 		if not is_inside_tree():
 			return
 
-		# Landing impact
+
 		AudioManager.play_sfx("blast", 1.15, -2.0)
 		camera_shake(18.0, 0.25)
 
@@ -588,7 +581,6 @@ func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
 	AudioManager.play_sfx("ting", 1.35, 0.0)
 
 	if animated_sprite:
-		# Phase 1: Jump arc upward toward the center of the trapdoor
 		var jump_up := create_tween().set_parallel(true)
 		jump_up.tween_property(self, "global_position", trapdoor_global_pos, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		jump_up.tween_property(animated_sprite, "position", Vector2(1.0, -210.0), 0.26).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -598,7 +590,6 @@ func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
 		if not is_inside_tree():
 			return
 
-		# Phase 2: Plunge down into the open trapdoor
 		var fall_in := create_tween().set_parallel(true)
 		fall_in.tween_property(animated_sprite, "position", Vector2(1.0, 30.0), 0.30).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		fall_in.tween_property(animated_sprite, "scale", Vector2(0.0, 0.0), 0.30).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
