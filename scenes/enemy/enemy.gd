@@ -1,11 +1,11 @@
 extends CharacterBody2D
 
 const WANDER_SPEED := 140.0
-const VIEW_RANGE := 500.0
+const VIEW_RANGE := 1200.0
 const FIREBALL_SPEED := 420.0
 const SHOOT_COOLDOWN := 1.2
 const WANDER_CHANGE_TIME := 2.5
-const FIREBALL_LIFETIME := 1.8
+const FIREBALL_LIFETIME := 5.0
 const FIREBALL_SCENE := preload("res://scenes/projectiles/fireball.tscn")
 const HIT_EFFECT_SCENE := preload("res://scenes/projectiles/hit.tscn")
 
@@ -104,9 +104,8 @@ func _shoot_fireball(target_position: Vector2) -> void:
 	fireball.lifetime = FIREBALL_LIFETIME
 	if audio:
 		audio.play()
-	var target_parent: Node = get_tree().current_scene if get_tree().current_scene else get_parent()
-	if target_parent:
-		target_parent.add_child(fireball)
+
+	self.get_parent().add_child(fireball)
 
 func take_damage(amount: int) -> void:
 	if is_invulnerable or current_hp <= 0:
@@ -117,12 +116,12 @@ func take_damage(amount: int) -> void:
 	if hp_bar:
 		hp_bar.value = current_hp
 
-	if HIT_EFFECT_SCENE and get_tree().current_scene:
+	if HIT_EFFECT_SCENE and get_parent():
 		var hit := HIT_EFFECT_SCENE.instantiate()
 		hit.global_position = global_position
 		hit.scale = scale * 2.5
 		hit.animation_name = "fire"
-		get_tree().current_scene.call_deferred("add_child", hit)
+		self.get_parent().call_deferred("add_child", hit)
 
 	if sprite:
 		var orig_color: Color = sprite.modulate
@@ -144,11 +143,11 @@ func _die() -> void:
 	Gamemanager.add_exp(exp_reward)
 	Audiomanager.play_sfx("blast")
 
-	if HIT_EFFECT_SCENE and get_tree().current_scene:
+	if HIT_EFFECT_SCENE and get_parent():
 		var hit := HIT_EFFECT_SCENE.instantiate()
 		hit.global_position = global_position
 		hit.scale = scale * 8.0
 		hit.animation_name = "fire"
-		get_parent().call_deferred("add_child", hit)
+		self.get_parent().call_deferred("add_child", hit)
 
 	queue_free()
