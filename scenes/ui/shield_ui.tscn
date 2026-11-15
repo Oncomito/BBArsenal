@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dup5jc01fbrw8"]
+
+[ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="1_6t2fo"]
+
+[node name="Shield_UI" type="Control" unique_id=1110568814]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=528082613]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 150.0
+offset_right = 604.0
+offset_bottom = 190.0
+color = Color(0, 0.65882355, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=370172911]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 91.0
+offset_right = 223.0
+offset_bottom = 146.0
+color = Color(0, 0, 0.8754654, 1)
+
+[node name="yyy2" type="Label" parent="." unique_id=37582645]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 83.0
+offset_right = 1485.0
+offset_bottom = 488.0
+theme_override_fonts/font = ExtResource("1_6t2fo")
+theme_override_font_sizes/font_size = 51
+text = "Press C
+or Press B (in joystick)
+to activate shield"

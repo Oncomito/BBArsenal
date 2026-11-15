@@ -3,6 +3,7 @@ extends Node2D
 const WASD_UI_SCENE := preload("res://scenes/ui/wasd_ui.tscn")
 const DASH_UI_SCENE := preload("res://scenes/ui/dash_ui.tscn")
 const PARRY_UI_SCENE := preload("res://scenes/ui/parry_ui.tscn")
+const SHIELD_UI_SCENE := preload("res://scenes/ui/shield_ui.tscn")
 const OH_NO_UI_SCENE := preload("res://scenes/ui/oh_no.tscn")
 const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/ui/to_the_levelsss.tscn")
 
@@ -204,6 +205,19 @@ func _start_tutorial() -> void:
 	await get_tree().create_timer(0.35).timeout
 	if is_instance_valid(parry_ui):
 		parry_ui.queue_free()
+
+	if not is_inside_tree():
+		return
+
+	var shield_ui := SHIELD_UI_SCENE.instantiate() as Control
+	ui_parent.add_child(shield_ui)
+	while is_inside_tree():
+		await get_tree().process_frame
+		if is_instance_valid(player) and bool(player.get("is_shield_active")):
+			break
+	await get_tree().create_timer(0.35).timeout
+	if is_instance_valid(shield_ui):
+		shield_ui.queue_free()
 
 	if not is_inside_tree():
 		return
