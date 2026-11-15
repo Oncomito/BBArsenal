@@ -132,7 +132,7 @@ func _shoot_at_player() -> void:
 	if not is_instance_valid(player):
 		return
 	ProjectileManager.spawn_projectile("fireball", {
-		"spawn_point": global_position,
+		"spawn_point": global_position + Vector2(0.0, -192),
 		"target": player,
 		"damage": 10.0,
 		"scale": Vector2(4, 4)

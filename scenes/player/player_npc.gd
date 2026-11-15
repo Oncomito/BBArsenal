@@ -94,7 +94,6 @@ func _enter_walk() -> void:
 
 func _pick_direction() -> Vector2:
 	var dir := Vector2.from_angle(randf_range(0.0, TAU))
-	# Too far from home? Head back, with a bit of randomness so it doesn't look robotic.
 	if roam_radius > 0.0 and global_position.distance_to(_home) > roam_radius:
 		var to_home := global_position.direction_to(_home)
 		dir = to_home.rotated(randf_range(-0.6, 0.6))
@@ -149,7 +148,6 @@ func _handle_bounce(pre_collision_velocity: Vector2) -> void:
 		var bounce_speed := minf(pre_collision_velocity.length(), walk_speed)
 		velocity = bounced_velocity.normalized() * bounce_speed
 
-	# Keep walking in the bounced direction so the NPC doesn't push back into the wall
 	if velocity != Vector2.ZERO:
 		_wander_dir = velocity.normalized()
 		_update_facing_direction(_wander_dir)
