@@ -7,6 +7,7 @@ signal energy_changed(current_energy: float, max_energy: float)
 signal player_died
 signal dash_count_changed(current_count: int, max_count: int)
 
+
 @export_group("Movement")
 @export var speed: float = 1945.0
 @export var acceleration: float = 1945.0
@@ -16,6 +17,8 @@ signal dash_count_changed(current_count: int, max_count: int)
 @export var dash_bounce_acceleration_multiplier: float = 1.12
 @export var bounce_factor: float = 1.1
 @export var min_bounce_speed: float = 100.0
+@export var bounce_lockout: float = 0.06
+var _bounce_lock_timer: float = 0.0
 
 @export_group("Health")
 @export var max_health: float = 100.0
@@ -101,6 +104,8 @@ func _physics_process(delta: float) -> void:
 
 	if dash_cooldown_timer > 0.0:
 		dash_cooldown_timer = maxf(dash_cooldown_timer - delta, 0.0)
+	if _bounce_lock_timer > 0.0:
+		_bounce_lock_timer = maxf(_bounce_lock_timer - delta, 0.0)
 
 	_decay_bounce_boost(delta)
 	_handle_energy_regen(delta)
@@ -171,11 +176,13 @@ func _handle_bounce(pre_collision_velocity: Vector2) -> void:
 	for i in get_slide_collision_count():
 		var collision := get_slide_collision(i)
 		var normal := collision.get_normal()
-		if pre_collision_velocity.dot(normal) < -30.0:
+
+		if bounced_velocity.dot(normal) < -30.0:
 			bounced_velocity = bounced_velocity.bounce(normal)
 			did_bounce = true
 
 	if did_bounce:
+		_bounce_lock_timer = bounce_lockout
 		if is_dashing:
 			# Accelerate speed and acceleration when dashing (with smaller, controlled boost)
 			speed = minf(maxf(speed, normal_speed * dash_speed_multiplier) * dash_bounce_factor, 4200.0)
@@ -278,23 +285,28 @@ func _on_successful_parry(pos: Vector2) -> void:
 	energy_changed.emit(energy, max_energy)
 
 func _input_move(delta: float) -> void:
+	var locked := _bounce_lock_timer > 0.0
+
 	var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
 	var target_max_speed := _get_current_move_speed()
 
 	if input_direction != Vector2.ZERO:
-		velocity = velocity.move_toward(input_direction * target_max_speed, acceleration * delta)
-		if not is_dashing:
-			_update_facing_direction(input_direction)
-		if is_dashing:
-			_play_animation("run_" + facing_direction)
-		elif not is_attacking:
-			_play_animation("run_" + facing_direction)
+		if not locked:
+			velocity = velocity.move_toward(input_direction * target_max_speed, acceleration * delta)
+			if not is_dashing:
+				_update_facing_direction(input_direction)
+			if is_dashing:
+				_play_animation("run_" + facing_direction)
+			elif not is_attacking:
+				_play_animation("run_" + facing_direction)
+		# ... facing and animation code unchanged
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-		if is_dashing:
-			_play_animation("run_" + facing_direction)
-		elif not is_attacking:
-			_play_animation("idle_" + facing_direction)
+		if not locked:
+			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+			if is_dashing:
+				_play_animation("run_" + facing_direction)
+			elif not is_attacking:
+				_play_animation("idle_" + facing_direction)
 
 func can_dash() -> bool:
 	return dash_cooldown_timer <= 0.0 and energy > 0.0
