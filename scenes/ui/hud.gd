@@ -1,5 +1,7 @@
 extends Control
 
+const PAUSE_MENU_SCENE := preload("res://scenes/ui/pause_menu.tscn")
+
 @onready var health_bar: ProgressBar = $health
 @onready var energy_bar: ProgressBar = $energy
 @onready var pause_button: Button = $Button
@@ -9,7 +11,12 @@ extends Control
 var player: Node = null
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_bind_player()
+	if pause_button:
+		pause_button.focus_mode = Control.FOCUS_NONE
+		if not pause_button.pressed.is_connected(_on_pause_button_pressed):
+			pause_button.pressed.connect(_on_pause_button_pressed)
 	if GameManager:
 		if GameManager.has_signal("level_changed") and not GameManager.level_changed.is_connected(_on_level_changed):
 			GameManager.level_changed.connect(_on_level_changed)
@@ -56,7 +63,14 @@ func _on_player_energy_changed(current_energy: float, max_energy_val: float) -> 
 		energy_bar.value = current_energy
 
 func _on_pause_button_pressed() -> void:
-	var pause_menu := get_parent().get_node_or_null("PauseMenu")
+	var pause_menu: Node = null
+	if get_parent():
+		pause_menu = get_parent().get_node_or_null("PauseMenu")
+	if not pause_menu and get_tree().current_scene:
+		pause_menu = get_tree().current_scene.find_child("PauseMenu", true, false)
+	if not pause_menu and PAUSE_MENU_SCENE and get_parent():
+		pause_menu = PAUSE_MENU_SCENE.instantiate()
+		get_parent().add_child(pause_menu)
 	if pause_menu and pause_menu.has_method("toggle_pause"):
 		pause_menu.toggle_pause()
 

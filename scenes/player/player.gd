@@ -426,6 +426,8 @@ func heal(amount: float) -> void:
 func die() -> void:
 	if is_dead:
 		return
+	if is_shield_active:
+		_deactivate_shield()
 	is_dead = true
 	velocity = Vector2.ZERO
 	player_died.emit()
@@ -502,6 +504,8 @@ func _on_parry_timer_timeout() -> void:
 			_play_animation("idle_" + facing_direction)
 
 func prepare_drop_in(target_global_pos: Vector2) -> void:
+	if is_shield_active:
+		_deactivate_shield()
 	is_transitioning = true
 	is_invulnerable = true
 	is_dashing = false
@@ -555,6 +559,8 @@ func play_drop_in_animation(target_global_pos: Vector2) -> void:
 	is_invulnerable = false
 
 func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
+	if is_shield_active:
+		_deactivate_shield()
 	is_transitioning = true
 	is_invulnerable = true
 	is_dashing = false

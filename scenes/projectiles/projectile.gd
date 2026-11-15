@@ -41,7 +41,9 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(player):
 			var dist := global_position.distance_to(player.global_position)
 			var is_shield_active: bool = bool(player.get("is_shield_active"))
-			if is_shield_active and dist < 70.0:
+			var shield_node := player.get_node_or_null("Shield") as Node2D
+			var shield_pos := shield_node.global_position if shield_node else player.global_position
+			if is_shield_active and (dist < 70.0 or global_position.distance_to(shield_pos) < 70.0):
 				parry(player)
 				return
 

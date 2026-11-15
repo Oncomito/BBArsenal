@@ -49,6 +49,7 @@ offset_left = 1107.0
 offset_top = 12.0
 offset_right = 1148.0
 offset_bottom = 58.0
+focus_mode = 0
 
 [node name="Label" type="Label" parent="Button" unique_id=1219445936]
 layout_mode = 0
@@ -94,24 +95,6 @@ texture = ExtResource("1_hqnrr")
 position = Vector2(38, 55)
 scale = Vector2(0.12, 0.12)
 texture = ExtResource("2_bo48s")
-
-[node name="Button2" type="Button" parent="." unique_id=1044940586]
-layout_mode = 0
-offset_left = 1107.0
-offset_top = 12.0
-offset_right = 1148.0
-offset_bottom = 58.0
-
-[node name="Label" type="Label" parent="." unique_id=188968587]
-layout_mode = 0
-offset_left = 1144.0
-offset_top = 25.0
-offset_right = 1161.6172
-offset_bottom = 48.0
-rotation = 1.5707964
-scale = Vector2(1.323325, 1.3811736)
-text = "="
-horizontal_alignment = 1
 
 [node name="levels" type="Label" parent="." unique_id=505111019]
 layout_mode = 0
