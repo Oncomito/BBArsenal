@@ -19,6 +19,8 @@ func _start_mode(mode: String) -> void:
 		return
 	_is_busy = true
 	AudioManager.play_sfx("click")
+	if AudioManager:
+		AudioManager.play_music("gameplay")
 	if GameManager:
 		GameManager.game_mode = mode
 		GameManager.reset_run()

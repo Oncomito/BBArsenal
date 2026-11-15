@@ -8,6 +8,8 @@ var _is_starting: bool = false
 
 func _ready() -> void:
 	get_tree().paused = false
+	if AudioManager:
+		AudioManager.play_music("menu")
 	if start_button:
 		start_button.grab_focus()
 	if GameManager and GameManager.is_black_screen_active and GameManager.has_method("fade_from_black"):
