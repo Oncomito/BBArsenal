@@ -39,7 +39,7 @@ alignment = 1
 [node name="Game" type="Label" parent="VBoxContainer" unique_id=546445225]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_rxvc7")
-text = "Game"
+text = "B. B. Arsenal"
 horizontal_alignment = 1
 
 [node name="Start" type="Button" parent="VBoxContainer" unique_id=419441130]

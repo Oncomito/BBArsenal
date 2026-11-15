@@ -3,9 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://dwdhrbtcy46h5" path="res://assets/map cyberpumk/neo_zero_buildings_02.png" id="1_keln3"]
 [ext_resource type="Texture2D" uid="uid://c32ec55v0ck7x" path="res://assets/map cyberpumk/neo_zero_props_02_free.png" id="2_crctu"]
 [ext_resource type="Texture2D" uid="uid://i3oypb3myjbv" path="res://assets/map cyberpumk/neo_zero_tileset_03.png" id="3_sn5u3"]
-[ext_resource type="PackedScene" uid="uid://bak0col2suuby" path="res://scenes/spawner/spawner.tscn" id="4_cn35j"]
+[ext_resource type="PackedScene" uid="uid://jg355rx0ga43" path="res://scenes/player/player_npc.tscn" id="5_fkd6t"]
 [ext_resource type="PackedScene" uid="uid://bhvd1xjol6d7v" path="res://scenes/obstacles/server.tscn" id="5_wko7x"]
-[ext_resource type="PackedScene" uid="uid://bmbs7r5mwg5av" path="res://scenes/player/player.tscn" id="6_pwqr4"]
+[ext_resource type="PackedScene" uid="uid://c4cs3pgpj4xex" path="res://scenes/ui/main_menu.tscn" id="6_keln3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qxqh0"]
 texture = ExtResource("1_keln3")
@@ -350,7 +350,7 @@ size = Vector2(3200, 128)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left_right"]
 size = Vector2(128, 1920)
 
-[node name="Level1CyberArena" type="Node2D" unique_id=1847605930]
+[node name="MainMenuBackground" type="Node2D" unique_id=1847605930]
 
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1263263212]
 use_parent_material = true
@@ -391,8 +391,6 @@ shape = SubResource("RectangleShape2D_left_right")
 unique_name_in_owner = true
 y_sort_enabled = true
 
-[node name="Spawner" parent="Ordering" unique_id=775625807 instance=ExtResource("4_cn35j")]
-
 [node name="ServerNE" parent="Ordering" unique_id=1208983105 instance=ExtResource("5_wko7x")]
 position = Vector2(768, -320)
 
@@ -405,4 +403,15 @@ position = Vector2(-704, 512)
 [node name="ServerNW" parent="Ordering" unique_id=16879603 instance=ExtResource("5_wko7x")]
 position = Vector2(-704, -320)
 
-[node name="Player" parent="Ordering" unique_id=770284520 instance=ExtResource("6_pwqr4")]
+[node name="PlayerNPC" parent="Ordering" unique_id=1797968289 instance=ExtResource("5_fkd6t")]
+position = Vector2(-352, -63)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1609608863]
+scale = Vector2(1.5971185, 1.0412697)
+zoom = Vector2(0.51, 0.51)
+
+[node name="Menu" parent="." unique_id=1317546458 instance=ExtResource("6_keln3")]
+offset_left = -596.0
+offset_top = -320.0
+offset_right = -596.0
+offset_bottom = -320.0

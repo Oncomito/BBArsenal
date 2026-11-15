@@ -1,7 +1,7 @@
 extends Control
 
 const main_scene: String = "res://scenes/main/main.tscn"
-const main_menu_scene: String = "res://scenes/ui/main_menu.tscn"
+const main_menu_scene: String = "res://scenes/levels/main_menu.tscn"
 
 @onready var tutorial_button: Button = $VBoxContainer/Start
 
@@ -19,6 +19,8 @@ func _start_mode(mode: String) -> void:
 		return
 	_is_busy = true
 	AudioManager.play_sfx("click")
+	if AudioManager:
+		AudioManager.play_music("gameplay")
 	if GameManager:
 		GameManager.game_mode = mode
 		GameManager.reset_run()

@@ -185,7 +185,7 @@ func _setup_hp_bar() -> void:
 func _die() -> void:
 	if GameManager and GameManager.has_method("register_enemy_kill"):
 		GameManager.register_enemy_kill(10)
-	AudioManager.play_sfx("blast")
+	AudioManager.play_sfx("explode")
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
 		var hit := HIT_EFFECT_SCENE.instantiate()
 		hit.global_position = global_position
