@@ -14,6 +14,7 @@ var is_parried: bool = false
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready() -> void:
+	add_to_group("projectile")
 	if animated_sprite and animated_sprite.sprite_frames:
 		if animated_sprite.sprite_frames.has_animation(element):
 			animated_sprite.play(element)
@@ -121,7 +122,7 @@ func parry(player: Node2D) -> void:
 	if nearest_enemy:
 		direction = global_position.direction_to(nearest_enemy.global_position)
 	else:
-		direction = -direction
+		direction = - direction
 
 	speed *= 1.6
 	lifetime = 2.5

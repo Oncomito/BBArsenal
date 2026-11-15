@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bak0col2suuby"]
+
+[ext_resource type="Script" uid="uid://ttxkiixn4vbr" path="res://scenes/spawner/spawner.gd" id="1_eoeca"]
+
+[node name="Spawner" type="Node2D" unique_id=1041138687]
+script = ExtResource("1_eoeca")
+
+[node name="Timer" type="Timer" parent="." unique_id=1724294395]
+wait_time = 2.0
+autostart = true
+
+[node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=1049447554]
+offset_left = -1425.9999
+offset_top = -856.0
+offset_right = -1382.5333
+offset_bottom = -814.5791
+scale = Vector2(65.636604, 41.428394)
+editor_only = false
