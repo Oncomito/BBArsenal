@@ -430,12 +430,3 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TrapDoorZone" unique_id=1954001235]
 shape = SubResource("RectangleShape2D_trapdoor")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=558382263]
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=344021740]
-offset_left = -1951.0
-offset_top = -1716.0
-offset_right = 2206.0
-offset_bottom = 1271.0
-color = Color(0, 0, 0, 1)

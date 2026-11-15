@@ -3,11 +3,15 @@ extends Control
 @onready var health_bar: ProgressBar = $health
 @onready var energy_bar: ProgressBar = $energy
 @onready var pause_button: Button = $Button
+@onready var levels_label: Label = get_node_or_null("levels")
 
 var player: Node = null
 
 func _ready() -> void:
 	_bind_player()
+	if GameManager and GameManager.has_signal("level_changed") and not GameManager.level_changed.is_connected(_on_level_changed):
+		GameManager.level_changed.connect(_on_level_changed)
+	_update_level_label()
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(player):
@@ -51,3 +55,10 @@ func _on_pause_button_pressed() -> void:
 	var pause_menu := get_parent().get_node_or_null("PauseMenu")
 	if pause_menu and pause_menu.has_method("toggle_pause"):
 		pause_menu.toggle_pause()
+
+func _on_level_changed(_new_level: int) -> void:
+	_update_level_label()
+
+func _update_level_label() -> void:
+	if levels_label and GameManager and GameManager.has_method("get_level_code"):
+		levels_label.text = "lvl %s" % GameManager.get_level_code()

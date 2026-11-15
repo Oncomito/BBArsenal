@@ -50,6 +50,7 @@ var is_dashing: bool = false
 var facing_direction: String = "down"
 var is_invulnerable: bool = false
 var is_attacking: bool = false
+var is_transitioning: bool = false
 var _dash_hit_enemies: Array = []
 
 var _shake_intensity: float = 0.0
@@ -95,7 +96,7 @@ func _process(delta: float) -> void:
 	_update_camera_shake(delta)
 
 func _physics_process(delta: float) -> void:
-	if is_dead:
+	if is_dead or is_transitioning:
 		return
 
 	if dash_cooldown_timer > 0.0:
@@ -233,6 +234,8 @@ func _handle_energy_regen(delta: float) -> void:
 		energy_changed.emit(energy, max_energy)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_transitioning:
+		return
 	if event.is_action_pressed("player_dash"):
 		if not is_dead and not get_tree().paused and can_dash():
 			get_viewport().set_input_as_handled()
@@ -379,11 +382,12 @@ func _get_facing_direction_vector() -> Vector2:
 
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
-	is_invulnerable = false
+	if not is_transitioning:
+		is_invulnerable = false
 	_dash_hit_enemies.clear()
 	speed = _get_current_move_speed()
 	acceleration = base_acceleration
-	if not is_attacking:
+	if not is_attacking and not is_transitioning:
 		var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
 		if input_direction != Vector2.ZERO:
 			_play_animation("run_" + facing_direction)
@@ -406,10 +410,102 @@ func get_dash_recharge_ratio() -> float:
 
 func _on_parry_timer_timeout() -> void:
 	is_attacking = false
-	if not is_dashing:
+	if not is_dashing and not is_transitioning:
 		is_invulnerable = false
-	var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
-	if input_direction != Vector2.ZERO:
-		_play_animation("run_" + facing_direction)
-	else:
-		_play_animation("idle_" + facing_direction)
+	if not is_transitioning:
+		var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
+		if input_direction != Vector2.ZERO:
+			_play_animation("run_" + facing_direction)
+		else:
+			_play_animation("idle_" + facing_direction)
+
+func prepare_drop_in(target_global_pos: Vector2) -> void:
+	is_transitioning = true
+	is_invulnerable = true
+	is_dashing = false
+	is_attacking = false
+	velocity = Vector2.ZERO
+	if dash_timer:
+		dash_timer.stop()
+	if parry_timer:
+		parry_timer.stop()
+
+	global_position = target_global_pos
+	if camera:
+		camera.reset_smoothing()
+	facing_direction = "down"
+	_play_animation("idle_down")
+
+	if animated_sprite:
+		animated_sprite.visible = true
+		animated_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		animated_sprite.scale = Vector2(3.6, 4.5)
+		animated_sprite.position = Vector2(1.0, -1100.0)
+
+func play_drop_in_animation(target_global_pos: Vector2) -> void:
+	prepare_drop_in(target_global_pos)
+
+	if animated_sprite:
+		var drop_tween := create_tween()
+		drop_tween.tween_property(animated_sprite, "position", Vector2(1.0, -60.0), 0.45).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		await drop_tween.finished
+
+		if not is_inside_tree():
+			return
+
+		# Landing impact
+		AudioManager.play_sfx("blast", 1.15, -2.0)
+		camera_shake(18.0, 0.25)
+
+		if HIT_EFFECT_SCENE and get_tree().current_scene:
+			var hit := HIT_EFFECT_SCENE.instantiate()
+			hit.global_position = global_position
+			hit.scale = Vector2(2.8, 2.8)
+			hit.animation_name = "holy"
+			get_tree().current_scene.call_deferred("add_child", hit)
+
+		animated_sprite.scale = Vector2(4.7, 3.3)
+		var land_tween := create_tween()
+		land_tween.tween_property(animated_sprite, "scale", Vector2(4.0, 4.0), 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		await land_tween.finished
+
+	is_transitioning = false
+	is_invulnerable = false
+
+func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
+	is_transitioning = true
+	is_invulnerable = true
+	is_dashing = false
+	is_attacking = false
+	velocity = Vector2.ZERO
+	if dash_timer:
+		dash_timer.stop()
+	if parry_timer:
+		parry_timer.stop()
+
+	facing_direction = "down"
+	_play_animation("idle_down")
+	AudioManager.play_sfx("ting", 1.35, 0.0)
+
+	if animated_sprite:
+		# Phase 1: Jump arc upward toward the center of the trapdoor
+		var jump_up := create_tween().set_parallel(true)
+		jump_up.tween_property(self, "global_position", trapdoor_global_pos, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		jump_up.tween_property(animated_sprite, "position", Vector2(1.0, -210.0), 0.26).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		jump_up.tween_property(animated_sprite, "scale", Vector2(4.4, 4.4), 0.26).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		await jump_up.finished
+
+		if not is_inside_tree():
+			return
+
+		# Phase 2: Plunge down into the open trapdoor
+		var fall_in := create_tween().set_parallel(true)
+		fall_in.tween_property(animated_sprite, "position", Vector2(1.0, 30.0), 0.30).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		fall_in.tween_property(animated_sprite, "scale", Vector2(0.0, 0.0), 0.30).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+		fall_in.tween_property(animated_sprite, "modulate:a", 0.0, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		await fall_in.finished
+
+		if not is_inside_tree():
+			return
+
+		await get_tree().create_timer(0.2).timeout

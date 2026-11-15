@@ -45,6 +45,11 @@ func _on_restart_pressed() -> void:
 	AudioManager.play_sfx("click")
 	visible = false
 	get_tree().paused = false
+	if GameManager:
+		if GameManager.has_method("reset_run"):
+			GameManager.reset_run()
+		if GameManager.has_method("fade_to_black"):
+			await GameManager.fade_to_black(0.2)
 	get_tree().reload_current_scene()
 
 func _on_settings_pressed() -> void:

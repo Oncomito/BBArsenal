@@ -4,13 +4,23 @@ const main_scene: String = "res://scenes/main/main.tscn"
 
 @onready var start_button: Button = $VBoxContainer/Start
 
+var _is_starting: bool = false
+
 func _ready() -> void:
 	get_tree().paused = false
 	if start_button:
 		start_button.grab_focus()
 
 func _on_start_pressed() -> void:
+	if _is_starting:
+		return
+	_is_starting = true
 	AudioManager.play_sfx("click")
+	if GameManager:
+		if GameManager.has_method("reset_run"):
+			GameManager.reset_run()
+		if GameManager.has_method("fade_to_black"):
+			await GameManager.fade_to_black(0.25)
 	get_tree().change_scene_to_file(main_scene)
 
 

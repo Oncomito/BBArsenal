@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/UI/—Pngtree—heart pixel art_8666747.png" id="1_hqnrr"]
 [ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/UI/energy.png" id="2_bo48s"]
 [ext_resource type="Script" uid="uid://ccsx05opowl0s" path="res://scenes/ui/hud.gd" id="3_hudgd"]
+[ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="4_8qguk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
 bg_color = Color(0.18, 0.05, 0.05, 0.85)
@@ -93,5 +94,14 @@ rotation = 1.5707964
 scale = Vector2(1.323325, 1.3811736)
 text = "="
 horizontal_alignment = 1
+
+[node name="levels" type="Label" parent="." unique_id=505111019]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 56.0
+offset_right = 89.0
+offset_bottom = 79.0
+theme_override_fonts/font = ExtResource("4_8qguk")
+text = "lv. (levels here)"
 
 [connection signal="pressed" from="Button" to="." method="_on_pause_button_pressed"]
