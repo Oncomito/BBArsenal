@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="HavenJakarta"
-run/main_scene="uid://cvbebrbh8kq0t"
+run/main_scene="uid://dejysd7bu3y7o"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/image="uid://xnnc42dqews1"
 config/icon="res://icon.svg"

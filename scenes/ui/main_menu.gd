@@ -1,6 +1,6 @@
 extends Control
 
-const choose_gameplay_scene: String = "res://scenes/ui/chose_gameplay.tscn"
+const choose_gameplay_scene: String = "res://scenes/levels/select_level.tscn"
 
 @onready var start_button: Button = $VBoxContainer/Start
 
