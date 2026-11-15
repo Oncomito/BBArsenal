@@ -47,16 +47,10 @@ layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_jcdy3")
 text = "Start"
 
-[node name="Settings" type="Button" parent="VBoxContainer" unique_id=777538815]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("1_rxvc7")
-text = "Settings"
-
 [node name="Exit" type="Button" parent="VBoxContainer" unique_id=260376871]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_rxvc7")
 text = "exit"
 
 [connection signal="pressed" from="VBoxContainer/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="VBoxContainer/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_exit_pressed"]
