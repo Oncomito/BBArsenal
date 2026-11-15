@@ -4,11 +4,16 @@ signal player_died
 signal level_changed(new_level: int)
 signal level_started(level_code: String)
 signal level_cleared(level: int)
+signal stats_changed
 
+var game_mode: String = "levels"
 var current_level: int = 1
 var current_stage: int = 1
 var current_sublevel: int = 0
 var max_arena_level: int = 10
+var enemies_killed: int = 0
+var total_enemies: int = 0
+var score: int = 0
 var exp: float = 0.0
 
 var _fade_layer: CanvasLayer = null
@@ -84,8 +89,22 @@ func reset_run() -> void:
 	current_level = 1
 	current_stage = 1
 	current_sublevel = 0
+	enemies_killed = 0
+	total_enemies = 0
+	score = 0
 	exp = 0.0
 	level_changed.emit(current_level)
+	stats_changed.emit()
+
+func set_wave_enemies(total: int) -> void:
+	enemies_killed = 0
+	total_enemies = max(total, 0)
+	stats_changed.emit()
+
+func register_enemy_kill(points: int = 10) -> void:
+	enemies_killed += 1
+	score += points
+	stats_changed.emit()
 
 func advance_level() -> int:
 	current_level += 1
@@ -94,19 +113,27 @@ func advance_level() -> int:
 		current_stage += 1
 		current_sublevel = 0
 	level_changed.emit(current_level)
+	stats_changed.emit()
 	return current_level
 
 func advance_stage() -> void:
 	current_stage += 1
 	current_sublevel = 0
 	level_changed.emit(current_level)
+	stats_changed.emit()
 
 func get_level_code() -> String:
 	return "%d.%d" % [current_stage, current_sublevel]
 
 func notify_level_started() -> void:
 	level_changed.emit(current_level)
-	level_started.emit(get_level_code())
+	stats_changed.emit()
+	if game_mode == "endless":
+		level_started.emit("Endless")
+	elif game_mode == "tutorial":
+		level_started.emit("Tutorial")
+	else:
+		level_started.emit("Level " + get_level_code())
 
 func add_exp(amount: float) -> void:
 	exp += amount

@@ -1,6 +1,6 @@
 extends Control
 
-const main_scene: String = "res://scenes/main/main.tscn"
+const choose_gameplay_scene: String = "res://scenes/ui/chose_gameplay.tscn"
 
 @onready var start_button: Button = $VBoxContainer/Start
 
@@ -10,23 +10,20 @@ func _ready() -> void:
 	get_tree().paused = false
 	if start_button:
 		start_button.grab_focus()
+	if GameManager and GameManager.is_black_screen_active and GameManager.has_method("fade_from_black"):
+		GameManager.call_deferred("fade_from_black", 0.25, 0.1)
 
 func _on_start_pressed() -> void:
 	if _is_starting:
 		return
 	_is_starting = true
 	AudioManager.play_sfx("click")
-	if GameManager:
-		if GameManager.has_method("reset_run"):
-			GameManager.reset_run()
-		if GameManager.has_method("fade_to_black"):
-			await GameManager.fade_to_black(0.25)
-	get_tree().change_scene_to_file(main_scene)
-
+	if GameManager and GameManager.has_method("fade_to_black"):
+		await GameManager.fade_to_black(0.2)
+	get_tree().change_scene_to_file(choose_gameplay_scene)
 
 func _on_settings_pressed() -> void:
 	AudioManager.play_sfx("click")
-	print("Open settings menu here")
 
 func _on_exit_pressed() -> void:
 	AudioManager.play_sfx("click")

@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://tcj2pqhslgfp"]
+
+[ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="1_5j6qp"]
+[ext_resource type="FontFile" uid="uid://rj7dwdgpy2oc" path="res://assets/fonts/Sandra.ttf" id="2_bs3uh"]
+
+[sub_resource type="FontVariation" id="FontVariation_u7w3h"]
+base_font = ExtResource("2_bs3uh")
+
+[node name="TO_THE_LEVELSSS" type="Control" unique_id=1110568814]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="yyy" type="Label" parent="." unique_id=1029531161]
+layout_mode = 0
+offset_left = -21.0
+offset_top = 167.0
+offset_right = 1161.0
+offset_bottom = 314.0
+theme_override_fonts/font = ExtResource("1_5j6qp")
+theme_override_font_sizes/font_size = 70
+text = "Apperently thats it.
+lets beginnn"
+horizontal_alignment = 1
+
+[node name="Start" type="Button" parent="." unique_id=1190426415]
+layout_mode = 0
+offset_left = 297.0
+offset_top = 407.0
+offset_right = 792.0
+offset_bottom = 538.0
+theme_override_fonts/font = SubResource("FontVariation_u7w3h")
+theme_override_font_sizes/font_size = 62
+text = "Let`s Go"

@@ -4,14 +4,18 @@ extends Control
 @onready var energy_bar: ProgressBar = $energy
 @onready var pause_button: Button = $Button
 @onready var levels_label: Label = get_node_or_null("levels")
+@onready var enemy_label: Label = get_node_or_null("levels/levels")
 
 var player: Node = null
 
 func _ready() -> void:
 	_bind_player()
-	if GameManager and GameManager.has_signal("level_changed") and not GameManager.level_changed.is_connected(_on_level_changed):
-		GameManager.level_changed.connect(_on_level_changed)
-	_update_level_label()
+	if GameManager:
+		if GameManager.has_signal("level_changed") and not GameManager.level_changed.is_connected(_on_level_changed):
+			GameManager.level_changed.connect(_on_level_changed)
+		if GameManager.has_signal("stats_changed") and not GameManager.stats_changed.is_connected(_update_labels):
+			GameManager.stats_changed.connect(_update_labels)
+	_update_labels()
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(player):
@@ -57,8 +61,24 @@ func _on_pause_button_pressed() -> void:
 		pause_menu.toggle_pause()
 
 func _on_level_changed(_new_level: int) -> void:
-	_update_level_label()
+	_update_labels()
 
-func _update_level_label() -> void:
-	if levels_label and GameManager and GameManager.has_method("get_level_code"):
-		levels_label.text = "lvl %s" % GameManager.get_level_code()
+func _update_labels() -> void:
+	if not GameManager:
+		return
+
+	if GameManager.game_mode == "endless":
+		if levels_label:
+			levels_label.text = "pts %d" % GameManager.score
+		if enemy_label:
+			enemy_label.text = "enemy %d/endless" % GameManager.enemies_killed
+	elif GameManager.game_mode == "tutorial":
+		if levels_label:
+			levels_label.text = "tutorial"
+		if enemy_label:
+			enemy_label.text = "enemy %d/%d" % [GameManager.enemies_killed, GameManager.total_enemies]
+	else:
+		if levels_label:
+			levels_label.text = "lvl %s" % GameManager.get_level_code()
+		if enemy_label:
+			enemy_label.text = "enemy %d/%d" % [GameManager.enemies_killed, GameManager.total_enemies]

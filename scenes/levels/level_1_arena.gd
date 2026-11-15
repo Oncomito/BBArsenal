@@ -1,5 +1,11 @@
 extends Node2D
 
+const WASD_UI_SCENE := preload("res://scenes/ui/wasd_ui.tscn")
+const DASH_UI_SCENE := preload("res://scenes/ui/dash_ui.tscn")
+const PARRY_UI_SCENE := preload("res://scenes/ui/parry_ui.tscn")
+const OH_NO_UI_SCENE := preload("res://scenes/ui/oh_no.tscn")
+const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/ui/to_the_levelsss.tscn")
+
 @export var max_floor_in_scene: int = 10
 @export var next_level_scene: PackedScene = preload("res://scenes/levels/level_2_crossroads.tscn")
 @export var trapdoor_local_center: Vector2 = Vector2.ZERO
@@ -7,6 +13,7 @@ extends Node2D
 
 var _is_trapdoor_open: bool = false
 var _is_entering_trapdoor: bool = false
+var _tutorial_waiting_enemies: bool = false
 
 @onready var trap_door: TileMapLayer = get_node_or_null("TrapDoor")
 @onready var spawner: Node2D = get_node_or_null("Spawner")
@@ -26,25 +33,32 @@ func _ready() -> void:
 		if spawner.has_signal("all_enemies_cleared") and not spawner.all_enemies_cleared.is_connected(_on_all_enemies_cleared):
 			spawner.all_enemies_cleared.connect(_on_all_enemies_cleared)
 
-	var start_level: int = GameManager.current_level if GameManager else 1
 	if GameManager:
 		GameManager.max_arena_level = max_floor_in_scene
 		if not GameManager.is_black_screen_active:
 			GameManager.set_black_instant()
+
 	var center_global := to_global(trapdoor_local_center)
 	if is_instance_valid(player) and player.has_method("prepare_drop_in"):
 		player.prepare_drop_in(center_global)
-	call_deferred("_start_floor", start_level)
+
+	var mode: String = GameManager.game_mode if GameManager else "levels"
+	if mode == "tutorial":
+		call_deferred("_start_tutorial")
+	elif mode == "endless":
+		call_deferred("_start_endless")
+	else:
+		var start_level: int = GameManager.current_level if GameManager else 1
+		call_deferred("_start_floor", start_level)
 
 func _setup_trapdoor_zone() -> void:
 	if not is_instance_valid(trap_door_zone):
 		trap_door_zone = Area2D.new()
 		trap_door_zone.name = "TrapDoorZone"
 		trap_door_zone.position = trapdoor_local_center
-		
+
 		var col := CollisionShape2D.new()
 		var shape := RectangleShape2D.new()
-		
 		shape.size = trapdoor_trigger_size
 		col.shape = shape
 		trap_door_zone.add_child(col)
@@ -55,18 +69,24 @@ func _setup_trapdoor_zone() -> void:
 	if not trap_door_zone.body_entered.is_connected(_on_trap_door_zone_body_entered):
 		trap_door_zone.body_entered.connect(_on_trap_door_zone_body_entered)
 
-func _start_floor(level: int) -> void:
+func _get_ui_parent() -> Node:
+	if get_tree().current_scene:
+		var ui_node := get_tree().current_scene.get_node_or_null("UI")
+		if ui_node:
+			return ui_node
+	return self
+
+func _reset_arena_state() -> void:
 	_is_trapdoor_open = false
 	_is_entering_trapdoor = false
+	_tutorial_waiting_enemies = false
 
-	# Close the trapdoor so the pit in the center is covered
 	if trap_door:
 		trap_door.visible = true
 
 	if trap_door_zone:
 		trap_door_zone.set_deferred("monitoring", false)
 
-	# Clear leftover projectiles
 	for proj in get_tree().get_nodes_in_group("projectile"):
 		if is_instance_valid(proj):
 			proj.queue_free()
@@ -78,7 +98,10 @@ func _start_floor(level: int) -> void:
 	if is_instance_valid(player) and player.has_method("prepare_drop_in"):
 		player.prepare_drop_in(center_global)
 
-	# Hold black screen briefly and fade out before the player drops in
+func _start_floor(level: int) -> void:
+	_reset_arena_state()
+	var center_global := to_global(trapdoor_local_center)
+
 	if GameManager and GameManager.has_method("fade_from_black"):
 		if not GameManager.is_black_screen_active:
 			GameManager.set_black_instant()
@@ -90,18 +113,142 @@ func _start_floor(level: int) -> void:
 	if GameManager and GameManager.has_method("notify_level_started"):
 		GameManager.notify_level_started()
 
-	# Drop player from the sky into the center of the arena
 	if is_instance_valid(player) and player.has_method("play_drop_in_animation"):
 		await player.play_drop_in_animation(center_global)
 
 	if not is_inside_tree():
 		return
 
-	# Begin spawning enemies for this floor
 	if spawner and spawner.has_method("start_wave"):
 		spawner.start_wave(level)
 
+func _start_endless() -> void:
+	_reset_arena_state()
+	var center_global := to_global(trapdoor_local_center)
+
+	if GameManager and GameManager.has_method("fade_from_black"):
+		if not GameManager.is_black_screen_active:
+			GameManager.set_black_instant()
+		await GameManager.fade_from_black(0.3, 0.35)
+
+	if not is_inside_tree():
+		return
+
+	if GameManager and GameManager.has_method("notify_level_started"):
+		GameManager.notify_level_started()
+
+	if is_instance_valid(player) and player.has_method("play_drop_in_animation"):
+		await player.play_drop_in_animation(center_global)
+
+	if not is_inside_tree():
+		return
+
+	if spawner and spawner.has_method("start_endless"):
+		spawner.start_endless()
+
+func _start_tutorial() -> void:
+	_reset_arena_state()
+	var center_global := to_global(trapdoor_local_center)
+
+	if GameManager and GameManager.has_method("set_wave_enemies"):
+		GameManager.set_wave_enemies(0)
+
+	if GameManager and GameManager.has_method("fade_from_black"):
+		if not GameManager.is_black_screen_active:
+			GameManager.set_black_instant()
+		await GameManager.fade_from_black(0.3, 0.35)
+
+	if not is_inside_tree():
+		return
+
+	if is_instance_valid(player) and player.has_method("play_drop_in_animation"):
+		await player.play_drop_in_animation(center_global)
+
+	if not is_inside_tree():
+		return
+
+	var ui_parent := _get_ui_parent()
+
+	var wasd_ui := WASD_UI_SCENE.instantiate() as Control
+	ui_parent.add_child(wasd_ui)
+	var moved_time := 0.0
+	while is_inside_tree() and moved_time < 0.35:
+		await get_tree().process_frame
+		if Input.get_vector("player_left", "player_right", "player_up", "player_down") != Vector2.ZERO:
+			moved_time += get_process_delta_time()
+	if is_instance_valid(wasd_ui):
+		wasd_ui.queue_free()
+
+	if not is_inside_tree():
+		return
+
+	var dash_ui := DASH_UI_SCENE.instantiate() as Control
+	ui_parent.add_child(dash_ui)
+	while is_inside_tree():
+		await get_tree().process_frame
+		if is_instance_valid(player) and bool(player.get("is_dashing")):
+			break
+	await get_tree().create_timer(0.35).timeout
+	if is_instance_valid(dash_ui):
+		dash_ui.queue_free()
+
+	if not is_inside_tree():
+		return
+
+	var parry_ui := PARRY_UI_SCENE.instantiate() as Control
+	ui_parent.add_child(parry_ui)
+	while is_inside_tree():
+		await get_tree().process_frame
+		if is_instance_valid(player) and bool(player.get("is_attacking")):
+			break
+	await get_tree().create_timer(0.35).timeout
+	if is_instance_valid(parry_ui):
+		parry_ui.queue_free()
+
+	if not is_inside_tree():
+		return
+
+	var oh_no_ui := OH_NO_UI_SCENE.instantiate() as Control
+	ui_parent.add_child(oh_no_ui)
+	await get_tree().create_timer(1.6).timeout
+	if is_instance_valid(oh_no_ui):
+		oh_no_ui.queue_free()
+
+	if not is_inside_tree():
+		return
+
+	_tutorial_waiting_enemies = true
+	if spawner and spawner.has_method("start_wave"):
+		spawner.start_wave(1, 3)
+
+func _show_tutorial_complete_ui() -> void:
+	var ui_parent := _get_ui_parent()
+	var to_levels_ui := TO_THE_LEVELS_UI_SCENE.instantiate() as Control
+	ui_parent.add_child(to_levels_ui)
+	var start_btn := to_levels_ui.get_node_or_null("Start") as Button
+	if start_btn:
+		start_btn.grab_focus()
+		start_btn.pressed.connect(func() -> void:
+			AudioManager.play_sfx("click")
+			if is_instance_valid(to_levels_ui):
+				to_levels_ui.queue_free()
+			if GameManager:
+				GameManager.game_mode = "levels"
+				GameManager.reset_run()
+				await GameManager.fade_to_black(0.25)
+			if is_inside_tree():
+				await _start_floor(1)
+		, CONNECT_ONE_SHOT)
+
 func _on_all_enemies_cleared() -> void:
+	if _tutorial_waiting_enemies:
+		_tutorial_waiting_enemies = false
+		_show_tutorial_complete_ui()
+		return
+
+	if GameManager and GameManager.game_mode != "levels":
+		return
+
 	if _is_trapdoor_open:
 		return
 
@@ -110,7 +257,6 @@ func _on_all_enemies_cleared() -> void:
 	if GameManager:
 		GameManager.level_cleared.emit(current_lvl)
 
-	# Open trapdoor in the center of the arena
 	if trap_door:
 		trap_door.visible = false
 
@@ -120,8 +266,6 @@ func _on_all_enemies_cleared() -> void:
 
 	if trap_door_zone:
 		trap_door_zone.set_deferred("monitoring", true)
-		# If the player is already standing inside the trapdoor area when it opens,
-		# give a brief moment to see it open before jumping in.
 		await get_tree().create_timer(0.35).timeout
 		if not is_inside_tree() or not _is_trapdoor_open or _is_entering_trapdoor:
 			return
@@ -153,7 +297,6 @@ func _enter_trapdoor(player_node: Node2D) -> void:
 	if not is_inside_tree():
 		return
 
-	# Fade to black screen when transitioning to next level
 	if GameManager and GameManager.has_method("fade_to_black"):
 		await GameManager.fade_to_black(0.25)
 

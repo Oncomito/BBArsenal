@@ -141,6 +141,8 @@ func take_damage(amount: int) -> void:
 		_die()
 
 func _die() -> void:
+	if GameManager and GameManager.has_method("register_enemy_kill"):
+		GameManager.register_enemy_kill(10)
 	Gamemanager.add_exp(exp_reward)
 	Audiomanager.play_sfx("blast")
 

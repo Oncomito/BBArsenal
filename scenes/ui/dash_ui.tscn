@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://gajycwq3k4a1"]
+
+[ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="1_pwwud"]
+
+[node name="DASH_UI" type="Control" unique_id=1110568814]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1060520211]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 96.0
+offset_right = 439.0
+offset_bottom = 132.0
+color = Color(0, 0, 0.8754654, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=619534705]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 141.0
+offset_right = 249.0
+offset_bottom = 181.0
+color = Color(0, 0.65882355, 0, 1)
+
+[node name="yyy" type="Label" parent="." unique_id=1029531161]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 83.0
+offset_right = 1479.0
+offset_bottom = 488.0
+theme_override_fonts/font = ExtResource("1_pwwud")
+theme_override_font_sizes/font_size = 45
+text = "Press Shift, Space. 
+or Press A (in joystick)
+to dashhh"

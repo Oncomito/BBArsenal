@@ -14,12 +14,12 @@ func _ready() -> void:
 	if GameManager and GameManager.has_signal("level_started") and not GameManager.level_started.is_connected(_on_level_started):
 		GameManager.level_started.connect(_on_level_started)
 
-func _on_level_started(level_code: String) -> void:
-	show_level_banner(level_code)
+func _on_level_started(banner_text: String) -> void:
+	show_level_banner(banner_text)
 
-func show_level_banner(level_code: String) -> void:
+func show_level_banner(banner_text: String) -> void:
 	if levels_label:
-		levels_label.text = "Level %s" % level_code
+		levels_label.text = banner_text
 
 	if _banner_tween and _banner_tween.is_valid():
 		_banner_tween.kill()

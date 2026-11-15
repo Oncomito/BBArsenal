@@ -17,6 +17,7 @@ var spawned_count: int = 0
 var alive_enemies: int = 0
 var wave_active: bool = false
 var wave_cleared: bool = false
+var is_endless: bool = false
 
 @onready var spawn_area: ReferenceRect = $ReferenceRect
 @onready var timer: Timer = $Timer
@@ -31,20 +32,38 @@ func _ready() -> void:
 func prepare_wave() -> void:
 	wave_active = false
 	wave_cleared = false
+	is_endless = false
 	spawned_count = 0
 	alive_enemies = 0
 	if timer:
 		timer.stop()
 
-func start_wave(level: int = 1) -> void:
-	total_to_spawn = max(1, base_enemies_per_level + max(level - 1, 0) * enemies_increase_per_level)
+func start_wave(level: int = 1, custom_total: int = -1) -> void:
+	is_endless = false
+	if custom_total > 0:
+		total_to_spawn = custom_total
+	else:
+		total_to_spawn = max(1, base_enemies_per_level + max(level - 1, 0) * enemies_increase_per_level)
 	spawned_count = 0
 	alive_enemies = 0
 	wave_active = true
 	wave_cleared = false
+	if GameManager and GameManager.has_method("set_wave_enemies"):
+		GameManager.set_wave_enemies(total_to_spawn)
 	if timer:
 		timer.start()
-	# Spawn first enemy right away so the player doesn't wait for the first timer tick
+	call_deferred("spawn_enemy")
+
+func start_endless() -> void:
+	is_endless = true
+	spawned_count = 0
+	alive_enemies = 0
+	wave_active = true
+	wave_cleared = false
+	if GameManager and GameManager.has_method("set_wave_enemies"):
+		GameManager.set_wave_enemies(0)
+	if timer:
+		timer.start()
 	call_deferred("spawn_enemy")
 
 func _on_timer_timeout() -> void:
@@ -56,7 +75,7 @@ func _on_timer_timeout() -> void:
 func spawn_enemy() -> void:
 	if not wave_active or wave_cleared:
 		return
-	if spawned_count >= total_to_spawn:
+	if not is_endless and spawned_count >= total_to_spawn:
 		timer.stop()
 		_check_wave_cleared()
 		return
@@ -111,7 +130,7 @@ func spawn_enemy() -> void:
 
 	spawned_count += 1
 	alive_enemies += 1
-	if spawned_count >= total_to_spawn and timer:
+	if not is_endless and spawned_count >= total_to_spawn and timer:
 		timer.stop()
 
 	enemy.tree_exited.connect(_on_enemy_tree_exited, CONNECT_ONE_SHOT)
@@ -130,6 +149,8 @@ func _on_enemy_tree_exited() -> void:
 	call_deferred("_check_wave_cleared")
 
 func _check_wave_cleared() -> void:
+	if is_endless:
+		return
 	if not is_inside_tree() or not wave_active or wave_cleared:
 		return
 	if spawned_count < total_to_spawn:

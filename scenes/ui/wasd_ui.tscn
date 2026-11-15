@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://nf2ojie8kfwj"]
+
+[ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="1_skd8e"]
+
+[node name="WASD_UI" type="Control" unique_id=1110568814]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2078024787]
+layout_mode = 0
+offset_left = 171.0
+offset_top = 87.0
+offset_right = 402.0
+offset_bottom = 134.0
+color = Color(0, 0, 0.8754654, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=715226589]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 135.0
+offset_right = 406.0
+offset_bottom = 181.0
+color = Color(0, 0.65882355, 0, 1)
+
+[node name="yyy" type="Label" parent="." unique_id=1029531161]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 77.0
+offset_right = 1066.0
+offset_bottom = 482.0
+theme_override_fonts/font = ExtResource("1_skd8e")
+theme_override_font_sizes/font_size = 49
+text = "Press W, A, S, D.
+or Move Joystic
+to move"
