@@ -98,7 +98,7 @@ func _shoot_fireball(target_position: Vector2) -> void:
 	var direction := global_position.direction_to(target_position)
 	var fireball := FIREBALL_SCENE.instantiate()
 	fireball.scale = fireball.scale * 4
-	fireball.global_position = global_position + direction * 38.0
+	fireball.global_position = global_position + Vector2(20.0, 0.0) + direction * 38.0
 	fireball.direction = direction
 	fireball.speed = FIREBALL_SPEED
 	fireball.lifetime = FIREBALL_LIFETIME
@@ -147,8 +147,8 @@ func _die() -> void:
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
 		var hit := HIT_EFFECT_SCENE.instantiate()
 		hit.global_position = global_position
-		hit.scale = scale * 4.0
+		hit.scale = scale * 8.0
 		hit.animation_name = "fire"
-		get_tree().current_scene.call_deferred("add_child", hit)
+		get_parent().call_deferred("add_child", hit)
 
 	queue_free()

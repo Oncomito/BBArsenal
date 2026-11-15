@@ -249,9 +249,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _perform_parry() -> void:
 	is_attacking = true
 	is_invulnerable = true
-	_play_animation("parry_" + facing_direction)
 	parry_timer.start(0.35)
-	AudioManager.play_sfx("blast", 2.0, -8.0)
+	_play_animation("parry_" + facing_direction)
 	_check_parry()
 
 func _check_parry() -> void:
@@ -259,7 +258,11 @@ func _check_parry() -> void:
 		if is_instance_valid(proj) and proj.has_method("parry") and not proj.get("is_parried"):
 			if global_position.distance_to(proj.global_position) <= 140.0:
 				proj.parry(self)
+				_update_facing_direction_to_object((proj as Node2D).global_position)
+				_play_animation("parry_" + facing_direction)
+				AudioManager.play_sfx("ting", 2.0, -8.0)
 				_on_successful_parry(proj.global_position)
+				break
 
 func _on_successful_parry(pos: Vector2) -> void:
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
@@ -323,10 +326,8 @@ func _perform_dash(input_direction: Vector2) -> void:
 
 	velocity = dash_dir * speed
 
-	# Sprite flashes white for a while during dash
 	flash_white(0.12)
-	# Sprite stays in running position
-	_play_animation("run_" + facing_direction)
+	animated_sprite.play("charge_" + facing_direction)
 
 func _get_current_move_speed() -> float:
 	if is_dashing:
@@ -339,7 +340,6 @@ func take_damage(amount: float) -> void:
 	if is_invulnerable:
 		return
 	if is_attacking:
-		# Parried melee damage!
 		_on_successful_parry(global_position)
 		return
 	if is_dead or amount <= 0.0:
@@ -368,6 +368,21 @@ func _update_facing_direction(dir: Vector2) -> void:
 		facing_direction = "right" if dir.x > 0.0 else "left"
 	else:
 		facing_direction = "down" if dir.y > 0.0 else "up"
+
+func _update_facing_direction_to_object(object: Vector2) -> void:
+	var direction: Vector2 = object - global_position
+	
+	if abs(direction.x) > abs(direction.y):
+		if direction.x > 0:
+			facing_direction = "right"
+		else:
+			facing_direction = "left"
+	else:
+		if direction.y > 0:
+			facing_direction = "down"
+		else:
+			facing_direction = "up"
+
 
 func _get_facing_direction_vector() -> Vector2:
 	match facing_direction:

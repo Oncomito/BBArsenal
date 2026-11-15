@@ -6,7 +6,7 @@
 script = ExtResource("1_eoeca")
 
 [node name="Timer" type="Timer" parent="." unique_id=1724294395]
-wait_time = 2.0
+wait_time = 5.0
 autostart = true
 
 [node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=1049447554]
@@ -15,4 +15,5 @@ offset_top = -856.0
 offset_right = -1382.5333
 offset_bottom = -814.5791
 scale = Vector2(65.636604, 41.428394)
+border_width = 0.0
 editor_only = false
