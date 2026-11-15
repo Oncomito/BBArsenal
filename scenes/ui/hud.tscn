@@ -64,9 +64,9 @@ horizontal_alignment = 1
 [node name="energy" type="ProgressBar" parent="." unique_id=931576718]
 layout_mode = 0
 offset_left = 38.0
-offset_top = 56.0
+offset_top = 39.0
 offset_right = 1101.0
-offset_bottom = 70.0
+offset_bottom = 53.0
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_energy_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_energy_fill")
