@@ -13,6 +13,7 @@ func _on_start_pressed() -> void:
 	AudioManager.play_sfx("click")
 	get_tree().change_scene_to_file(main_scene)
 
+
 func _on_settings_pressed() -> void:
 	AudioManager.play_sfx("click")
 	print("Open settings menu here")

@@ -2,11 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://c4ryo5ntc7v3g" path="res://scenes/ui/pause_menu.tscn" id="1_hyk8p"]
 [ext_resource type="PackedScene" uid="uid://r3mujbv78cs7" path="res://scenes/levels/level_1_arena.tscn" id="1_iuonh"]
-<<<<<<< HEAD
-=======
 [ext_resource type="PackedScene" uid="uid://bi8t3umgrmt4y" path="res://scenes/ui/hud.tscn" id="3_k2fmo"]
 [ext_resource type="PackedScene" uid="uid://c4ncphasnbrkd" path="res://scenes/ui/game_over.tscn" id="4_gameover"]
->>>>>>> 857de0290d4281a10d03c11e1f464f724b573a73
 
 [node name="main" type="Node2D" unique_id=1102324276]
 
