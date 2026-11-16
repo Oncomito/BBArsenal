@@ -28,7 +28,7 @@ var _bounce_lock_timer: float = 0.0
 @export var max_energy: float = 100.0
 @export var dash_energy_cost: float = 20.0
 @export var dash_cooldown: float = 0.2
-@export var energy_regen_rate: float = 2.0
+@export var energy_regen_rate: float = 5.0
 @export var energy_regen_delay: float = 1.0
 @export var energy_exhausted_regen_delay: float = 1.5
 @export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.5
@@ -330,8 +330,7 @@ func _on_successful_parry(pos: Vector2) -> void:
 
 	camera_shake(14.0, 0.2)
 	AudioManager.play_sfx("ting", 1.8, 3.0)
-	energy = minf(energy + 35.0, max_energy)
-	energy_changed.emit(energy, max_energy)
+	energize(35.0)
 
 func _input_move(delta: float) -> void:
 	var locked := _bounce_lock_timer > 0.0
@@ -438,10 +437,15 @@ func heal(amount: float) -> void:
 	health_changed.emit(health, max_health)
 
 func energize(amount: float) -> void:
-	if is_dead or amount <= 0.0:
+	if is_dead:
 		return
-	energy = clampf(energy + amount, 0.0, max_health)
+	var energy_change := -amount if is_shield_active and amount > 0.0 else amount
+	energy = clampf(energy + energy_change, 0.0, max_energy)
 	energy_changed.emit(energy, max_energy)
+	if is_shield_active and energy <= 0.0:
+		is_exhausted = true
+		energy_regen_wait_timer = energy_exhausted_regen_delay
+		_deactivate_shield()
 
 func die() -> void:
 	if is_dead:
