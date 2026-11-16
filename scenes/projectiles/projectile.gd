@@ -44,7 +44,10 @@ func _physics_process(delta: float) -> void:
 			var shield_node := player.get_node_or_null("Shield") as Node2D
 			var shield_pos := shield_node.global_position if shield_node else player.global_position
 			if is_shield_active and (dist < 70.0 or global_position.distance_to(shield_pos) < 70.0):
-				parry(player)
+				if shield_node and shield_node.has_method("bounce_projectile"):
+					shield_node.call("bounce_projectile", self)
+				else:
+					parry(player)
 				return
 
 			var is_attacking: bool = bool(player.get("is_attacking"))
@@ -95,7 +98,10 @@ func _on_area_entered(area: Area2D) -> void:
 		return
 	if not is_parried:
 		if area.is_in_group("player_shield") and area.get("is_active"):
-			parry(area.get("player_ref"))
+			if area.has_method("bounce_projectile"):
+				area.call("bounce_projectile", self)
+			else:
+				parry(area.get("player_ref"))
 			return
 		if area.name == "Hitbox" or area.is_in_group("player_hitbox"):
 			var player := area.get_parent()

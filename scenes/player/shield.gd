@@ -76,14 +76,18 @@ func _on_area_entered(area: Area2D) -> void:
 		return
 	
 	if area.is_in_group("projectile") and area.has_method("parry") and not area.get("is_parried"):
-		_bounce_projectile(area)
+		bounce_projectile(area)
 
 func _on_body_entered(body: Node2D) -> void:
 	if not is_active:
 		return
 	if body.is_in_group("projectile") and body.has_method("parry") and not body.get("is_parried"):
-		_bounce_projectile(body)
+		bounce_projectile(body)
 
-func _bounce_projectile(proj: Node2D) -> void:
+
+func bounce_projectile(proj: Node2D) -> void:
+	if not is_active or not is_instance_valid(proj) or not proj.has_method("parry") or proj.get("is_parried"):
+		return
+	GameManager.player_energize.emit(-proj.damage)
 	proj.parry(player_ref)
 	projectile_bounced.emit(proj)
