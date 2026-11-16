@@ -18,9 +18,9 @@ func _ready() -> void:
 		if not pause_button.pressed.is_connected(_on_pause_button_pressed):
 			pause_button.pressed.connect(_on_pause_button_pressed)
 	if GameManager:
-		if GameManager.has_signal("level_changed") and not GameManager.level_changed.is_connected(_on_level_changed):
+		if not GameManager.level_changed.is_connected(_on_level_changed):
 			GameManager.level_changed.connect(_on_level_changed)
-		if GameManager.has_signal("stats_changed") and not GameManager.stats_changed.is_connected(_update_labels):
+		if not GameManager.stats_changed.is_connected(_update_labels):
 			GameManager.stats_changed.connect(_update_labels)
 	_update_labels()
 

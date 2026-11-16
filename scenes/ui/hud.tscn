@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://bi8t3umgrmt4y"]
 
 [ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/UI/—Pngtree—heart pixel art_8666747.png" id="1_hqnrr"]
+[ext_resource type="FontFile" uid="uid://brr2jtpm3yhu3" path="res://assets/fonts/JetBrainsMono-VariableFont_wght.ttf" id="2_136eg"]
 [ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/UI/energy.png" id="2_bo48s"]
 [ext_resource type="Script" uid="uid://ccsx05opowl0s" path="res://scenes/ui/hud.gd" id="3_hudgd"]
 [ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="4_8qguk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1itfa"]
+font = ExtResource("2_136eg")
+font_size = 24
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_energy_bg"]
 bg_color = Color(0.2, 0.16, 0.04, 0.85)
@@ -27,13 +32,17 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
-bg_color = Color(0.85, 0.15, 0.15, 1)
+bg_color = Color(0.9555598, 0.19983092, 0.19054687, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="LabelSettings" id="LabelSettings_8qguk"]
+font_size = 48
+
 [node name="HUD" type="Control" unique_id=1729188291]
+texture_filter = 6
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,29 +54,31 @@ script = ExtResource("3_hudgd")
 
 [node name="Button" type="Button" parent="." unique_id=2020490796]
 layout_mode = 0
-offset_left = 1107.0
-offset_top = 12.0
-offset_right = 1148.0
-offset_bottom = 58.0
+offset_left = 1795.9999
+offset_top = 47.0
+offset_right = 1836.9999
+offset_bottom = 93.0
+scale = Vector2(1.6343701, 1.5321991)
 focus_mode = 0
 
 [node name="Label" type="Label" parent="Button" unique_id=1219445936]
 layout_mode = 0
-offset_left = 37.0
-offset_top = 13.0
-offset_right = 54.617188
-offset_bottom = 36.0
+offset_left = 42.32293
+offset_top = 10.957552
+offset_right = 61.67008
+offset_bottom = 42.95755
 rotation = 1.5707964
 scale = Vector2(1.323325, 1.3811736)
 text = "="
+label_settings = SubResource("LabelSettings_1itfa")
 horizontal_alignment = 1
 
 [node name="energy" type="ProgressBar" parent="." unique_id=931576718]
 layout_mode = 0
-offset_left = 38.0
-offset_top = 39.0
-offset_right = 1101.0
-offset_bottom = 53.0
+offset_left = 46.5
+offset_top = 1024.0
+offset_right = 521.0
+offset_bottom = 1046.5001
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_energy_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_energy_fill")
@@ -76,41 +87,43 @@ show_percentage = false
 
 [node name="health" type="ProgressBar" parent="." unique_id=648273595]
 layout_mode = 0
-offset_left = 39.0
-offset_top = 11.0
-offset_right = 1101.0
-offset_bottom = 39.0
+offset_left = 48.0
+offset_top = 975.0
+offset_right = 521.5
+offset_bottom = 1024.0
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
 value = 100.0
 show_percentage = false
 
-[node name="health_icon" type="Sprite2D" parent="health" unique_id=1321744819]
-position = Vector2(2, 16)
-scale = Vector2(0.03, 0.03)
+[node name="health_icon" type="Sprite2D" parent="." unique_id=1321744819]
+position = Vector2(46, 1003)
+scale = Vector2(0.03391353, 0.03391353)
 texture = ExtResource("1_hqnrr")
 
-[node name="health_icon2" type="Sprite2D" parent="." unique_id=955546948]
-position = Vector2(38, 55)
-scale = Vector2(0.12, 0.12)
+[node name="energy_icon" type="Sprite2D" parent="." unique_id=955546948]
+position = Vector2(47, 1046)
+scale = Vector2(0.13594192, 0.13594192)
 texture = ExtResource("2_bo48s")
 
 [node name="levels" type="Label" parent="." unique_id=505111019]
 layout_mode = 0
-offset_left = 50.0
-offset_top = 53.0
-offset_right = 174.0
-offset_bottom = 76.0
+offset_left = 55.0
+offset_top = 37.0
+offset_right = 179.0
+offset_bottom = 60.0
 theme_override_fonts/font = ExtResource("4_8qguk")
 text = "lv. (levels here)"
+label_settings = SubResource("LabelSettings_8qguk")
 
 [node name="levels" type="Label" parent="levels" unique_id=171649866]
 layout_mode = 0
-offset_left = 153.0
-offset_right = 430.0
-offset_bottom = 23.0
+offset_top = 46.0
+offset_right = 985.0
+offset_bottom = 96.0
 theme_override_fonts/font = ExtResource("4_8qguk")
 text = "enemy killed (enemy_killed)/(total_enemy)"
+label_settings = SubResource("LabelSettings_8qguk")
 
 [connection signal="pressed" from="Button" to="." method="_on_pause_button_pressed"]

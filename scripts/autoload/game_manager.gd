@@ -1,6 +1,7 @@
 extends Node
 
-signal player_died
+signal player_heal(amount: float)
+signal player_energize(amoung: float)
 signal level_changed(new_level: int)
 signal level_started(level_code: String)
 signal level_cleared(level: int)
@@ -112,6 +113,9 @@ func advance_level() -> int:
 	if current_sublevel >= max_arena_level:
 		current_stage += 1
 		current_sublevel = 0
+
+	player_heal.emit(50.0)
+	player_energize.emit(100.0)
 	level_changed.emit(current_level)
 	stats_changed.emit()
 	return current_level
@@ -148,3 +152,13 @@ func get_player_damage(base_damage: float = 20.0) -> float:
 
 func get_enemy_scaling_hp(base_hp: float = 20.0) -> float:
 	return base_hp * (1.0 + float(max(current_level - 1, 0)) * 0.1)
+
+func restart_game() -> void:
+	get_tree().paused = false
+	reset_run()
+	await fade_to_black(0.2)
+
+	AudioManager.play_music("gameplay")
+	AudioManager.fade_in(0.5)
+
+	get_tree().reload_current_scene()

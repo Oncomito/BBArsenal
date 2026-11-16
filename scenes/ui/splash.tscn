@@ -46,6 +46,30 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BackdropGlow:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BackdropGlow:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(578.7635, 330.89517)]
+}
 
 [sub_resource type="Animation" id="Animation_poid3"]
 resource_name = "splash"
@@ -87,6 +111,30 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector2(0.82, 0.82), Vector2(1.04, 1.04), Vector2(1, 1), Vector2(1.02, 1.02), Vector2(1.08, 1.08)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BackdropGlow:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.4, 2.2),
+"transitions": PackedFloat32Array(0.5, 0.5, 2, 2),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1, 1), Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BackdropGlow:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.21, 1.41, 2.2),
+"transitions": PackedFloat32Array(0.5, 0.5, 2, 2),
+"update": 0,
+"values": [Vector2(578.7635, 330.89517), Vector2(185.44675, 110.90443), Vector2(185.44675, 110.90443), Vector2(-19.39312, 0.60603714)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4rrho"]
 _data = {
@@ -95,25 +143,29 @@ _data = {
 }
 
 [node name="Splash" type="Node2D" unique_id=795284154]
+texture_filter = 6
+scale = Vector2(1.6500694, 1.6500694)
 script = ExtResource("1_10vqf")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1600740122]
-offset_left = -64.0
-offset_top = -64.0
-offset_right = 1216.0
-offset_bottom = 712.0
+offset_left = -61.209545
+offset_top = -56.9673
+offset_right = 1218.7904
+offset_bottom = 719.0327
 color = Color(0.047058824, 0.05882353, 0.105882354, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="BackdropGlow" type="ColorRect" parent="." unique_id=1600740123]
-offset_left = 169.0
-offset_top = 100.0
-offset_right = 969.0
-offset_bottom = 535.0
+offset_left = 578.7635
+offset_top = 330.89517
+offset_right = 1378.7638
+offset_bottom = 765.8949
 color = Color(0.09, 0.14, 0.26, 0.45)
+metadata/_edit_use_anchors_ = true
 
 [node name="Logo" type="Node2D" parent="." unique_id=1268777329]
 texture_filter = 6
-position = Vector2(576, 324)
+position = Vector2(578.79047, 331.0327)
 
 [node name="Icon" type="Sprite2D" parent="Logo" unique_id=282407759]
 position = Vector2(-3, -78)
@@ -136,6 +188,7 @@ theme_override_font_sizes/font_size = 64
 text = "B. B. Arsenal"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=367711798]
 libraries/ = SubResource("AnimationLibrary_4rrho")

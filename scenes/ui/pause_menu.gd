@@ -16,6 +16,10 @@ func toggle_pause() -> void:
 	if _is_game_over_active():
 		return
 	AudioManager.play_sfx("click")
+	if AudioManager.is_playing():
+		AudioManager.pause_music()
+	else:
+		AudioManager.resume_music()
 	get_tree().paused = not get_tree().paused
 	visible = get_tree().paused
 	if visible and continue_button:

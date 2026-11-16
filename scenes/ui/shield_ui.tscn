@@ -2,7 +2,12 @@
 
 [ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="1_6t2fo"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_fk2sh"]
+font = ExtResource("1_6t2fo")
+font_size = 48
+
 [node name="Shield_UI" type="Control" unique_id=1110568814]
+texture_filter = 6
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,30 +16,51 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="ColorRect2" type="ColorRect" parent="." unique_id=528082613]
-layout_mode = 0
-offset_left = 92.0
-offset_top = 150.0
-offset_right = 604.0
-offset_bottom = 190.0
-color = Color(0, 0.65882355, 0, 1)
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=370172911]
-layout_mode = 0
-offset_left = 24.0
-offset_top = 91.0
-offset_right = 223.0
-offset_bottom = 146.0
+[node name="ColorRect3" type="ColorRect" parent="." unique_id=805036721]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -282.0
+offset_top = -372.0
+offset_right = -16.0
+offset_bottom = -339.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0.8754654, 1)
 
-[node name="yyy2" type="Label" parent="." unique_id=37582645]
-layout_mode = 0
-offset_left = 27.0
-offset_top = 83.0
-offset_right = 1485.0
-offset_bottom = 488.0
-theme_override_fonts/font = ExtResource("1_6t2fo")
-theme_override_font_sizes/font_size = 51
-text = "Press C
-or Press B (in joystick)
-to activate shield"
+[node name="ColorRect4" type="ColorRect" parent="." unique_id=654546015]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 32.0
+offset_top = -371.0
+offset_right = 284.0
+offset_bottom = -339.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.65882355, 0, 1)
+
+[node name="yyy3" type="Label" parent="." unique_id=1406922123]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -295.5
+offset_top = -383.0
+offset_right = 295.5
+offset_bottom = -280.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Keyboard C // Gamepad B
+to activate Shield"
+label_settings = SubResource("LabelSettings_fk2sh")
+horizontal_alignment = 1
+vertical_alignment = 1

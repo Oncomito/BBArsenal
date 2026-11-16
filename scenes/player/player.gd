@@ -1,3 +1,5 @@
+class_name Player
+
 extends CharacterBody2D
 
 const HIT_EFFECT_SCENE := preload("res://scenes/projectiles/hit.tscn")
@@ -6,7 +8,6 @@ signal health_changed(current_health: float, max_health: float)
 signal energy_changed(current_energy: float, max_energy: float)
 signal player_died
 signal dash_count_changed(current_count: int, max_count: int)
-
 
 @export_group("Movement")
 @export var speed: float = 1945.0
@@ -27,7 +28,7 @@ var _bounce_lock_timer: float = 0.0
 @export var max_energy: float = 100.0
 @export var dash_energy_cost: float = 20.0
 @export var dash_cooldown: float = 0.2
-@export var energy_regen_rate: float = 25.0
+@export var energy_regen_rate: float = 5.0
 @export var energy_regen_delay: float = 1.0
 @export var energy_exhausted_regen_delay: float = 1.5
 @export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.5
@@ -75,6 +76,8 @@ var flash_material: ShaderMaterial
 
 func _ready() -> void:
 	add_to_group("player")
+	GameManager.player_heal.connect(heal)
+	GameManager.player_energize.connect(energize)
 	if has_node("Shield"):
 		shield.setup(self)
 	normal_speed = speed
@@ -190,6 +193,7 @@ func _handle_bounce(pre_collision_velocity: Vector2) -> void:
 			did_bounce = true
 
 	if did_bounce:
+		energize(ceilf(dash_energy_cost / 3))
 		_bounce_lock_timer = bounce_lockout
 		if is_dashing:
 			speed = minf(maxf(speed, normal_speed * dash_speed_multiplier) * dash_bounce_factor, 4200.0)
@@ -326,8 +330,7 @@ func _on_successful_parry(pos: Vector2) -> void:
 
 	camera_shake(14.0, 0.2)
 	AudioManager.play_sfx("ting", 1.8, 3.0)
-	energy = minf(energy + 35.0, max_energy)
-	energy_changed.emit(energy, max_energy)
+	energize(35.0)
 
 func _input_move(delta: float) -> void:
 	var locked := _bounce_lock_timer > 0.0
@@ -356,11 +359,16 @@ func can_dash() -> bool:
 	return dash_cooldown_timer <= 0.0 and energy > 0.0
 
 func _perform_dash(input_direction: Vector2) -> void:
+	if floor(energy / dash_energy_cost) < 1:
+		return
+
 	if is_shield_active:
 		_deactivate_shield()
 
 	dash_cooldown_timer = dash_cooldown
+
 	energy = maxf(energy - dash_energy_cost, 0.0)
+
 	if energy <= 0.0:
 		is_exhausted = true
 		energy_regen_wait_timer = energy_exhausted_regen_delay
@@ -427,6 +435,17 @@ func heal(amount: float) -> void:
 		return
 	health = clampf(health + amount, 0.0, max_health)
 	health_changed.emit(health, max_health)
+
+func energize(amount: float) -> void:
+	if is_dead:
+		return
+	var energy_change := -amount if is_shield_active and amount > 0.0 else amount
+	energy = clampf(energy + energy_change, 0.0, max_energy)
+	energy_changed.emit(energy, max_energy)
+	if is_shield_active and energy <= 0.0:
+		is_exhausted = true
+		energy_regen_wait_timer = energy_exhausted_regen_delay
+		_deactivate_shield()
 
 func die() -> void:
 	if is_dead:
@@ -509,12 +528,13 @@ func _on_parry_timer_timeout() -> void:
 			_play_animation("idle_" + facing_direction)
 
 func prepare_drop_in(target_global_pos: Vector2) -> void:
-	if is_shield_active:
-		_deactivate_shield()
+	_deactivate_shield()
+
 	is_transitioning = true
 	is_invulnerable = true
 	is_dashing = false
 	is_attacking = false
+
 	velocity = Vector2.ZERO
 	if dash_timer:
 		dash_timer.stop()
@@ -543,7 +563,6 @@ func play_drop_in_animation(target_global_pos: Vector2) -> void:
 
 		if not is_inside_tree():
 			return
-
 
 		AudioManager.play_sfx("blast", 1.15, -2.0)
 		camera_shake(18.0, 0.25)

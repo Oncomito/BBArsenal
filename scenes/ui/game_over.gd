@@ -23,6 +23,7 @@ func _bind_player() -> void:
 
 func show_game_over() -> void:
 	var pause_menu := get_parent().get_node_or_null("PauseMenu") as Control
+	AudioManager.fade_out(2.5)
 	if pause_menu:
 		pause_menu.visible = false
 	visible = true
@@ -44,13 +45,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_restart_pressed() -> void:
 	AudioManager.play_sfx("click")
 	visible = false
-	get_tree().paused = false
-	if GameManager:
-		if GameManager.has_method("reset_run"):
-			GameManager.reset_run()
-		if GameManager.has_method("fade_to_black"):
-			await GameManager.fade_to_black(0.2)
-	get_tree().reload_current_scene()
+	Gamemanager.restart_game()
 
 func _on_settings_pressed() -> void:
 	AudioManager.play_sfx("click")
