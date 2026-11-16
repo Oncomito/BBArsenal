@@ -60,20 +60,14 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2bhf2"]
-radius = 4.601104
-height = 44.98857
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fvs4a"]
+size = Vector2(58.79188, 50.364258)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3qjkr"]
 radius = 40.3907
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hurtbox"]
-radius = 24.0
-height = 58.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vn0dp"]
-radius = 66.0
-height = 218.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_sgj0o"]
+radius = 117.06836
 
 [node name="Mecha" type="CharacterBody2D" unique_id=1926874390 groups=["enemy"]]
 collision_layer = 2
@@ -89,10 +83,10 @@ autoplay = "walk"
 frame_progress = 0.6293927
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=695283538]
-position = Vector2(0.99999994, -19.000002)
+position = Vector2(2.5151305, -116)
 rotation = -1.5707964
 scale = Vector2(3.9121046, 3.9121046)
-shape = SubResource("CapsuleShape2D_2bhf2")
+shape = SubResource("RectangleShape2D_fvs4a")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1628389611]
 position = Vector2(-5.9604645e-08, -66)
@@ -100,27 +94,17 @@ scale = Vector2(3.9121046, 3.9121046)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2032168519]
-position = Vector2(0.68885815, 1.7113258)
+position = Vector2(1.5235894e-08, 16.870714)
 rotation = -1.5707964
 shape = SubResource("CircleShape2D_3qjkr")
 
-[node name="Hurtbox" type="Area2D" parent="." unique_id=1804870234]
-position = Vector2(-0.69488525, -122.694885)
-scale = Vector2(3.9121046, 3.9121046)
+[node name="Bodybox" type="StaticBody2D" parent="." unique_id=2086730052]
 collision_layer = 0
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1687370211]
-position = Vector2(0.17762439, 1.7113252)
-shape = SubResource("CapsuleShape2D_hurtbox")
-
-[node name="Bodybox" type="StaticBody2D" parent="." unique_id=2086730052]
-collision_layer = 0
-collision_mask = 3
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bodybox" unique_id=1808352292]
-position = Vector2(0, -66)
-rotation = -1.5707964
-shape = SubResource("CapsuleShape2D_vn0dp")
+position = Vector2(0, -117)
+rotation = -3.1415927
+shape = SubResource("CircleShape2D_sgj0o")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1501155434]

@@ -217,7 +217,6 @@ func _on_hitbox_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player") and is_preparing_stomp:
 		is_preparing_stomp = false
 
-
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("player_hitbox") or area.name == "Hitbox":
 		var attacker := area.get_parent()
