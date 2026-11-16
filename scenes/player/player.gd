@@ -34,6 +34,9 @@ var _bounce_lock_timer: float = 0.0
 @export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.5
 @export var dash_damage: float = 35.0
 @export var parry_cooldown: float = 0.75
+@export_range(0.0, 1.0, 0.05) var speed_damage_min_speed_ratio: float = 0.5
+@export var dash_invulnerability_duration: float = 0.25
+@export var parry_invulnerability_duration: float = 0.2
 
 @export_group("Shield")
 @export var shield_drain_rate: float = 10.0
@@ -53,6 +56,7 @@ var energy: float = 100.0
 var energy_regen_wait_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
 var parry_cooldown_timer: float = 0.0
+var _invulnerability_timer: float = 0.0
 var is_exhausted: bool = false
 var is_dead: bool = false
 var is_dashing: bool = false
@@ -61,7 +65,6 @@ var is_invulnerable: bool = false
 var is_attacking: bool = false
 var is_shield_active: bool = false
 var is_transitioning: bool = false
-var _dash_bounce_damage_active: bool = false
 var _dash_hit_enemies: Array = []
 
 var _shake_intensity: float = 0.0
@@ -119,6 +122,10 @@ func _physics_process(delta: float) -> void:
 		dash_cooldown_timer = maxf(dash_cooldown_timer - delta, 0.0)
 	if parry_cooldown_timer > 0.0:
 		parry_cooldown_timer = maxf(parry_cooldown_timer - delta, 0.0)
+	if _invulnerability_timer > 0.0:
+		_invulnerability_timer = maxf(_invulnerability_timer - delta, 0.0)
+	if not is_transitioning:
+		is_invulnerable = _invulnerability_timer > 0.0
 	if _bounce_lock_timer > 0.0:
 		_bounce_lock_timer = maxf(_bounce_lock_timer - delta, 0.0)
 
@@ -131,10 +138,11 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_handle_bounce(pre_collision_velocity)
 
-	if is_dashing or (_dash_bounce_damage_active and velocity.length() > _get_current_move_speed()):
-		_handle_dash_damage()
-	elif not is_dashing:
-		_dash_bounce_damage_active = false
+	var current_speed := velocity.length()
+	var minimum_damage_speed := normal_speed * speed_damage_min_speed_ratio
+	if is_dashing or current_speed >= minimum_damage_speed:
+		_handle_speed_damage(current_speed)
+	else:
 		_dash_hit_enemies.clear()
 
 	if is_attacking:
@@ -150,14 +158,19 @@ func _decay_bounce_boost(delta: float) -> void:
 	if acceleration > base_acceleration:
 		acceleration = move_toward(acceleration, base_acceleration, delta * 2000.0)
 
-func _handle_dash_damage() -> void:
+
+func _handle_speed_damage(current_speed: float) -> void:
+	if current_speed <= 0.0:
+		return
+	var reference_speed := maxf(normal_speed * dash_speed_multiplier, 1.0)
+	var damage := dash_damage * current_speed / reference_speed
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if is_instance_valid(enemy) and not _dash_hit_enemies.has(enemy):
 			var enemy_position = enemy.global_position + Vector2(0.0, -115)
 			var my_center_position = global_position + Vector2(0.0, -75)
 			if my_center_position.distance_to(enemy_position) < 200:
 				if enemy.has_method("take_damage"):
-					enemy.take_damage(dash_damage)
+					enemy.take_damage(damage)
 					_dash_hit_enemies.append(enemy)
 					_on_dash_hit(enemy.global_position)
 
@@ -187,10 +200,9 @@ func _handle_bounce(pre_collision_velocity: Vector2) -> void:
 			did_bounce = true
 
 	if did_bounce:
-		energize(ceilf(dash_energy_cost / 3))
+		energize(ceilf(dash_energy_cost / 2))
 		_bounce_lock_timer = bounce_lockout
 		if is_dashing:
-			_dash_bounce_damage_active = true
 			speed = minf(maxf(speed, normal_speed * dash_speed_multiplier) * dash_bounce_factor, 4200.0)
 			acceleration = minf(maxf(acceleration, base_acceleration) * dash_bounce_acceleration_multiplier, 2800.0)
 			velocity = bounced_velocity.normalized() * speed
@@ -300,6 +312,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _perform_parry() -> void:
 	is_attacking = true
 	is_invulnerable = true
+	_invulnerability_timer = maxf(_invulnerability_timer, parry_invulnerability_duration)
 	parry_cooldown_timer = parry_cooldown
 	parry_timer.start(0.1)
 	_play_animation("parry_" + facing_direction)
@@ -326,7 +339,7 @@ func _on_successful_parry(pos: Vector2) -> void:
 
 	camera_shake(14.0, 0.2)
 	AudioManager.play_sfx("ting", 1.8, 3.0)
-	energize(7.5)
+	energize(15)
 
 func _input_move(delta: float) -> void:
 	var locked := _bounce_lock_timer > 0.0
@@ -376,7 +389,7 @@ func _perform_dash(input_direction: Vector2) -> void:
 
 	is_dashing = true
 	is_invulnerable = true
-	_dash_bounce_damage_active = false
+	_invulnerability_timer = maxf(_invulnerability_timer, dash_invulnerability_duration)
 	_dash_hit_enemies.clear()
 	dash_timer.start(0.16)
 
@@ -487,8 +500,6 @@ func _get_facing_direction_vector() -> Vector2:
 
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
-	if not is_transitioning:
-		is_invulnerable = false
 	speed = _get_current_move_speed()
 	acceleration = base_acceleration
 	if not is_attacking and not is_transitioning:
@@ -514,8 +525,6 @@ func get_dash_recharge_ratio() -> float:
 
 func _on_parry_timer_timeout() -> void:
 	is_attacking = false
-	if not is_dashing and not is_transitioning:
-		is_invulnerable = false
 	if not is_transitioning:
 		var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
 		if input_direction != Vector2.ZERO:
@@ -528,6 +537,7 @@ func prepare_drop_in(target_global_pos: Vector2) -> void:
 
 	is_transitioning = true
 	is_invulnerable = true
+	_invulnerability_timer = 0.0
 	is_dashing = false
 	is_attacking = false
 
@@ -592,6 +602,7 @@ func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
 		_deactivate_shield()
 	is_transitioning = true
 	is_invulnerable = true
+	_invulnerability_timer = 0.0
 	is_dashing = false
 	is_attacking = false
 	velocity = Vector2.ZERO

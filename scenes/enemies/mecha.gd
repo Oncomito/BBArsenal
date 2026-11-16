@@ -222,6 +222,7 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		var attacker := area.get_parent()
 		if is_instance_valid(attacker) and attacker.is_in_group("player"):
 			var dmg: float = float(attacker.get("dash_damage")) if "dash_damage" in attacker else 25.0
+			GameManager.player_energize.emit(5.0)
 			take_damage(dmg)
 
 func _shoot_at_player() -> void:
