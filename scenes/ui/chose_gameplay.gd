@@ -19,12 +19,12 @@ func _start_mode(mode: String) -> void:
 		return
 	_is_busy = true
 	AudioManager.play_sfx("click")
-	if AudioManager:
-		AudioManager.play_music("gameplay")
-	if GameManager:
-		GameManager.game_mode = mode
-		GameManager.reset_run()
-		await GameManager.fade_to_black(0.25)
+	AudioManager.play_music("gameplay")
+	
+	GameManager.game_mode = mode
+	GameManager.reset_run()
+	await GameManager.fade_to_black(0.25)
+	
 	get_tree().change_scene_to_file(main_scene)
 
 func _on_start_pressed() -> void:

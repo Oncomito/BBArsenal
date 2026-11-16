@@ -408,7 +408,7 @@ position = Vector2(-352, -63)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1609608863]
 scale = Vector2(1.5971185, 1.0412697)
-zoom = Vector2(0.51, 0.51)
+zoom = Vector2(0.85, 0.85)
 
 [node name="Chose_gameplay" parent="." unique_id=1317546458 instance=ExtResource("6_votyu")]
 offset_left = -593.0

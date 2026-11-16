@@ -3,21 +3,24 @@ extends CharacterBody2D
 const HIT_EFFECT_SCENE := preload("res://scenes/projectiles/hit.tscn")
 
 @export var speed: float = 180.0
-@export var max_health: float = 100.0
+@export var max_health: float = 180.0
 @export var damage: float = 15.0
 @export var shoot_cooldown: float = 2.5
-@export var shoot_range: float = 600.0
-@export var stomp_cooldown: float = 3.5
-@export var stomp_range: float = 160.0
+@export var shoot_range: float = 1200.0
+@export var stomp_range: float = 200
 @export var stomp_damage: float = 25.0
-@export var stomp_radius: float = 180.0
+@export var burst_count: int = 3
+@export var time_between_shots: float = 1 / float(burst_count)
 
 var health: float
-var player: Node2D = null
-var shoot_timer: float = 1.0
-var stomp_timer: float = 2.0
+var player: CharacterBody2D = null
+var shoot_timer: Timer = Timer.new()
+var consecutive_shoot_timer: Timer = Timer.new()
+var shots_remaining: int = 0
+var is_preparing_stomp: bool = false
 var is_stomping: bool = false
 var is_stunned: bool = false
+var warning_pulse: float = 0.0
 
 var hp_bar: ProgressBar
 
@@ -25,22 +28,55 @@ var hp_bar: ProgressBar
 @onready var hitbox: Area2D = $Hitbox
 @onready var hurtbox: Area2D = $Hurtbox
 
+
 func _ready() -> void:
 	add_to_group("enemy")
 	health = max_health
 	player = get_tree().get_first_node_in_group("player")
-	if hitbox and not hitbox.body_entered.is_connected(_on_hitbox_body_entered):
-		hitbox.body_entered.connect(_on_hitbox_body_entered)
+
+	add_child(shoot_timer)
+	add_child(consecutive_shoot_timer)
+
+	shoot_timer.wait_time = shoot_cooldown
+	shoot_timer.one_shot = true
+	shoot_timer.timeout.connect(_start_shoot_burst)
+
+	consecutive_shoot_timer.wait_time = time_between_shots
+	consecutive_shoot_timer.one_shot = true
+	consecutive_shoot_timer.timeout.connect(_shoot_next_in_burst)
+
+	if hitbox:
+		if not hitbox.body_entered.is_connected(_on_hitbox_body_entered):
+			hitbox.body_entered.connect(_on_hitbox_body_entered)
+		if not hitbox.body_exited.is_connected(_on_hitbox_body_exited):
+			hitbox.body_exited.connect(_on_hitbox_body_exited)
+
 	if hurtbox and not hurtbox.area_entered.is_connected(_on_hurtbox_area_entered):
 		hurtbox.area_entered.connect(_on_hurtbox_area_entered)
+
 	_setup_hp_bar()
+
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("player")
 
-	if is_stunned or is_stomping:
+	if is_stomping:
+		warning_pulse += delta * 12.0
+		queue_redraw()
+
+	if is_stunned:
 		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
+	if is_stomping:
+		if is_instance_valid(player):
+			var dir := global_position.direction_to(player.global_position)
+			velocity = dir * (speed * 0.3)
+			animated_sprite.flip_h = velocity.x < 0
+		else:
+			velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
@@ -48,43 +84,98 @@ func _physics_process(delta: float) -> void:
 		var dist := global_position.distance_to(player.global_position)
 		var dir := global_position.direction_to(player.global_position)
 		velocity = dir * speed
-		if velocity.x != 0:
-			animated_sprite.flip_h = velocity.x < 0
+		animated_sprite.flip_h = velocity.x < 0
 
-		# Stomp logic
-		stomp_timer -= delta
-		if stomp_timer <= 0.0 and dist <= stomp_range:
-			_start_stomp()
-			return
+		
+		if dist <= shoot_range and shoot_timer.is_stopped() and consecutive_shoot_timer.is_stopped() and shots_remaining == 0:
+			_start_shoot_burst()
 
-		# Shooting logic
-		shoot_timer -= delta
-		if shoot_timer <= 0.0 and dist <= shoot_range:
-			_shoot_at_player()
-			shoot_timer = shoot_cooldown
+		
+		if dist <= stomp_range and not is_preparing_stomp and not is_stomping:
+			_start_stomp_preparation()
 	else:
 		velocity = Vector2.ZERO
 
 	move_and_slide()
 
-func _start_stomp() -> void:
+
+func _draw() -> void:
+	if is_stomping:
+		var radius := stomp_range
+		var indicator_pos := Vector2.ZERO
+
+		
+		var alpha := 0.2 + 0.15 * sin(warning_pulse)
+		draw_circle(indicator_pos, radius, Color(1.0, 0.2, 0.1, alpha))
+		draw_arc(indicator_pos, radius, 0, TAU, 48, Color(1.0, 0.1, 0.1, 0.85), 3.5, true)
+
+
+func _start_shoot_burst() -> void:
+	shots_remaining = burst_count
+	_shoot_next_in_burst()
+
+
+func _shoot_next_in_burst() -> void:
+	if not is_instance_valid(player):
+		shots_remaining = 0
+		return
+
+	_shoot_at_player()
+	shots_remaining -= 1
+
+	if shots_remaining > 0:
+		consecutive_shoot_timer.start()
+	else:
+		shoot_timer.start()
+
+
+func _start_stomp_preparation() -> void:
+	if is_preparing_stomp or is_stomping:
+		return
+	is_preparing_stomp = true
+
+	
+	get_tree().create_timer(0.5).timeout.connect(
+		func():
+			if not is_instance_valid(self):
+				return
+			if not is_preparing_stomp:
+				return
+			
+			
+			var dist := global_position.distance_to(player.global_position) if is_instance_valid(player) else 9999.0
+			if not player or dist > stomp_range or not hitbox.overlaps_body(player):
+				is_preparing_stomp = false
+				return
+
+			_start_stomp_charge(),
+	)
+
+
+func _start_stomp_charge() -> void:
+	is_preparing_stomp = false
 	is_stomping = true
-	velocity = Vector2.ZERO
+	warning_pulse = 0.0
 	if animated_sprite:
 		animated_sprite.modulate = Color(2.5, 0.5, 0.5, 1.0)
 	AudioManager.play_sfx("fireball", 0.8, -2.0)
 
-	get_tree().create_timer(0.45).timeout.connect(func():
-		if not is_instance_valid(self):
-			return
-		_execute_stomp()
+	var charge_duration := randf_range(2.0, 4.0)
+	get_tree().create_timer(charge_duration).timeout.connect(
+		func():
+			if not is_instance_valid(self):
+				return
+			if not is_stomping:
+				return
+			
+			_execute_stomp(),
 	)
 
+
 func _execute_stomp() -> void:
-	if animated_sprite:
-		animated_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	animated_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	is_stomping = false
-	stomp_timer = stomp_cooldown
+	queue_redraw()
 
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
 		var hit := HIT_EFFECT_SCENE.instantiate()
@@ -95,31 +186,37 @@ func _execute_stomp() -> void:
 
 	AudioManager.play_sfx("blast", 1.1, 2.0)
 
-	if is_instance_valid(player):
-		var dist := global_position.distance_to(player.global_position)
-		if dist <= stomp_radius:
-			if bool(player.get("is_attacking")):
-				AudioManager.play_sfx("ting", 1.8, 4.0)
-				take_damage(40.0)
-				is_stunned = true
-				if player.has_method("camera_shake"):
-					player.camera_shake(16.0, 0.25)
-				get_tree().create_timer(1.2).timeout.connect(func():
-					if is_instance_valid(self):
-						is_stunned = false
-				)
-			elif bool(player.get("is_invulnerable")):
-				# Dodged via dash i-frame
-				pass
-			else:
-				if player.has_method("take_damage"):
-					player.take_damage(stomp_damage)
+	if hitbox:
+		for body in hitbox.get_overlapping_bodies():
+			if body.is_in_group("player"):
+				if bool(body.get("is_attacking")):
+					AudioManager.play_sfx("ting", 1.8, 4.0)
+					is_stunned = true
+					if body.has_method("camera_shake"):
+						body.camera_shake(16.0, 0.25)
+					get_tree().create_timer(1.2).timeout.connect(
+						func():
+							if is_instance_valid(self):
+								is_stunned = false,
+					)
+				elif bool(body.get("is_invulnerable")):
+					pass
+				else:
+					if body.has_method("take_damage"):
+						body.take_damage(stomp_damage)
+
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if is_stunned:
 		return
-	if body.is_in_group("player") and body.has_method("take_damage"):
-		body.take_damage(damage)
+	if body.is_in_group("player") and not is_preparing_stomp and not is_stomping:
+		_start_stomp_preparation()
+
+
+func _on_hitbox_body_exited(body: Node2D) -> void:
+	if body.is_in_group("player") and is_preparing_stomp:
+		is_preparing_stomp = false
+
 
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("player_hitbox") or area.name == "Hitbox":
@@ -131,12 +228,17 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 func _shoot_at_player() -> void:
 	if not is_instance_valid(player):
 		return
-	ProjectileManager.spawn_projectile("fireball", {
-		"spawn_point": global_position + Vector2(0.0, -192),
-		"target": player,
-		"damage": 10.0,
-		"scale": Vector2(4, 4)
-	})
+	ProjectileManager.spawn_projectile(
+		"fireball",
+		{
+			"spawn_point": global_position + Vector2(0.0, -192),
+			"target": player,
+			"damage": 10.0,
+			"scale": Vector2(4, 4),
+			"speed": 1000.0,
+			"lifetime": 2.5
+		},
+	)
 
 func take_damage(amount: float) -> void:
 	health = maxf(health - amount, 0.0)
@@ -146,13 +248,15 @@ func take_damage(amount: float) -> void:
 	if animated_sprite:
 		var orig_color: Color = animated_sprite.modulate
 		animated_sprite.modulate = Color(2.5, 2.5, 2.5, 1.0)
-		get_tree().create_timer(0.12).timeout.connect(func():
-			if is_instance_valid(animated_sprite):
-				animated_sprite.modulate = orig_color
+		get_tree().create_timer(0.12).timeout.connect(
+			func():
+				if is_instance_valid(animated_sprite):
+					animated_sprite.modulate = orig_color,
 		)
 
 	if health <= 0.0:
 		_die()
+
 
 func _setup_hp_bar() -> void:
 	hp_bar = ProgressBar.new()
@@ -182,14 +286,15 @@ func _setup_hp_bar() -> void:
 	add_child(hp_bar)
 	hp_bar.visible = true
 
+
 func _die() -> void:
 	if GameManager and GameManager.has_method("register_enemy_kill"):
 		GameManager.register_enemy_kill(10)
-	AudioManager.play_sfx("explode")
+	AudioManager.play_sfx("explode", 2.0)
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
 		var hit := HIT_EFFECT_SCENE.instantiate()
 		hit.global_position = global_position
-		hit.scale = Vector2(3.0, 3.0)
+		hit.scale = Vector2(10.0, 10.0)
 		hit.animation_name = "fire"
 		get_tree().current_scene.call_deferred("add_child", hit)
 	queue_free()

@@ -10,10 +10,10 @@ wait_time = 5.0
 autostart = true
 
 [node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=1049447554]
-offset_left = -1425.9999
-offset_top = -856.0
-offset_right = -1382.5333
-offset_bottom = -814.5791
+offset_left = -1345.0027
+offset_top = -765.0
+offset_right = -1304.0042
+offset_bottom = -727.9722
 scale = Vector2(65.636604, 41.428394)
 border_width = 0.0
 editor_only = false

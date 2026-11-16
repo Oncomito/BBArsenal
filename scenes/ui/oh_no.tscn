@@ -3,6 +3,7 @@
 [ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="1_gq1yt"]
 
 [node name="OH_NO" type="Control" unique_id=1110568814]
+texture_filter = 6
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

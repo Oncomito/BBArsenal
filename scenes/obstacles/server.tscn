@@ -348,6 +348,8 @@ sources/1 = SubResource("TileSetAtlasSource_35dle")
 sources/2 = SubResource("TileSetAtlasSource_8s6mi")
 
 [node name="Server" type="StaticBody2D" unique_id=116451500]
+collision_layer = 4
+collision_mask = 3
 
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=106615592]
 position = Vector2(-32, -28)

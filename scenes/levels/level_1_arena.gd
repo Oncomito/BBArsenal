@@ -22,8 +22,7 @@ var _tutorial_waiting_enemies: bool = false
 @onready var trap_door_zone: Area2D = get_node_or_null("TrapDoorZone")
 
 func _ready() -> void:
-	if AudioManager:
-		AudioManager.play_music("gameplay")
+	AudioManager.play_music("gameplay")
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("player") as CharacterBody2D
 	_setup_trapdoor_zone()
@@ -42,10 +41,10 @@ func _ready() -> void:
 			GameManager.set_black_instant()
 
 	var center_global := to_global(trapdoor_local_center)
-	if is_instance_valid(player) and player.has_method("prepare_drop_in"):
+	if is_instance_valid(player):
 		player.prepare_drop_in(center_global)
 
-	var mode: String = GameManager.game_mode if GameManager else "levels"
+	var mode: String = GameManager.game_mode
 	if mode == "tutorial":
 		call_deferred("_start_tutorial")
 	elif mode == "endless":
@@ -105,24 +104,22 @@ func _start_floor(level: int) -> void:
 	_reset_arena_state()
 	var center_global := to_global(trapdoor_local_center)
 
-	if GameManager and GameManager.has_method("fade_from_black"):
-		if not GameManager.is_black_screen_active:
-			GameManager.set_black_instant()
-		await GameManager.fade_from_black(0.3, 0.35)
+	if not GameManager.is_black_screen_active:
+		GameManager.set_black_instant()
+	await GameManager.fade_from_black(0.3, 0.35)
 
 	if not is_inside_tree():
 		return
 
-	if GameManager and GameManager.has_method("notify_level_started"):
-		GameManager.notify_level_started()
+	GameManager.notify_level_started()
 
-	if is_instance_valid(player) and player.has_method("play_drop_in_animation"):
+	if is_instance_valid(player):
 		await player.play_drop_in_animation(center_global)
 
 	if not is_inside_tree():
 		return
 
-	if spawner and spawner.has_method("start_wave"):
+	if spawner:
 		spawner.start_wave(level)
 
 func _start_endless() -> void:
@@ -140,7 +137,7 @@ func _start_endless() -> void:
 	if GameManager and GameManager.has_method("notify_level_started"):
 		GameManager.notify_level_started()
 
-	if is_instance_valid(player) and player.has_method("play_drop_in_animation"):
+	if is_instance_valid(player):
 		await player.play_drop_in_animation(center_global)
 
 	if not is_inside_tree():
@@ -153,18 +150,16 @@ func _start_tutorial() -> void:
 	_reset_arena_state()
 	var center_global := to_global(trapdoor_local_center)
 
-	if GameManager and GameManager.has_method("set_wave_enemies"):
-		GameManager.set_wave_enemies(0)
+	GameManager.set_wave_enemies(0)
 
-	if GameManager and GameManager.has_method("fade_from_black"):
-		if not GameManager.is_black_screen_active:
-			GameManager.set_black_instant()
-		await GameManager.fade_from_black(0.3, 0.35)
+	if not GameManager.is_black_screen_active:
+		GameManager.set_black_instant()
+	await GameManager.fade_from_black(0.3, 0.35)
 
 	if not is_inside_tree():
 		return
 
-	if is_instance_valid(player) and player.has_method("play_drop_in_animation"):
+	if is_instance_valid(player):
 		await player.play_drop_in_animation(center_global)
 
 	if not is_inside_tree():
@@ -248,10 +243,11 @@ func _show_tutorial_complete_ui() -> void:
 			AudioManager.play_sfx("click")
 			if is_instance_valid(to_levels_ui):
 				to_levels_ui.queue_free()
-			if GameManager:
-				GameManager.game_mode = "levels"
-				GameManager.reset_run()
-				await GameManager.fade_to_black(0.25)
+			GameManager.game_mode = "levels"
+			GameManager.reset_run()
+			await GameManager.fade_to_black(0.25)
+			player.set("health", 100.0)
+			player.set("energy", 100.0)
 			if is_inside_tree():
 				await _start_floor(1)
 		, CONNECT_ONE_SHOT)
@@ -340,10 +336,8 @@ func _transition_to_next_scene() -> void:
 		if not new_player:
 			new_player = next_instance.get_node_or_null("Ordering/Player") as Node2D
 		if new_player:
-			if "health" in new_player:
-				new_player.health = saved_hp
-			if new_player.has_method("prepare_drop_in"):
-				new_player.prepare_drop_in(new_player.global_position)
+			new_player.health = saved_hp
+			new_player.prepare_drop_in(new_player.global_position)
 
 		if GameManager and GameManager.has_method("fade_from_black"):
 			await GameManager.fade_from_black(0.3, 0.35)

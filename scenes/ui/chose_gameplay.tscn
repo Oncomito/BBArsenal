@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://oq027r6bf0bn"]
 
-[ext_resource type="Script" path="res://scenes/ui/chose_gameplay.gd" id="1_jchdr"]
+[ext_resource type="Script" uid="uid://dsavs5c774cw2" path="res://scenes/ui/chose_gameplay.gd" id="1_jchdr"]
 [ext_resource type="FontFile" uid="uid://rj7dwdgpy2oc" path="res://assets/fonts/Sandra.ttf" id="2_50xe1"]
 
 [sub_resource type="FontVariation" id="FontVariation_jcdy3"]
 base_font = ExtResource("2_50xe1")
 
 [node name="Chose_gameplay" type="Control" unique_id=1317546458]
-texture_filter = 3
+texture_filter = 6
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

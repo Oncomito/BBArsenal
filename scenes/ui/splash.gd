@@ -2,29 +2,41 @@ extends Node2D
 
 const MAIN_MENU_SCENE: String = "res://scenes/levels/main_menu.tscn"
 
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
+
 var _transitioning: bool = false
+var _screenshot_taken: bool = false
 
 func _ready() -> void:
 	if AudioManager:
 		AudioManager.play_sfx("ting", 1.15, -4.0)
-	await get_tree().create_timer(0.6).timeout
-	if not is_inside_tree():
-		return
-	await RenderingServer.frame_post_draw
-	if not is_inside_tree():
-		return
-	var viewport := get_viewport()
-	if viewport and viewport.get_texture():
-		var img: Image = viewport.get_texture().get_image()
-		if img:
-			img.save_png("res://assets/images/splash_screen.png")
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_cancel") or (event is InputEventMouseButton and event.pressed):
 		get_viewport().set_input_as_handled()
 		_go_to_main_menu()
 
-func _on_animation_player_animation_finished(_anim_name: StringName) -> void:
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if _transitioning or _screenshot_taken:
+		return
+	_screenshot_taken = true
+	
+	var anim: Animation = anim_player.get_animation(anim_name)
+	if anim:
+		anim_player.seek(anim.length, true)
+
+	await RenderingServer.frame_post_draw
+	if not is_inside_tree():
+		return
+		
+	var viewport := get_viewport()
+	if viewport and viewport.get_texture():
+		var img: Image = viewport.get_texture().get_image()
+		if img:
+			var err := img.save_png("res://assets/images/splash_screen.png")
+			if err != OK:
+				push_error("Failed to save screenshot: " + str(err))
+				
 	_go_to_main_menu()
 
 func _go_to_main_menu() -> void:
