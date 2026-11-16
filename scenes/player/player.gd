@@ -145,7 +145,8 @@ func _decay_bounce_boost(delta: float) -> void:
 func _handle_dash_damage() -> void:
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if is_instance_valid(enemy) and not _dash_hit_enemies.has(enemy):
-			if global_position.distance_to(enemy.global_position) < 95.0:
+			var enemy_position = enemy.global_position + Vector2(0.0, -115)
+			if global_position.distance_to(enemy.global_position) < 250.0:
 				if enemy.has_method("take_damage"):
 					enemy.take_damage(dash_damage)
 					_dash_hit_enemies.append(enemy)
@@ -305,7 +306,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _perform_parry() -> void:
 	is_attacking = true
 	is_invulnerable = true
-	parry_timer.start(0.35)
+	parry_timer.start(0.1)
 	_play_animation("parry_" + facing_direction)
 	_check_parry()
 
@@ -318,7 +319,7 @@ func _check_parry() -> void:
 				_play_animation("parry_" + facing_direction)
 				AudioManager.play_sfx("ting", 2.0, -8.0)
 				_on_successful_parry(proj.global_position)
-				break
+				return
 
 func _on_successful_parry(pos: Vector2) -> void:
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
@@ -330,7 +331,7 @@ func _on_successful_parry(pos: Vector2) -> void:
 
 	camera_shake(14.0, 0.2)
 	AudioManager.play_sfx("ting", 1.8, 3.0)
-	energize(35.0)
+	energize(2.5)
 
 func _input_move(delta: float) -> void:
 	var locked := _bounce_lock_timer > 0.0
@@ -551,7 +552,7 @@ func prepare_drop_in(target_global_pos: Vector2) -> void:
 		animated_sprite.visible = true
 		animated_sprite.modulate = Color(1.0, 1.0, 1.0, 1.0)
 		animated_sprite.scale = Vector2(3.6, 4.5)
-		animated_sprite.position = Vector2(1.0, -1100.0)
+		animated_sprite.position = Vector2(1.0, -2000.0)
 
 func play_drop_in_animation(target_global_pos: Vector2) -> void:
 	prepare_drop_in(target_global_pos)
@@ -575,9 +576,18 @@ func play_drop_in_animation(target_global_pos: Vector2) -> void:
 			get_tree().current_scene.call_deferred("add_child", hit)
 
 		animated_sprite.scale = Vector2(4.7, 3.3)
-		var land_tween := create_tween()
-		land_tween.tween_property(animated_sprite, "scale", Vector2(4.0, 4.0), 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		await land_tween.finished
+		var bounce_tween := create_tween().set_parallel(true)
+		bounce_tween.tween_property(animated_sprite, "scale", Vector2(3.8, 4.2), 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		bounce_tween.tween_property(animated_sprite, "position", Vector2(1.0, -120.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		await bounce_tween.finished
+
+		if not is_inside_tree():
+			return
+
+		var settle_tween := create_tween().set_parallel(true)
+		settle_tween.tween_property(animated_sprite, "scale", Vector2(4.0, 4.0), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		settle_tween.tween_property(animated_sprite, "position", Vector2(1.0, -60.0), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		await settle_tween.finished
 
 	is_transitioning = false
 	is_invulnerable = false

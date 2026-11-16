@@ -479,6 +479,7 @@ radius = 15.0
 height = 46.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_behr0"]
+radius = 11.81794
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1mmru"]
 radius = 22.0
@@ -515,7 +516,7 @@ one_shot = true
 [node name="ParryTimer" type="Timer" parent="." unique_id=855689762]
 unique_name_in_owner = true
 
-[node name="Hitbox" type="Area2D" parent="." unique_id=200786888]
+[node name="Hitbox" type="Area2D" parent="." unique_id=200786888 groups=["player_hitbox"]]
 
 [node name="Collision" type="CollisionShape2D" parent="Hitbox" unique_id=1009863355]
 position = Vector2(0, -57)
@@ -529,6 +530,7 @@ position = Vector2(0, -54)
 shape = SubResource("CapsuleShape2D_1mmru")
 
 [node name="Shield" parent="." unique_id=828424897 instance=ExtResource("2_shield")]
+visible = false
 position = Vector2(0, -54)
 
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]

@@ -38,6 +38,7 @@ project/assembly_name="HavenJakarta"
 [global_group]
 
 player=""
+player_hitbox=""
 
 [input]
 
