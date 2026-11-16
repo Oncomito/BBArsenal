@@ -1,6 +1,6 @@
 extends Node2D
 
-const MAIN_MENU_SCENE: String = "res://scenes/levels/main_menu.tscn"
+const MAIN_MENU_SCENE: String = "res://scenes/ui/main_menu.tscn"
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
