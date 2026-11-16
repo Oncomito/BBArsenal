@@ -17,23 +17,134 @@ var total_enemies: int = 0
 var score: int = 0
 var exp: float = 0.0
 
+const BASE_RESOLUTION := Vector2i(1920, 1080)
+const MAX_WINDOWED_RATIO := 0.9
+
 var _fade_layer: CanvasLayer = null
 var _fade_rect: ColorRect = null
 var _fade_tween: Tween = null
 var is_black_screen_active: bool = false
 
+var device_os: String = ""
+var fullscreen_resolution: Vector2i = BASE_RESOLUTION
+var windowed_resolution: Vector2i = Vector2i(1728, 972)
+var _last_window_mode: int = -1
+var _is_desktop_display: bool = false
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if name == "GameManager":
 		_setup_fade_overlay()
-		
-	detect_device()
-		
+		detect_device()
+
+func _process(_delta: float) -> void:
+	if name != "GameManager" or not _is_desktop_display:
+		return
+	var current_mode := DisplayServer.window_get_mode()
+	if current_mode != _last_window_mode:
+		_last_window_mode = current_mode
+		_apply_display_resolution(current_mode)
+	elif current_mode == DisplayServer.WINDOW_MODE_WINDOWED:
+		var screen := DisplayServer.window_get_current_screen()
+		var screen_size := DisplayServer.screen_get_size(screen)
+		var max_size := Vector2i(
+			int(floor(float(screen_size.x) * MAX_WINDOWED_RATIO)),
+			int(floor(float(screen_size.y) * MAX_WINDOWED_RATIO))
+		)
+		var win_size := DisplayServer.window_get_size()
+		if win_size.x > max_size.x or win_size.y > max_size.y:
+			_apply_display_resolution(current_mode)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if name != "GameManager" or not _is_desktop_display:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_F11 or (event.keycode == KEY_ENTER and event.alt_pressed):
+			toggle_fullscreen()
+			get_viewport().set_input_as_handled()
 
 func detect_device() -> void:
-	var os_name = OS.get_name()
+	device_os = OS.get_name()
+	print(device_os)
 
-	print(os_name)
+	if DisplayServer.get_name() == "headless":
+		_is_desktop_display = false
+		return
+
+	if OS.has_feature("web") or device_os == "Web":
+		_is_desktop_display = false
+		return
+
+	if OS.has_feature("mobile") or device_os in ["Android", "iOS"]:
+		_is_desktop_display = false
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		return
+
+	_is_desktop_display = true
+	_update_screen_resolutions()
+	_last_window_mode = DisplayServer.window_get_mode()
+	_apply_display_resolution(_last_window_mode)
+
+func _update_screen_resolutions() -> void:
+	var screen := DisplayServer.window_get_current_screen()
+	var screen_size := DisplayServer.screen_get_size(screen)
+	if screen_size.x <= 0 or screen_size.y <= 0:
+		return
+
+	fullscreen_resolution = screen_size
+
+	var max_width := int(floor(float(screen_size.x) * MAX_WINDOWED_RATIO))
+	var max_height := int(floor(float(screen_size.y) * MAX_WINDOWED_RATIO))
+	var aspect := float(BASE_RESOLUTION.x) / float(BASE_RESOLUTION.y)
+
+	var win_width := max_width
+	var win_height := int(floor(float(win_width) / aspect))
+	if win_height > max_height:
+		win_height = max_height
+		win_width = int(floor(float(win_height) * aspect))
+
+	win_width = min(win_width, max_width)
+	win_height = min(win_height, max_height)
+	windowed_resolution = Vector2i(max(win_width, 640), max(win_height, 360))
+
+func _apply_display_resolution(mode: int) -> void:
+	if not _is_desktop_display:
+		return
+	_update_screen_resolutions()
+	var screen := DisplayServer.window_get_current_screen()
+	var screen_size := DisplayServer.screen_get_size(screen)
+	var screen_pos := DisplayServer.screen_get_position(screen)
+
+	if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		if DisplayServer.window_get_mode() != mode:
+			DisplayServer.window_set_mode(mode)
+		DisplayServer.window_set_size(fullscreen_resolution)
+	elif mode == DisplayServer.WINDOW_MODE_WINDOWED:
+		if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_WINDOWED:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+		DisplayServer.window_set_size(windowed_resolution)
+		var usable_rect := DisplayServer.screen_get_usable_rect(screen)
+		var centered_pos: Vector2i
+		if usable_rect.size.x > 0 and usable_rect.size.y > 0:
+			centered_pos = usable_rect.position + (usable_rect.size - windowed_resolution) / 2
+			centered_pos.y = max(centered_pos.y, usable_rect.position.y + 24)
+		else:
+			centered_pos = screen_pos + (screen_size - windowed_resolution) / 2
+		DisplayServer.window_set_position(centered_pos)
+
+func toggle_fullscreen() -> void:
+	if not _is_desktop_display:
+		return
+	var current_mode := DisplayServer.window_get_mode()
+	if current_mode == DisplayServer.WINDOW_MODE_FULLSCREEN or current_mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		_last_window_mode = DisplayServer.WINDOW_MODE_WINDOWED
+		_apply_display_resolution(DisplayServer.WINDOW_MODE_WINDOWED)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		_last_window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
+		_apply_display_resolution(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 func _setup_fade_overlay() -> void:
 	_fade_layer = CanvasLayer.new()
