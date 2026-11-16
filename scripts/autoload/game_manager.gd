@@ -26,6 +26,14 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if name == "GameManager":
 		_setup_fade_overlay()
+		
+	detect_device()
+		
+
+func detect_device() -> void:
+	var os_name = OS.get_name()
+
+	print(os_name)
 
 func _setup_fade_overlay() -> void:
 	_fade_layer = CanvasLayer.new()
