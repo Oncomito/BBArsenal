@@ -1,18 +1,18 @@
-#Assets License
+# Assets Credit
 
-##Tilesets
+## Tilesets
 
-##Sprite & Character
+## Sprite & Character
 
-##Music
+## Music
 
-##SFX
+## SFX
 
-##Font
+## Font
 
-##Others
+## Others
 
-#Note **IMPORTANT!**
+# Note **IMPORTANT!**
 IF YOU FEEL AND BELIEVE YOUR ASSETS OR ARTS ARE IN USE WITHIN THIS PROJECTS WITHOUT PLEASE INFORM US IN OUR CONTACT FORM :
 
 please contact one of the following emails.
