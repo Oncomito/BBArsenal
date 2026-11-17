@@ -26,8 +26,6 @@ var hp_bar: ProgressBar
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox: Area2D = $Hitbox
-@onready var hurtbox: Area2D = $Hurtbox
-
 
 func _ready() -> void:
 	add_to_group("enemy")
@@ -50,10 +48,7 @@ func _ready() -> void:
 			hitbox.body_entered.connect(_on_hitbox_body_entered)
 		if not hitbox.body_exited.is_connected(_on_hitbox_body_exited):
 			hitbox.body_exited.connect(_on_hitbox_body_exited)
-
-	if hurtbox and not hurtbox.area_entered.is_connected(_on_hurtbox_area_entered):
-		hurtbox.area_entered.connect(_on_hurtbox_area_entered)
-
+			
 	_setup_hp_bar()
 
 
@@ -72,8 +67,9 @@ func _physics_process(delta: float) -> void:
 
 	if is_stomping:
 		if is_instance_valid(player):
+			var dist := global_position.distance_to(player.global_position)
 			var dir := global_position.direction_to(player.global_position)
-			velocity = dir * (speed * 0.3)
+			velocity = dir * (speed * 0.3) if dist > stomp_range else Vector2.ZERO
 			animated_sprite.flip_h = velocity.x < 0
 		else:
 			velocity = Vector2.ZERO
@@ -83,7 +79,7 @@ func _physics_process(delta: float) -> void:
 	if is_instance_valid(player):
 		var dist := global_position.distance_to(player.global_position)
 		var dir := global_position.direction_to(player.global_position)
-		velocity = dir * speed
+		velocity = dir * speed if dist > stomp_range else Vector2.ZERO
 		animated_sprite.flip_h = velocity.x < 0
 
 		
@@ -180,7 +176,7 @@ func _execute_stomp() -> void:
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
 		var hit := HIT_EFFECT_SCENE.instantiate()
 		hit.global_position = global_position
-		hit.scale = Vector2(3.5, 3.5)
+		hit.scale = Vector2(15.0, 15.0)
 		hit.animation_name = "fire"
 		get_tree().current_scene.call_deferred("add_child", hit)
 
@@ -212,18 +208,9 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and not is_preparing_stomp and not is_stomping:
 		_start_stomp_preparation()
 
-
 func _on_hitbox_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player") and is_preparing_stomp:
 		is_preparing_stomp = false
-
-func _on_hurtbox_area_entered(area: Area2D) -> void:
-	if area.is_in_group("player_hitbox") or area.name == "Hitbox":
-		var attacker := area.get_parent()
-		if is_instance_valid(attacker) and attacker.is_in_group("player"):
-			var dmg: float = float(attacker.get("dash_damage")) if "dash_damage" in attacker else 25.0
-			GameManager.player_energize.emit(5.0)
-			take_damage(dmg)
 
 func _shoot_at_player() -> void:
 	if not is_instance_valid(player):

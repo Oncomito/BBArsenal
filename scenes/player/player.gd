@@ -66,6 +66,7 @@ var is_attacking: bool = false
 var is_shield_active: bool = false
 var is_transitioning: bool = false
 var _dash_hit_enemies: Array = []
+var is_charging: bool = false
 
 var _shake_intensity: float = 0.0
 var _shake_timer: float = 0.0
@@ -171,6 +172,7 @@ func _handle_speed_damage(current_speed: float) -> void:
 			if my_center_position.distance_to(enemy_position) < 200:
 				if enemy.has_method("take_damage"):
 					enemy.take_damage(damage)
+					energize(5.0)
 					_dash_hit_enemies.append(enemy)
 					_on_dash_hit(enemy.global_position)
 
@@ -200,7 +202,7 @@ func _handle_bounce(pre_collision_velocity: Vector2) -> void:
 			did_bounce = true
 
 	if did_bounce:
-		energize(ceilf(dash_energy_cost / 2))
+		energize(ceilf(dash_energy_cost / 4))
 		_bounce_lock_timer = bounce_lockout
 		if is_dashing:
 			speed = minf(maxf(speed, normal_speed * dash_speed_multiplier) * dash_bounce_factor, 4200.0)
@@ -339,7 +341,7 @@ func _on_successful_parry(pos: Vector2) -> void:
 
 	camera_shake(14.0, 0.2)
 	AudioManager.play_sfx("ting", 1.8, 3.0)
-	energize(15)
+	energize(10)
 
 func _input_move(delta: float) -> void:
 	var locked := _bounce_lock_timer > 0.0
@@ -350,7 +352,7 @@ func _input_move(delta: float) -> void:
 	if input_direction != Vector2.ZERO:
 		if not locked:
 			velocity = velocity.move_toward(input_direction * target_max_speed, acceleration * delta)
-			if not is_dashing:
+			if not is_dashing or is_charging:
 				_update_facing_direction(input_direction)
 			if is_dashing:
 				_play_animation("run_" + facing_direction)
@@ -359,6 +361,8 @@ func _input_move(delta: float) -> void:
 	else:
 		if not locked:
 			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+			if is_charging:
+				return
 			if is_dashing:
 				_play_animation("run_" + facing_direction)
 			elif not is_attacking:
@@ -404,6 +408,7 @@ func _perform_dash(input_direction: Vector2) -> void:
 	velocity = dash_dir * speed
 
 	flash_white(0.12)
+	is_charging = true
 	animated_sprite.play("charge_" + facing_direction)
 
 func _get_current_move_speed() -> float:
@@ -576,14 +581,14 @@ func play_drop_in_animation(target_global_pos: Vector2) -> void:
 		if HIT_EFFECT_SCENE and get_tree().current_scene:
 			var hit := HIT_EFFECT_SCENE.instantiate()
 			hit.global_position = global_position
-			hit.scale = Vector2(2.8, 2.8)
+			hit.scale = Vector2(5.0, 5.0)
 			hit.animation_name = "holy"
 			get_tree().current_scene.call_deferred("add_child", hit)
 
 		animated_sprite.scale = Vector2(4.7, 3.3)
 		var bounce_tween := create_tween().set_parallel(true)
 		bounce_tween.tween_property(animated_sprite, "scale", Vector2(3.8, 4.2), 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		bounce_tween.tween_property(animated_sprite, "position", Vector2(1.0, -120.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		bounce_tween.tween_property(animated_sprite, "position", Vector2(1.0, -240.0), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		await bounce_tween.finished
 
 		if not is_inside_tree():
@@ -635,3 +640,7 @@ func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
 			return
 
 		await get_tree().create_timer(0.2).timeout
+
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	pass # Replace with function body.

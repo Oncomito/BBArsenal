@@ -475,8 +475,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cpwp1"]
-radius = 15.0
-height = 46.0
+radius = 21.0
+height = 62.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_behr0"]
 radius = 11.81794
@@ -505,7 +505,8 @@ frame = 5
 frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=966692073]
-position = Vector2(0, -29)
+position = Vector2(2, -24)
+rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_cpwp1")
 
 [node name="DashTimer" type="Timer" parent="." unique_id=1126209666]
@@ -533,5 +534,6 @@ shape = SubResource("CapsuleShape2D_1mmru")
 visible = false
 position = Vector2(0, -54)
 
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="ParryTimer" to="." method="_on_parry_timer_timeout"]
