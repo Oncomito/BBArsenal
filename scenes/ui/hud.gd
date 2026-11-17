@@ -2,8 +2,8 @@ extends Control
 
 const PAUSE_MENU_SCENE := preload("res://scenes/ui/pause_menu.tscn")
 
-@onready var health_bar: ProgressBar = $health
-@onready var energy_bar: ProgressBar = $energy
+@onready var health_bar: ProgressBar = %health
+@onready var energy_bar: ProgressBar = $Panel/energy
 @onready var pause_button: Button = $Button
 @onready var levels_label: Label = get_node_or_null("levels")
 @onready var enemy_label: Label = get_node_or_null("levels/levels")

@@ -62,10 +62,6 @@ func _physics_process(delta: float) -> void:
 					parry(player)
 					return
 
-			if dist < 30.0:
-				Gamemanager.take_damage(damage)
-				_explode()
-				return
 	else:
 		for enemy in get_tree().get_nodes_in_group("enemy"):
 			if is_instance_valid(enemy) and not enemy.is_queued_for_deletion():
@@ -78,11 +74,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if not is_parried:
 		if body.is_in_group("player"):
-			if body.get("is_attacking"):
-				parry(body)
-				return
-			Gamemanager.take_damage(damage)
-			_explode()
+			return
 		elif body is TileMapLayer or body is StaticBody2D:
 			_explode()
 	else:
@@ -102,6 +94,15 @@ func _on_area_entered(area: Area2D) -> void:
 				area.call("bounce_projectile", self)
 			else:
 				parry(area.get("player_ref"))
+			return
+		if area.name == "Hurtbox" or area.is_in_group("player_hurtbox"):
+			var player := area.get_parent() as Node2D
+			if is_instance_valid(player) and player.is_in_group("player"):
+				if player.get("is_attacking"):
+					parry(player)
+				else:
+					Gamemanager.take_damage(damage)
+					_explode()
 			return
 		if area.name == "Hitbox" or area.is_in_group("player_hitbox"):
 			var player := area.get_parent()

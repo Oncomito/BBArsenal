@@ -1,6 +1,7 @@
 extends Control
 
 const CHOOSE_GAMEPLAY_SCENE: String = "res://scenes/ui/select_level.tscn"
+const SETTINGS_SCENE := preload("res://scenes/ui/settings.tscn")
 
 @onready var start_button: Button = $VBoxContainer/Start
 
@@ -27,6 +28,10 @@ func _on_start_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	AudioManager.play_sfx("click")
+	if not get_node_or_null("Settings"):
+		var settings := SETTINGS_SCENE.instantiate()
+		settings.call("set_return_focus", $VBoxContainer/Settings)
+		add_child(settings)
 
 func _on_exit_pressed() -> void:
 	AudioManager.play_sfx("click")

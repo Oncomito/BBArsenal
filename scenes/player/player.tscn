@@ -258,19 +258,19 @@ animations = [{
 "speed": 8.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("21_fvjb1")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("22_bysbl")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("23_2wy34")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("24_ymths")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("25_3p0jd")
 }],
 "loop": 0,
@@ -278,19 +278,19 @@ animations = [{
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("26_7nf13")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("27_0y4ya")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("28_s050l")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("29_4sw5w")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("30_s4k4a")
 }],
 "loop": 0,
@@ -298,19 +298,19 @@ animations = [{
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("31_vkc6f")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("32_21yht")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("33_trum3")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("34_4b1ex")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("35_v8cnd")
 }],
 "loop": 0,
@@ -318,19 +318,19 @@ animations = [{
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("36_wuxn4")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("37_46q5t")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("38_5miun")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("39_7u1tp")
 }, {
-"duration": 1.0,
+"duration": 1.2,
 "texture": ExtResource("40_pq1ih")
 }],
 "loop": 0,
@@ -482,8 +482,8 @@ height = 62.0
 radius = 11.81794
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1mmru"]
-radius = 22.0
-height = 92.0
+radius = 34.0
+height = 108.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1797968289 groups=["player"]]
 collision_mask = 6
@@ -499,9 +499,9 @@ texture_filter = 1
 position = Vector2(1, -60)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_player")
-animation = &"charge_left"
+animation = &"parry_up"
 autoplay = "idle_down"
-frame = 5
+frame = 4
 frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=966692073]

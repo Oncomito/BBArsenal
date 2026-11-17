@@ -1,5 +1,7 @@
 extends Node
 
+const SETTINGS_PATH := "user://audio_settings.cfg"
+
 var sounds = {
 	"fireball": preload("res://assets/sound/floraphonic-fireball-whoosh-1-179125.mp3"),
 	"blast": preload("res://assets/sound/yodguard-fire-magic-6-378641.mp3"),
@@ -16,10 +18,14 @@ var music_tracks = {
 var bgm_player: AudioStreamPlayer
 var current_track: String = ""
 var current_volume: float = 0.0
+var current_volume_offset: float = 0.0
+var music_volume: float = 1.0
+var sfx_volume: float = 1.0
 var music_tween: Tween
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_load_audio_settings()
 	
 	bgm_player = AudioStreamPlayer.new()
 	bgm_player.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -40,7 +46,8 @@ func play_music(track_name: String, volume_db: float = 0.0) -> void:
 		return
 	
 	current_track = track_name
-	current_volume = volume_db
+	current_volume_offset = volume_db
+	current_volume = _volume_to_db(music_volume) + current_volume_offset
 
 	var stream = music_tracks[track_name]
 	
@@ -85,11 +92,43 @@ func play_sfx(sound_name: String, pitch: float = 1.0, volume_db: float = 0.0) ->
 	player.process_mode = Node.PROCESS_MODE_ALWAYS
 	player.stream = sounds[sound_name]
 	player.pitch_scale = pitch
-	player.volume_db = volume_db
+	player.volume_db = _volume_to_db(sfx_volume) + volume_db
 
 	add_child(player)
 	player.finished.connect(player.queue_free)
 	player.play()
+
+func set_music_volume(value: float) -> void:
+	music_volume = clampf(value, 0.0, 1.0)
+	current_volume = _volume_to_db(music_volume) + current_volume_offset
+	if music_tween:
+		music_tween.kill()
+	if bgm_player:
+		bgm_player.volume_db = current_volume
+	_save_audio_settings()
+
+func set_sfx_volume(value: float) -> void:
+	sfx_volume = clampf(value, 0.0, 1.0)
+	_save_audio_settings()
+
+func _volume_to_db(value: float) -> float:
+	return linear_to_db(value) if value > 0.0 else -80.0
+
+func _load_audio_settings() -> void:
+	var config := ConfigFile.new()
+	if config.load(SETTINGS_PATH) != OK:
+		return
+	music_volume = clampf(float(config.get_value("audio", "music_volume", music_volume)), 0.0, 1.0)
+	sfx_volume = clampf(float(config.get_value("audio", "sfx_volume", sfx_volume)), 0.0, 1.0)
+	current_volume = _volume_to_db(music_volume)
+
+func _save_audio_settings() -> void:
+	var config := ConfigFile.new()
+	config.set_value("audio", "music_volume", music_volume)
+	config.set_value("audio", "sfx_volume", sfx_volume)
+	var error := config.save(SETTINGS_PATH)
+	if error != OK:
+		push_warning("Could not save audio settings: %s" % error_string(error))
 
 func fade_out(duration: float = 1.0) -> void:
 	if music_tween:

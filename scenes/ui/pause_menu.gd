@@ -1,6 +1,7 @@
 extends Control
 
 const main_menu_scene: String = "res://scenes/levels/main_menu.tscn"
+const SETTINGS_SCENE := preload("res://scenes/ui/settings.tscn")
 
 @onready var continue_button: Button = $VBoxContainer/Continue
 
@@ -43,7 +44,10 @@ func _on_continue_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	AudioManager.play_sfx("click")
-	print("settings button pressed")
+	if not get_node_or_null("Settings"):
+		var settings := SETTINGS_SCENE.instantiate()
+		settings.call("set_return_focus", $VBoxContainer/Settings)
+		add_child(settings)
 
 func _on_main_menu_pressed() -> void:
 	AudioManager.play_sfx("click")

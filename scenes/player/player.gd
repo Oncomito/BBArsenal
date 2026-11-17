@@ -28,7 +28,7 @@ var _bounce_lock_timer: float = 0.0
 @export var max_energy: float = 100.0
 @export var dash_energy_cost: float = 20.0
 @export var dash_cooldown: float = 0.2
-@export var energy_regen_rate: float = 5.0
+@export var energy_regen_rate: float = 10.0
 @export var energy_regen_delay: float = 1.0
 @export var energy_exhausted_regen_delay: float = 1.5
 @export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.5
@@ -66,7 +66,7 @@ var is_attacking: bool = false
 var is_shield_active: bool = false
 var is_transitioning: bool = false
 var _dash_hit_enemies: Array = []
-var is_charging: bool = false
+var _locked_animation: String = ""
 
 var _shake_intensity: float = 0.0
 var _shake_timer: float = 0.0
@@ -307,7 +307,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			_toggle_shield()
 	elif event.is_action_pressed("player_parry"):
-		if not is_dead and not get_tree().paused and not is_attacking and not is_shield_active and parry_cooldown_timer <= 0.0:
+		if not is_dead and not get_tree().paused and not is_attacking and not is_shield_active and not is_dashing and _locked_animation.is_empty() and parry_cooldown_timer <= 0.0:
 			get_viewport().set_input_as_handled()
 			_perform_parry()
 
@@ -317,8 +317,8 @@ func _perform_parry() -> void:
 	_invulnerability_timer = maxf(_invulnerability_timer, parry_invulnerability_duration)
 	parry_cooldown_timer = parry_cooldown
 	parry_timer.start(0.1)
-	_play_animation("parry_" + facing_direction)
 	_check_parry()
+	_play_locked_animation("parry_" + facing_direction)
 
 func _check_parry() -> void:
 	for proj in get_tree().get_nodes_in_group("projectile"):
@@ -326,7 +326,6 @@ func _check_parry() -> void:
 			if global_position.distance_to(proj.global_position) <= 140.0:
 				proj.parry(self)
 				_update_facing_direction_to_object((proj as Node2D).global_position)
-				_play_animation("parry_" + facing_direction)
 				AudioManager.play_sfx("ting", 2.0, -8.0)
 				_on_successful_parry(proj.global_position)
 				return
@@ -352,7 +351,7 @@ func _input_move(delta: float) -> void:
 	if input_direction != Vector2.ZERO:
 		if not locked:
 			velocity = velocity.move_toward(input_direction * target_max_speed, acceleration * delta)
-			if not is_dashing or is_charging:
+			if _locked_animation.is_empty() and not is_dashing:
 				_update_facing_direction(input_direction)
 			if is_dashing:
 				_play_animation("run_" + facing_direction)
@@ -361,15 +360,13 @@ func _input_move(delta: float) -> void:
 	else:
 		if not locked:
 			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-			if is_charging:
-				return
 			if is_dashing:
 				_play_animation("run_" + facing_direction)
 			elif not is_attacking:
 				_play_animation("idle_" + facing_direction)
 
 func can_dash() -> bool:
-	return dash_cooldown_timer <= 0.0 and energy > 0.0
+	return dash_cooldown_timer <= 0.0 and energy > 0.0 and not is_attacking and _locked_animation.is_empty()
 
 func _perform_dash(input_direction: Vector2) -> void:
 	if floor(energy / dash_energy_cost) < 1:
@@ -379,7 +376,6 @@ func _perform_dash(input_direction: Vector2) -> void:
 		_deactivate_shield()
 
 	dash_cooldown_timer = dash_cooldown
-
 	energy = maxf(energy - dash_energy_cost, 0.0)
 
 	if energy <= 0.0:
@@ -396,7 +392,6 @@ func _perform_dash(input_direction: Vector2) -> void:
 	_invulnerability_timer = maxf(_invulnerability_timer, dash_invulnerability_duration)
 	_dash_hit_enemies.clear()
 	dash_timer.start(0.16)
-
 	speed = normal_speed * dash_speed_multiplier
 
 	var dash_dir := input_direction
@@ -406,10 +401,8 @@ func _perform_dash(input_direction: Vector2) -> void:
 		_update_facing_direction(dash_dir)
 
 	velocity = dash_dir * speed
-
 	flash_white(0.12)
-	is_charging = true
-	animated_sprite.play("charge_" + facing_direction)
+	_play_locked_animation("charge_" + facing_direction)
 
 func _get_current_move_speed() -> float:
 	if is_dashing:
@@ -507,6 +500,8 @@ func _on_dash_timer_timeout() -> void:
 	is_dashing = false
 	speed = _get_current_move_speed()
 	acceleration = base_acceleration
+	if _locked_animation.begins_with("charge_"):
+		_locked_animation = ""
 	if not is_attacking and not is_transitioning:
 		var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
 		if input_direction != Vector2.ZERO:
@@ -515,8 +510,14 @@ func _on_dash_timer_timeout() -> void:
 			_play_animation("idle_" + facing_direction)
 
 func _play_animation(anim_name: String) -> void:
+	if not _locked_animation.is_empty():
+		return
 	if animated_sprite.animation != anim_name:
 		animated_sprite.play(anim_name)
+
+func _play_locked_animation(anim_name: String) -> void:
+	_locked_animation = anim_name
+	animated_sprite.play(anim_name)
 
 func get_dash_count() -> int:
 	if dash_energy_cost <= 0.0 or energy <= 0.0:
@@ -545,6 +546,7 @@ func prepare_drop_in(target_global_pos: Vector2) -> void:
 	_invulnerability_timer = 0.0
 	is_dashing = false
 	is_attacking = false
+	_locked_animation = ""
 
 	velocity = Vector2.ZERO
 	if dash_timer:
@@ -610,6 +612,7 @@ func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
 	_invulnerability_timer = 0.0
 	is_dashing = false
 	is_attacking = false
+	_locked_animation = ""
 	velocity = Vector2.ZERO
 	if dash_timer:
 		dash_timer.stop()
@@ -643,4 +646,16 @@ func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:
-	pass # Replace with function body.
+	if _locked_animation.is_empty() or animated_sprite.animation != _locked_animation:
+		return
+
+	_locked_animation = ""
+
+	if is_dead or is_transitioning or is_attacking:
+		return
+
+	var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
+	if is_dashing or input_direction != Vector2.ZERO:
+		_play_animation("run_" + facing_direction)
+	else:
+		_play_animation("idle_" + facing_direction)

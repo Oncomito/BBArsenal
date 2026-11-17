@@ -215,12 +215,13 @@ func _on_hitbox_body_exited(body: Node2D) -> void:
 func _shoot_at_player() -> void:
 	if not is_instance_valid(player):
 		return
+	AudioManager.play_sfx("fireball")
 	ProjectileManager.spawn_projectile(
 		"fireball",
 		{
 			"spawn_point": global_position + Vector2(0.0, -192),
 			"target": player,
-			"damage": 10.0,
+			"damage": 2.5,
 			"scale": Vector2(4, 4),
 			"speed": 1000.0,
 			"lifetime": 2.5
