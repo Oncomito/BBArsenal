@@ -9,3 +9,10 @@ We are using **FREE** and **OPEN SOURCE** Assets within the internet, if you wan
 Our game are compatible with: <br>
 - Dekstop <br>
 - X Box Controller Input
+
+## Playable
+Our game lives here
+[**Click Here!!**](https://itch.io/whyfren/havenjakarta)
+Feel free to play!
+Also if you have some ciritcs and suggestions, we are so grateful to hear that!
+
