@@ -10,6 +10,9 @@ All assets are sourced from **FREE** and **OPEN SOURCE** sumber in the internet,
 
 ## Music
 
+- [Menu Music](https://opengameart.org/content/menu-music-1)
+- [Combat Music 1](https://opengameart.org/content/awake-megawall-10)
+
 ## SFX
 
 ## Font
