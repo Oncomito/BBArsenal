@@ -115,9 +115,9 @@ label_settings = SubResource("LabelSettings_8qguk")
 
 [node name="BossHp" type="Label" parent="BossFight" unique_id=2100190915]
 layout_mode = 0
-offset_left = 829.0
+offset_left = 199.0
 offset_top = 85.0
-offset_right = 1242.0
+offset_right = 1824.0
 offset_bottom = 203.0
 theme_override_fonts/font = ExtResource("5_xgiq7")
 theme_override_font_sizes/font_size = 25

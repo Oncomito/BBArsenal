@@ -8,6 +8,9 @@ signal level_cleared(level: int)
 signal stats_changed
 signal virtual_gamepad_changed(enabled: bool)
 signal hud_layout_changed(layout_id: String)
+signal boss_spawned(boss: Node)
+signal boss_health_changed(current_health: float, max_health: float, boss_name: String)
+signal boss_defeated
 
 var game_mode: String = "levels"
 var current_level: int = 1
@@ -20,6 +23,7 @@ var score: int = 0
 var exp: float = 0.0
 var virtual_gamepad_enabled: bool = false
 var hud_layout: String = HUD_LAYOUT_TOP_BAR
+var active_boss: Node = null
 
 const BASE_RESOLUTION := Vector2i(1920, 1080)
 const MAX_WINDOWED_RATIO := 0.9
@@ -228,6 +232,7 @@ func reset_run() -> void:
 	total_enemies = 0
 	score = 0
 	exp = 0.0
+	active_boss = null
 	level_changed.emit(current_level)
 	stats_changed.emit()
 
@@ -235,6 +240,22 @@ func set_wave_enemies(total: int) -> void:
 	enemies_killed = 0
 	total_enemies = max(total, 0)
 	stats_changed.emit()
+
+func register_boss(boss: Node) -> void:
+	active_boss = boss
+	var cur_hp: float = float(boss.get("health")) if "health" in boss else 0.0
+	var max_hp: float = float(boss.get("max_health")) if "max_health" in boss else 100.0
+	var title: String = str(boss.get("boss_title")) if "boss_title" in boss else "BOSS"
+	boss_spawned.emit(boss)
+	boss_health_changed.emit(cur_hp, max_hp, title)
+
+func update_boss_health(current_health: float, max_health: float, boss_name: String = "BOSS") -> void:
+	boss_health_changed.emit(current_health, max_health, boss_name)
+
+func unregister_boss(boss: Node = null) -> void:
+	if boss == null or active_boss == boss:
+		active_boss = null
+	boss_defeated.emit()
 
 func register_enemy_kill(points: int = 10) -> void:
 	enemies_killed += 1
@@ -270,6 +291,8 @@ func notify_level_started() -> void:
 		level_started.emit("Endless")
 	elif game_mode == "tutorial":
 		level_started.emit("Tutorial")
+	elif game_mode == "boss":
+		level_started.emit("Boss Fight")
 	else:
 		level_started.emit("Level " + get_level_code())
 

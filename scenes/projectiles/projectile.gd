@@ -152,8 +152,8 @@ func parry(player: Node2D) -> void:
 		spark.animation_name = "holy" if element != "holy" else "arcane"
 		get_tree().current_scene.call_deferred("add_child", spark)
 
-	if Audiomanager:
-		Audiomanager.play_sfx("blast", 2.2)
+	if AudioManager:
+		AudioManager.play_sfx("blast", 2.2)
 
 	if player and player.has_method("camera_shake"):
 		player.camera_shake(7.0, 0.15)
@@ -165,7 +165,7 @@ func _explode() -> void:
 	set_physics_process(false)
 	hide()
 
-	Audiomanager.play_sfx("blast")
+	AudioManager.play_sfx("blast")
 	if HIT_EFFECT_SCENE and get_tree().current_scene:
 		var hit := HIT_EFFECT_SCENE.instantiate()
 		hit.global_position = global_position
