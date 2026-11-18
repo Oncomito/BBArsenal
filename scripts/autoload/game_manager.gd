@@ -6,6 +6,7 @@ signal level_changed(new_level: int)
 signal level_started(level_code: String)
 signal level_cleared(level: int)
 signal stats_changed
+signal virtual_gamepad_changed(enabled: bool)
 
 var game_mode: String = "levels"
 var current_level: int = 1
@@ -16,9 +17,11 @@ var enemies_killed: int = 0
 var total_enemies: int = 0
 var score: int = 0
 var exp: float = 0.0
+var virtual_gamepad_enabled: bool = true
 
 const BASE_RESOLUTION := Vector2i(1920, 1080)
 const MAX_WINDOWED_RATIO := 0.9
+const GAME_SETTINGS_PATH := "user://game_settings.cfg"
 
 var _fade_layer: CanvasLayer = null
 var _fade_rect: ColorRect = null
@@ -33,6 +36,7 @@ var _is_desktop_display: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_load_game_settings()
 	if name == "GameManager":
 		_setup_fade_overlay()
 		detect_device()
@@ -281,3 +285,21 @@ func restart_game() -> void:
 	AudioManager.fade_in(0.5)
 
 	get_tree().reload_current_scene()
+
+func set_virtual_gamepad_enabled(enabled: bool) -> void:
+	virtual_gamepad_enabled = enabled
+	_save_game_settings()
+	virtual_gamepad_changed.emit(virtual_gamepad_enabled)
+
+func _load_game_settings() -> void:
+	var config := ConfigFile.new()
+	if config.load(GAME_SETTINGS_PATH) != OK:
+		return
+	virtual_gamepad_enabled = bool(config.get_value("controls", "virtual_gamepad_enabled", virtual_gamepad_enabled))
+
+func _save_game_settings() -> void:
+	var config := ConfigFile.new()
+	config.set_value("controls", "virtual_gamepad_enabled", virtual_gamepad_enabled)
+	var error := config.save(GAME_SETTINGS_PATH)
+	if error != OK:
+		push_warning("Could not save game settings: %s" % error_string(error))

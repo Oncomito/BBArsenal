@@ -4,6 +4,7 @@ extends Control
 @onready var music_value: Label = $Center/Panel/Content/MusicRow/MusicValue
 @onready var sfx_slider: HSlider = $Center/Panel/Content/SfxRow/SfxSlider
 @onready var sfx_value: Label = $Center/Panel/Content/SfxRow/SfxValue
+@onready var gamepad_toggle: Button = $Center/Panel/Content/GamepadRow/GamepadToggle
 
 var return_focus: Control
 
@@ -11,14 +12,20 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	music_slider.focus_mode = Control.FOCUS_ALL
 	sfx_slider.focus_mode = Control.FOCUS_ALL
+	gamepad_toggle.focus_mode = Control.FOCUS_ALL
 	var back_button: Button = $Center/Panel/Content/Back
 	music_slider.focus_neighbor_bottom = music_slider.get_path_to(sfx_slider)
 	sfx_slider.focus_neighbor_top = sfx_slider.get_path_to(music_slider)
-	sfx_slider.focus_neighbor_bottom = sfx_slider.get_path_to(back_button)
-	back_button.focus_neighbor_top = back_button.get_path_to(sfx_slider)
+	sfx_slider.focus_neighbor_bottom = sfx_slider.get_path_to(gamepad_toggle)
+	gamepad_toggle.focus_neighbor_top = gamepad_toggle.get_path_to(sfx_slider)
+	gamepad_toggle.focus_neighbor_bottom = gamepad_toggle.get_path_to(back_button)
+	back_button.focus_neighbor_top = back_button.get_path_to(gamepad_toggle)
 	music_slider.value = AudioManager.music_volume
 	sfx_slider.value = AudioManager.sfx_volume
 	_update_value_labels()
+	var virtual_gamepad := GameManager.virtual_gamepad_enabled if GameManager else true
+	gamepad_toggle.set_pressed_no_signal(virtual_gamepad)
+	_update_gamepad_toggle_visual(virtual_gamepad)
 	music_slider.grab_focus()
 
 func _on_music_slider_value_changed(value: float) -> void:
@@ -28,6 +35,23 @@ func _on_music_slider_value_changed(value: float) -> void:
 func _on_sfx_slider_value_changed(value: float) -> void:
 	AudioManager.set_sfx_volume(value)
 	_update_value_labels()
+
+func _on_gamepad_toggle_toggled(toggled_on: bool) -> void:
+	AudioManager.play_sfx("click")
+	if GameManager:
+		GameManager.set_virtual_gamepad_enabled(toggled_on)
+	_update_gamepad_toggle_visual(toggled_on)
+
+func _update_gamepad_toggle_visual(enabled: bool) -> void:
+	if not is_instance_valid(gamepad_toggle):
+		return
+	gamepad_toggle.text = "ON" if enabled else "OFF"
+	var text_color := Color(0.55, 1.0, 0.92, 1.0) if enabled else Color(0.7, 0.76, 0.78, 0.85)
+	gamepad_toggle.add_theme_color_override("font_color", text_color)
+	gamepad_toggle.add_theme_color_override("font_pressed_color", text_color)
+	gamepad_toggle.add_theme_color_override("font_hover_color", text_color)
+	gamepad_toggle.add_theme_color_override("font_hover_pressed_color", text_color)
+	gamepad_toggle.add_theme_color_override("font_focus_color", text_color)
 
 func _update_value_labels() -> void:
 	music_value.text = "%d%%" % roundi(music_slider.value * 100.0)

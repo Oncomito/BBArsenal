@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b7abwh4odmhu"]
+[gd_scene format=3 uid="uid://dpe5cj6mna0tg"]
 
 [ext_resource type="Script" path="res://scenes/ui/hud.gd" id="1_n3ctc"]
 [ext_resource type="FontFile" uid="uid://brr2jtpm3yhu3" path="res://assets/fonts/JetBrainsMono-VariableFont_wght.ttf" id="2_wcai5"]

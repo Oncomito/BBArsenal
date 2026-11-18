@@ -12,12 +12,27 @@ var _button_tweens: Dictionary = {}
 @onready var parry_button: Button = $Parry
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	if GameManager and not GameManager.virtual_gamepad_changed.is_connected(_on_virtual_gamepad_changed):
+		GameManager.virtual_gamepad_changed.connect(_on_virtual_gamepad_changed)
+	_update_visibility()
 	_bind_player()
 	for btn in [dash_button, shield_button, parry_button]:
 		if is_instance_valid(btn):
 			btn.pivot_offset = btn.size * 0.5
 
+func _on_virtual_gamepad_changed(_enabled: bool) -> void:
+	_update_visibility()
+
+func _update_visibility() -> void:
+	var enabled := GameManager.virtual_gamepad_enabled if GameManager else true
+	visible = enabled and not get_tree().paused
+
 func _process(_delta: float) -> void:
+	_update_visibility()
+	if not visible:
+		return
+
 	var current_player := _bind_player()
 	if not is_instance_valid(current_player):
 		return
