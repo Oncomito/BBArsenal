@@ -31,7 +31,7 @@ var _bounce_lock_timer: float = 0.0
 @export var energy_regen_rate: float = 10.0
 @export var energy_regen_delay: float = 1.0
 @export var energy_exhausted_regen_delay: float = 1.5
-@export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.5
+@export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.1
 @export var dash_damage: float = 35.0
 @export var parry_cooldown: float = 0.75
 @export_range(0.0, 1.0, 0.05) var speed_damage_min_speed_ratio: float = 0.5
@@ -95,7 +95,7 @@ func _ready() -> void:
 	is_dead = false
 	_setup_flash_shader()
 	health_changed.emit(health, max_health)
-	energy_changed.emit(energy, max_energy)
+	_emit_energy_changed()
 
 func _setup_flash_shader() -> void:
 	var shader := load("res://shaders/white_flash.gdshader") as Shader
@@ -214,10 +214,7 @@ func _handle_bounce(pre_collision_velocity: Vector2) -> void:
 			var normal_bounce_speed := minf(pre_collision_velocity.length(), speed)
 			velocity = bounced_velocity.normalized() * normal_bounce_speed
 		_update_facing_direction(velocity.normalized())
-		if is_dashing:
-			_play_animation("run_" + facing_direction)
-		elif not is_attacking:
-			_play_animation("run_" + facing_direction)
+		_update_movement_animation()
 
 		camera_shake(10.0 if is_dashing else 4.0, wall_hit_shake_duration)
 		AudioManager.play_sfx("ting", 1.2 if is_dashing else 0.9, 0.0)
@@ -258,7 +255,7 @@ func _handle_energy_regen(delta: float) -> void:
 		energy = minf(energy + energy_regen_rate * delta, max_energy)
 		if is_exhausted and energy > 0.0:
 			is_exhausted = false
-		energy_changed.emit(energy, max_energy)
+		_emit_energy_changed()
 
 func _handle_shield(delta: float) -> void:
 	if not is_shield_active:
@@ -269,20 +266,23 @@ func _handle_shield(delta: float) -> void:
 		return
 
 	energy = maxf(energy - shield_drain_rate * delta, 0.0)
-	energy_changed.emit(energy, max_energy)
-	dash_count_changed.emit(get_dash_count(), int(ceil(max_energy / maxf(dash_energy_cost, 1.0))))
+	_emit_energy_changed()
 
 	if energy <= 0.0:
 		is_exhausted = true
 		energy_regen_wait_timer = energy_exhausted_regen_delay
 		_deactivate_shield()
 
-func _toggle_shield() -> void:
+func toggle_shield() -> void:
+	if is_dead or is_transitioning or get_tree().paused or is_dashing:
+		return
 	if is_shield_active:
 		_deactivate_shield()
-	else:
-		if energy > 0.0 and not is_exhausted and not is_dashing:
-			_activate_shield()
+	elif energy > 0.0 and not is_exhausted:
+		_activate_shield()
+
+func _toggle_shield() -> void:
+	toggle_shield()
 
 func _activate_shield() -> void:
 	is_shield_active = true
@@ -295,23 +295,33 @@ func _deactivate_shield() -> void:
 		shield.deactivate()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_transitioning:
+	if is_transitioning or is_dead or get_tree().paused:
 		return
-	if event.is_action_pressed("player_dash"):
-		if not is_dead and not get_tree().paused and can_dash():
-			get_viewport().set_input_as_handled()
-			var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
-			_perform_dash(input_direction)
-	elif event.is_action_pressed("player_shield"):
-		if not is_dead and not get_tree().paused and not is_dashing:
-			get_viewport().set_input_as_handled()
-			_toggle_shield()
-	elif event.is_action_pressed("player_parry"):
-		if not is_dead and not get_tree().paused and not is_attacking and not is_shield_active and not is_dashing and _locked_animation.is_empty() and parry_cooldown_timer <= 0.0:
-			get_viewport().set_input_as_handled()
-			_perform_parry()
+	if event.is_action_pressed("player_dash") and can_dash():
+		get_viewport().set_input_as_handled()
+		perform_dash()
+	elif event.is_action_pressed("player_shield") and not is_dashing:
+		get_viewport().set_input_as_handled()
+		toggle_shield()
+	elif event.is_action_pressed("player_parry") and can_parry():
+		get_viewport().set_input_as_handled()
+		perform_parry()
 
-func _perform_parry() -> void:
+func can_parry() -> bool:
+	return (
+		not is_dead
+		and not is_transitioning
+		and not get_tree().paused
+		and not is_attacking
+		and not is_shield_active
+		and not is_dashing
+		and _locked_animation.is_empty()
+		and parry_cooldown_timer <= 0.0
+	)
+
+func perform_parry() -> void:
+	if not can_parry():
+		return
 	is_attacking = true
 	is_invulnerable = true
 	_invulnerability_timer = maxf(_invulnerability_timer, parry_invulnerability_duration)
@@ -319,6 +329,9 @@ func _perform_parry() -> void:
 	parry_timer.start(0.1)
 	_check_parry()
 	_play_locked_animation("parry_" + facing_direction)
+
+func _perform_parry() -> void:
+	perform_parry()
 
 func _check_parry() -> void:
 	for proj in get_tree().get_nodes_in_group("projectile"):
@@ -343,33 +356,34 @@ func _on_successful_parry(pos: Vector2) -> void:
 	energize(10)
 
 func _input_move(delta: float) -> void:
-	var locked := _bounce_lock_timer > 0.0
+	if _bounce_lock_timer > 0.0:
+		return
 
 	var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
 	var target_max_speed := _get_current_move_speed()
 
 	if input_direction != Vector2.ZERO:
-		if not locked:
-			velocity = velocity.move_toward(input_direction * target_max_speed, acceleration * delta)
-			if _locked_animation.is_empty() and not is_dashing:
-				_update_facing_direction(input_direction)
-			if is_dashing:
-				_play_animation("run_" + facing_direction)
-			elif not is_attacking:
-				_play_animation("run_" + facing_direction)
+		velocity = velocity.move_toward(input_direction * target_max_speed, acceleration * delta)
+		if _locked_animation.is_empty() and not is_dashing:
+			_update_facing_direction(input_direction)
 	else:
-		if not locked:
-			velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-			if is_dashing:
-				_play_animation("run_" + facing_direction)
-			elif not is_attacking:
-				_play_animation("idle_" + facing_direction)
+		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
+
+	_update_movement_animation()
 
 func can_dash() -> bool:
-	return dash_cooldown_timer <= 0.0 and energy > 0.0 and not is_attacking and _locked_animation.is_empty()
+	return (
+		not is_dead
+		and not is_transitioning
+		and not get_tree().paused
+		and dash_cooldown_timer <= 0.0
+		and energy >= dash_energy_cost
+		and not is_attacking
+		and _locked_animation.is_empty()
+	)
 
-func _perform_dash(input_direction: Vector2) -> void:
-	if floor(energy / dash_energy_cost) < 1:
+func perform_dash(direction: Vector2 = Vector2.ZERO) -> void:
+	if not can_dash():
 		return
 
 	if is_shield_active:
@@ -384,8 +398,7 @@ func _perform_dash(input_direction: Vector2) -> void:
 	else:
 		energy_regen_wait_timer = energy_regen_delay
 
-	energy_changed.emit(energy, max_energy)
-	dash_count_changed.emit(get_dash_count(), int(ceil(max_energy / maxf(dash_energy_cost, 1.0))))
+	_emit_energy_changed()
 
 	is_dashing = true
 	is_invulnerable = true
@@ -394,7 +407,9 @@ func _perform_dash(input_direction: Vector2) -> void:
 	dash_timer.start(0.16)
 	speed = normal_speed * dash_speed_multiplier
 
-	var dash_dir := input_direction
+	var dash_dir := direction
+	if dash_dir == Vector2.ZERO:
+		dash_dir = Input.get_vector("player_left", "player_right", "player_up", "player_down")
 	if dash_dir == Vector2.ZERO:
 		dash_dir = _get_facing_direction_vector()
 	else:
@@ -403,6 +418,9 @@ func _perform_dash(input_direction: Vector2) -> void:
 	velocity = dash_dir * speed
 	flash_white(0.12)
 	_play_locked_animation("charge_" + facing_direction)
+
+func _perform_dash(direction: Vector2 = Vector2.ZERO) -> void:
+	perform_dash(direction)
 
 func _get_current_move_speed() -> float:
 	if is_dashing:
@@ -417,8 +435,7 @@ func take_damage(amount: float) -> void:
 	if is_shield_active:
 		var energy_absorbed := amount * 1.2
 		energy = maxf(energy - energy_absorbed, 0.0)
-		energy_changed.emit(energy, max_energy)
-		dash_count_changed.emit(get_dash_count(), int(ceil(max_energy / maxf(dash_energy_cost, 1.0))))
+		_emit_energy_changed()
 		camera_shake(8.0, 0.15)
 		if AudioManager:
 			AudioManager.play_sfx("blast", 2.0, -4.0)
@@ -449,7 +466,7 @@ func energize(amount: float) -> void:
 		return
 	var energy_change := -amount if is_shield_active and amount > 0.0 else amount
 	energy = clampf(energy + energy_change, 0.0, max_energy)
-	energy_changed.emit(energy, max_energy)
+	_emit_energy_changed()
 	if is_shield_active and energy <= 0.0:
 		is_exhausted = true
 		energy_regen_wait_timer = energy_exhausted_regen_delay
@@ -471,19 +488,7 @@ func _update_facing_direction(dir: Vector2) -> void:
 		facing_direction = "down" if dir.y > 0.0 else "up"
 
 func _update_facing_direction_to_object(object: Vector2) -> void:
-	var direction: Vector2 = object - global_position
-	
-	if abs(direction.x) > abs(direction.y):
-		if direction.x > 0:
-			facing_direction = "right"
-		else:
-			facing_direction = "left"
-	else:
-		if direction.y > 0:
-			facing_direction = "down"
-		else:
-			facing_direction = "up"
-
+	_update_facing_direction(object - global_position)
 
 func _get_facing_direction_vector() -> Vector2:
 	match facing_direction:
@@ -502,8 +507,15 @@ func _on_dash_timer_timeout() -> void:
 	acceleration = base_acceleration
 	if _locked_animation.begins_with("charge_"):
 		_locked_animation = ""
-	if not is_attacking and not is_transitioning:
-		var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
+	_update_movement_animation()
+
+func _update_movement_animation() -> void:
+	if is_dead or is_transitioning:
+		return
+	var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
+	if is_dashing:
+		_play_animation("run_" + facing_direction)
+	elif not is_attacking:
 		if input_direction != Vector2.ZERO:
 			_play_animation("run_" + facing_direction)
 		else:
@@ -519,6 +531,13 @@ func _play_locked_animation(anim_name: String) -> void:
 	_locked_animation = anim_name
 	animated_sprite.play(anim_name)
 
+func get_max_dash_count() -> int:
+	return int(ceil(max_energy / maxf(dash_energy_cost, 1.0)))
+
+func _emit_energy_changed() -> void:
+	energy_changed.emit(energy, max_energy)
+	dash_count_changed.emit(get_dash_count(), get_max_dash_count())
+
 func get_dash_count() -> int:
 	if dash_energy_cost <= 0.0 or energy <= 0.0:
 		return 0
@@ -531,28 +550,24 @@ func get_dash_recharge_ratio() -> float:
 
 func _on_parry_timer_timeout() -> void:
 	is_attacking = false
-	if not is_transitioning:
-		var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
-		if input_direction != Vector2.ZERO:
-			_play_animation("run_" + facing_direction)
-		else:
-			_play_animation("idle_" + facing_direction)
+	_update_movement_animation()
 
-func prepare_drop_in(target_global_pos: Vector2) -> void:
+func _begin_transition_state() -> void:
 	_deactivate_shield()
-
 	is_transitioning = true
 	is_invulnerable = true
 	_invulnerability_timer = 0.0
 	is_dashing = false
 	is_attacking = false
 	_locked_animation = ""
-
 	velocity = Vector2.ZERO
 	if dash_timer:
 		dash_timer.stop()
 	if parry_timer:
 		parry_timer.stop()
+
+func prepare_drop_in(target_global_pos: Vector2) -> void:
+	_begin_transition_state()
 
 	global_position = target_global_pos
 	if camera:
@@ -605,19 +620,7 @@ func play_drop_in_animation(target_global_pos: Vector2) -> void:
 	is_invulnerable = false
 
 func play_jump_into_trapdoor(trapdoor_global_pos: Vector2) -> void:
-	if is_shield_active:
-		_deactivate_shield()
-	is_transitioning = true
-	is_invulnerable = true
-	_invulnerability_timer = 0.0
-	is_dashing = false
-	is_attacking = false
-	_locked_animation = ""
-	velocity = Vector2.ZERO
-	if dash_timer:
-		dash_timer.stop()
-	if parry_timer:
-		parry_timer.stop()
+	_begin_transition_state()
 
 	facing_direction = "down"
 	_play_animation("idle_down")
@@ -654,8 +657,4 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	if is_dead or is_transitioning or is_attacking:
 		return
 
-	var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
-	if is_dashing or input_direction != Vector2.ZERO:
-		_play_animation("run_" + facing_direction)
-	else:
-		_play_animation("idle_" + facing_direction)
+	_update_movement_animation()

@@ -1,6 +1,6 @@
 # Assets License
 
-We are currently try to make our assets but idk if we can even capable of make ones.
+We are currently in progress to make our assets, though the progress would be undeniably slow as none of our workmates is capable of doing arts.
 
 # Assets Credit
 

@@ -1,16 +1,25 @@
 extends Node2D
 
-const WASD_UI_SCENE := preload("res://scenes/ui/wasd_ui.tscn")
-const DASH_UI_SCENE := preload("res://scenes/ui/dash_ui.tscn")
-const PARRY_UI_SCENE := preload("res://scenes/ui/parry_ui.tscn")
-const SHIELD_UI_SCENE := preload("res://scenes/ui/shield_ui.tscn")
-const OH_NO_UI_SCENE := preload("res://scenes/ui/oh_no.tscn")
-const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/ui/to_the_levelsss.tscn")
+const WASD_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_wasd.tscn")
+const DASH_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_dash.tscn")
+const PARRY_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_parry.tscn")
+const SHIELD_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_shield.tscn")
+const OH_NO_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_oh_no.tscn")
+const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_to_levels.tscn")
+
+const BOSS_SCENE := preload("res://scenes/enemies/mecha_boss.tscn")
+const HUD_TOP_BAR_UI_SCENE := preload("res://scenes/ui/hud/hud_top_bar.tscn")
+const MOBILE_HUD_UI_SCENE := preload("res://scenes/ui/mobile/mobile_hud.tscn")
+const LEVELS_UI_SCENE := preload("res://scenes/ui/hud/levels_ui.tscn")
+const PAUSE_MENU_UI_SCENE := preload("res://scenes/ui/menus/pause_menu.tscn")
+const GAME_OVER_UI_SCENE := preload("res://scenes/ui/menus/game_over.tscn")
 
 @export var max_floor_in_scene: int = 10
 @export var next_level_scene: PackedScene = preload("res://scenes/levels/level_2_crossroads.tscn")
 @export var trapdoor_local_center: Vector2 = Vector2.ZERO
 @export var trapdoor_trigger_size: Vector2 = Vector2(480.0, 480.0)
+@export var is_boss_level: bool = false
+@export var boss_enemy_scene: PackedScene = BOSS_SCENE
 
 var _is_trapdoor_open: bool = false
 var _is_entering_trapdoor: bool = false
@@ -37,21 +46,54 @@ func _ready() -> void:
 
 	if GameManager:
 		GameManager.max_arena_level = max_floor_in_scene
+		if is_boss_level:
+			GameManager.game_mode = "boss"
 		if not GameManager.is_black_screen_active:
 			GameManager.set_black_instant()
+
+	if get_tree().current_scene == self and get_node_or_null("UI") == null:
+		_ensure_standalone_ui()
 
 	var center_global := to_global(trapdoor_local_center)
 	if is_instance_valid(player):
 		player.prepare_drop_in(center_global)
 
-	var mode: String = GameManager.game_mode
+	var mode: String = GameManager.game_mode if GameManager else "levels"
 	if mode == "tutorial":
 		call_deferred("_start_tutorial")
 	elif mode == "endless":
 		call_deferred("_start_endless")
+	elif mode == "boss" or is_boss_level:
+		call_deferred("_start_boss_floor")
 	else:
 		var start_level: int = GameManager.current_level if GameManager else 1
 		call_deferred("_start_floor", start_level)
+
+
+func _ensure_standalone_ui() -> void:
+	var ui_layer := CanvasLayer.new()
+	ui_layer.name = "UI"
+	add_child(ui_layer)
+
+	var hud_scene: PackedScene = HUD_TOP_BAR_UI_SCENE
+	if GameManager and GameManager.has_method("get_hud_scene_path"):
+		var loaded_hud := load(GameManager.get_hud_scene_path()) as PackedScene
+		if loaded_hud:
+			hud_scene = loaded_hud
+
+	var ui_entries: Array = [
+		["HUD", hud_scene],
+		["MobileHUD", MOBILE_HUD_UI_SCENE],
+		["LevelsUI", LEVELS_UI_SCENE],
+		["PauseMenu", PAUSE_MENU_UI_SCENE],
+		["GameOver", GAME_OVER_UI_SCENE],
+	]
+	for entry in ui_entries:
+		var packed: PackedScene = entry[1]
+		if packed:
+			var inst := packed.instantiate()
+			inst.name = str(entry[0])
+			ui_layer.add_child(inst)
 
 func _setup_trapdoor_zone() -> void:
 	if not is_instance_valid(trap_door_zone):
@@ -100,29 +142,7 @@ func _reset_arena_state() -> void:
 	if is_instance_valid(player) and player.has_method("prepare_drop_in"):
 		player.prepare_drop_in(center_global)
 
-func _start_floor(level: int) -> void:
-	_reset_arena_state()
-	var center_global := to_global(trapdoor_local_center)
-
-	if not GameManager.is_black_screen_active:
-		GameManager.set_black_instant()
-	await GameManager.fade_from_black(0.3, 0.35)
-
-	if not is_inside_tree():
-		return
-
-	GameManager.notify_level_started()
-
-	if is_instance_valid(player):
-		await player.play_drop_in_animation(center_global)
-
-	if not is_inside_tree():
-		return
-
-	if spawner:
-		spawner.start_wave(level)
-
-func _start_endless() -> void:
+func _begin_arena_drop_in() -> bool:
 	_reset_arena_state()
 	var center_global := to_global(trapdoor_local_center)
 
@@ -132,7 +152,7 @@ func _start_endless() -> void:
 		await GameManager.fade_from_black(0.3, 0.35)
 
 	if not is_inside_tree():
-		return
+		return false
 
 	if GameManager and GameManager.has_method("notify_level_started"):
 		GameManager.notify_level_started()
@@ -140,11 +160,41 @@ func _start_endless() -> void:
 	if is_instance_valid(player):
 		await player.play_drop_in_animation(center_global)
 
-	if not is_inside_tree():
-		return
+	return is_inside_tree()
 
+
+func _start_floor(level: int) -> void:
+	if not await _begin_arena_drop_in():
+		return
+	if spawner:
+		spawner.start_wave(level)
+
+
+func _start_endless() -> void:
+	if not await _begin_arena_drop_in():
+		return
 	if spawner and spawner.has_method("start_endless"):
 		spawner.start_endless()
+
+
+func _start_boss_floor() -> void:
+	if spawner:
+		var boss_pack: PackedScene = boss_enemy_scene if boss_enemy_scene else BOSS_SCENE
+		if "enemy_scene" in spawner:
+			spawner.enemy_scene = boss_pack
+		if "enemy_scenes" in spawner:
+			var pool: Array[PackedScene] = [boss_pack]
+			spawner.enemy_scenes = pool
+		if "max_enemies" in spawner:
+			spawner.max_enemies = 1
+		if "base_enemies_per_level" in spawner:
+			spawner.base_enemies_per_level = 1
+		if "enemies_increase_per_level" in spawner:
+			spawner.enemies_increase_per_level = 0
+	if not await _begin_arena_drop_in():
+		return
+	if spawner and spawner.has_method("start_wave"):
+		spawner.start_wave(1, 1)
 
 func _start_tutorial() -> void:
 	_reset_arena_state()
@@ -258,7 +308,7 @@ func _on_all_enemies_cleared() -> void:
 		_show_tutorial_complete_ui()
 		return
 
-	if GameManager and GameManager.game_mode != "levels":
+	if GameManager and GameManager.game_mode not in ["levels", "boss"]:
 		return
 
 	if _is_trapdoor_open:
@@ -313,6 +363,10 @@ func _enter_trapdoor(player_node: Node2D) -> void:
 		await GameManager.fade_to_black(0.25)
 
 	if not is_inside_tree():
+		return
+
+	if GameManager and GameManager.game_mode == "boss":
+		await _start_boss_floor()
 		return
 
 	var next_level: int = GameManager.advance_level() if GameManager else 2

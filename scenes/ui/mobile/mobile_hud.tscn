@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://bcsquxfpkvpsi"]
+
+[ext_resource type="Script" uid="uid://bhnoqhikgc678" path="res://scenes/ui/mobile/mobile_hud.gd" id="1_gsvga"]
+[ext_resource type="PackedScene" uid="uid://dcpn1ho5o8dp6" path="res://scenes/ui/mobile/dash_button.tscn" id="2_dash"]
+[ext_resource type="PackedScene" path="res://scenes/ui/mobile/shield_button.tscn" id="3_shield"]
+[ext_resource type="PackedScene" path="res://scenes/ui/mobile/parry_button.tscn" id="4_parry"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joy_normal"]
+bg_color = Color(0.08, 0.11, 0.18, 0.45)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.22, 0.85, 1, 0.55)
+corner_radius_top_left = 300
+corner_radius_top_right = 300
+corner_radius_bottom_right = 300
+corner_radius_bottom_left = 300
+shadow_color = Color(0.05, 0.65, 0.95, 0.18)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joy_pressed"]
+bg_color = Color(0.1, 0.16, 0.26, 0.62)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.35, 0.92, 1, 0.9)
+corner_radius_top_left = 300
+corner_radius_top_right = 300
+corner_radius_bottom_right = 300
+corner_radius_bottom_left = 300
+shadow_color = Color(0.15, 0.85, 1, 0.35)
+shadow_size = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tip_normal"]
+bg_color = Color(0.28, 0.84, 1, 0.72)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.85, 0.98, 1, 0.9)
+corner_radius_top_left = 300
+corner_radius_top_right = 300
+corner_radius_bottom_right = 300
+corner_radius_bottom_left = 300
+shadow_color = Color(0.15, 0.8, 1, 0.32)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tip_pressed"]
+bg_color = Color(0.45, 0.94, 1, 0.92)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 300
+corner_radius_top_right = 300
+corner_radius_bottom_right = 300
+corner_radius_bottom_left = 300
+shadow_color = Color(0.25, 0.92, 1, 0.52)
+shadow_size = 14
+
+[node name="MobileHUD" type="Control" unique_id=932176028]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_gsvga")
+
+[node name="VirtualJoystick" type="VirtualJoystick" parent="." unique_id=513139276]
+layout_mode = 0
+offset_left = 265.0
+offset_top = 810.0
+offset_right = 305.0
+offset_bottom = 850.0
+joystick_mode = 1
+joystick_size = 420.0
+tip_size = 169.0
+deadzone_ratio = 0.04
+action_left = &"player_left"
+action_right = &"player_right"
+action_up = &"player_up"
+action_down = &"player_down"
+theme_override_styles/normal_joystick = SubResource("StyleBoxFlat_joy_normal")
+theme_override_styles/pressed_joystick = SubResource("StyleBoxFlat_joy_pressed")
+theme_override_styles/normal_tip = SubResource("StyleBoxFlat_tip_normal")
+theme_override_styles/pressed_tip = SubResource("StyleBoxFlat_tip_pressed")
+
+[node name="Dash" parent="." unique_id=660694269 instance=ExtResource("2_dash")]
+layout_mode = 0
+offset_left = 1610.0
+offset_top = 770.0
+offset_right = 1830.0
+offset_bottom = 990.0
+
+[node name="Parry" parent="." unique_id=880694271 instance=ExtResource("4_parry")]
+layout_mode = 0
+offset_left = 1395.0
+offset_top = 825.0
+offset_right = 1560.0
+offset_bottom = 990.0
+
+[node name="Shield" parent="." unique_id=770694270 instance=ExtResource("3_shield")]
+layout_mode = 0
+offset_left = 1495.0
+offset_top = 575.0
+offset_right = 1660.0
+offset_bottom = 740.0
+
+[connection signal="pressed" from="Dash" to="." method="_on_dash_pressed"]
+[connection signal="pressed" from="Parry" to="." method="_on_parry_pressed"]
+[connection signal="pressed" from="Shield" to="." method="_on_shield_pressed"]

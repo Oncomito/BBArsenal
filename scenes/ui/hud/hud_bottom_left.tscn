@@ -1,0 +1,244 @@
+[gd_scene format=3 uid="uid://bi8t3umgrmt4y"]
+
+[ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/ui/—Pngtree—heart pixel art_8666747.png" id="1_hqnrr"]
+[ext_resource type="FontFile" uid="uid://brr2jtpm3yhu3" path="res://assets/fonts/JetBrainsMono-VariableFont_wght.ttf" id="2_136eg"]
+[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/ui/energy.png" id="2_bo48s"]
+[ext_resource type="Script" uid="uid://berybs57oaid1" path="res://scenes/ui/hud/hud.gd" id="3_hudgd"]
+[ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="4_8qguk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1itfa"]
+font = ExtResource("2_136eg")
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_136eg"]
+bg_color = Color(0.2, 0.16, 0.04, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vn0dp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_energy_fill"]
+bg_color = Color(0.95, 0.8, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwttb"]
+bg_color = Color(1, 1, 1, 0.88235295)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
+bg_color = Color(0.18, 0.05, 0.05, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.9555598, 0.19983092, 0.19054687, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_bg"]
+bg_color = Color(0.18, 0.05, 0.05, 0.85)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_fill"]
+bg_color = Color(0.6401179, 0.028062731, 0.032663066, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="LabelSettings" id="LabelSettings_8qguk"]
+font_size = 48
+
+[node name="HUD" type="Control" unique_id=1729188291]
+texture_filter = 6
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_hudgd")
+layout_id = "bottom_left"
+
+[node name="Button" type="Button" parent="." unique_id=2020490796]
+layout_mode = 0
+offset_left = 1795.9999
+offset_top = 47.0
+offset_right = 1836.9999
+offset_bottom = 93.0
+scale = Vector2(1.6343701, 1.5321991)
+focus_mode = 0
+
+[node name="Label" type="Label" parent="Button" unique_id=1219445936]
+layout_mode = 0
+offset_left = 42.32293
+offset_top = 10.957552
+offset_right = 61.67008
+offset_bottom = 42.95755
+rotation = 1.5707964
+scale = Vector2(1.323325, 1.3811736)
+text = "="
+label_settings = SubResource("LabelSettings_1itfa")
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="." unique_id=773153633]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 1024.0
+offset_right = 522.0
+offset_bottom = 1047.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_136eg")
+
+[node name="energy" type="ProgressBar" parent="Panel" unique_id=931576718]
+layout_mode = 0
+offset_left = -0.5
+offset_right = 474.0
+offset_bottom = 23.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_vn0dp")
+theme_override_styles/fill = SubResource("StyleBoxFlat_energy_fill")
+value = 100.0
+show_percentage = false
+
+[node name="mark-1" type="Panel" parent="Panel" unique_id=311453294]
+layout_mode = 0
+offset_left = 373.0
+offset_right = 380.0
+offset_bottom = 23.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwttb")
+
+[node name="mark-2" type="Panel" parent="Panel" unique_id=42256685]
+layout_mode = 0
+offset_left = 278.0
+offset_right = 285.0
+offset_bottom = 23.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwttb")
+
+[node name="mark-3" type="Panel" parent="Panel" unique_id=453851376]
+layout_mode = 0
+offset_left = 183.0
+offset_right = 190.0
+offset_bottom = 23.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwttb")
+
+[node name="mark-4" type="Panel" parent="Panel" unique_id=253173910]
+layout_mode = 0
+offset_left = 88.0
+offset_right = 95.0
+offset_bottom = 23.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hwttb")
+
+[node name="health" type="ProgressBar" parent="." unique_id=648273595]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 48.0
+offset_top = 975.0
+offset_right = 521.5
+offset_bottom = 1024.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+value = 100.0
+show_percentage = false
+
+[node name="health_icon" type="Sprite2D" parent="." unique_id=1321744819]
+position = Vector2(46, 1003)
+scale = Vector2(0.03391353, 0.03391353)
+texture = ExtResource("1_hqnrr")
+
+[node name="energy_icon" type="Sprite2D" parent="." unique_id=955546948]
+position = Vector2(47, 1046)
+scale = Vector2(0.13594192, 0.13594192)
+texture = ExtResource("2_bo48s")
+
+[node name="BossFight" type="Control" parent="." unique_id=1317237785]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="Boss" type="ProgressBar" parent="BossFight" unique_id=1653804765]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 47.0
+offset_right = 1750.0
+offset_bottom = 118.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_boss_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_boss_fill")
+value = 100.0
+show_percentage = false
+
+[node name="levels" type="Label" parent="BossFight" unique_id=695660853]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 58.0
+offset_right = 443.0
+offset_bottom = 176.0
+theme_override_fonts/font = ExtResource("4_8qguk")
+theme_override_font_sizes/font_size = 25
+text = "lv. (levels here)"
+label_settings = SubResource("LabelSettings_8qguk")
+
+[node name="BossHp" type="Label" parent="BossFight" unique_id=2100190915]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 24.0
+offset_right = 1750.0
+offset_bottom = 142.0
+theme_override_fonts/font = ExtResource("4_8qguk")
+theme_override_font_sizes/font_size = 25
+text = "(name_boss) Health"
+label_settings = SubResource("LabelSettings_8qguk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NormalLevels" type="Control" parent="." unique_id=328893875]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="levels" type="Label" parent="NormalLevels" unique_id=505111019]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 37.0
+offset_right = 425.0
+offset_bottom = 87.0
+theme_override_fonts/font = ExtResource("4_8qguk")
+text = "lv. (levels here)"
+label_settings = SubResource("LabelSettings_8qguk")
+
+[node name="EnemyCounter" type="Label" parent="NormalLevels" unique_id=171649866]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 83.0
+offset_right = 1040.0
+offset_bottom = 133.0
+theme_override_fonts/font = ExtResource("4_8qguk")
+text = "enemy killed (enemy_killed) / (total_enemy)"
+label_settings = SubResource("LabelSettings_8qguk")
+
+[connection signal="pressed" from="Button" to="." method="_on_pause_button_pressed"]

@@ -6,6 +6,11 @@ signal level_changed(new_level: int)
 signal level_started(level_code: String)
 signal level_cleared(level: int)
 signal stats_changed
+signal virtual_gamepad_changed(enabled: bool)
+signal hud_layout_changed(layout_id: String)
+signal boss_spawned(boss: Node)
+signal boss_health_changed(current_health: float, max_health: float, boss_name: String)
+signal boss_defeated
 
 var game_mode: String = "levels"
 var current_level: int = 1
@@ -16,16 +21,149 @@ var enemies_killed: int = 0
 var total_enemies: int = 0
 var score: int = 0
 var exp: float = 0.0
+var virtual_gamepad_enabled: bool = false
+var hud_layout: String = HUD_LAYOUT_TOP_BAR
+var active_boss: Node = null
+
+const BASE_RESOLUTION := Vector2i(1920, 1080)
+const MAX_WINDOWED_RATIO := 0.9
+const GAME_SETTINGS_PATH := "user://game_settings.cfg"
+const HUD_LAYOUT_TOP_BAR := "top_bar"
+const HUD_LAYOUT_BOTTOM_LEFT := "bottom_left"
+const HUD_TOP_BAR_SCENE_PATH := "res://scenes/ui/hud/hud_top_bar.tscn"
+const HUD_BOTTOM_LEFT_SCENE_PATH := "res://scenes/ui/hud/hud_bottom_left.tscn"
 
 var _fade_layer: CanvasLayer = null
 var _fade_rect: ColorRect = null
 var _fade_tween: Tween = null
 var is_black_screen_active: bool = false
 
+var device_os: String = ""
+var fullscreen_resolution: Vector2i = BASE_RESOLUTION
+var windowed_resolution: Vector2i = Vector2i(1728, 972)
+var _last_window_mode: int = -1
+var _is_desktop_display: bool = false
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	virtual_gamepad_enabled = is_mobile_device()
+	_load_game_settings()
 	if name == "GameManager":
 		_setup_fade_overlay()
+		detect_device()
+
+func is_mobile_device() -> bool:
+	var os_name := OS.get_name()
+	return OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or os_name in ["Android", "iOS"]
+
+func _process(_delta: float) -> void:
+	if name != "GameManager" or not _is_desktop_display:
+		return
+	var current_mode := DisplayServer.window_get_mode()
+	if current_mode != _last_window_mode:
+		_last_window_mode = current_mode
+		_apply_display_resolution(current_mode)
+	elif current_mode == DisplayServer.WINDOW_MODE_WINDOWED:
+		var screen := DisplayServer.window_get_current_screen()
+		var screen_size := DisplayServer.screen_get_size(screen)
+		var max_size := Vector2i(
+			int(floor(float(screen_size.x) * MAX_WINDOWED_RATIO)),
+			int(floor(float(screen_size.y) * MAX_WINDOWED_RATIO))
+		)
+		var win_size := DisplayServer.window_get_size()
+		if win_size.x > max_size.x or win_size.y > max_size.y:
+			_apply_display_resolution(current_mode)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if name != "GameManager" or not _is_desktop_display:
+		return
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_F11 or (event.keycode == KEY_ENTER and event.alt_pressed):
+			toggle_fullscreen()
+			get_viewport().set_input_as_handled()
+
+func detect_device() -> void:
+	device_os = OS.get_name()
+	print(device_os)
+
+	if DisplayServer.get_name() == "headless":
+		_is_desktop_display = false
+		return
+
+	if OS.has_feature("web") or device_os == "Web":
+		_is_desktop_display = false
+		return
+
+	if OS.has_feature("mobile") or device_os in ["Android", "iOS"]:
+		_is_desktop_display = false
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		return
+
+	_is_desktop_display = true
+	_update_screen_resolutions()
+	_last_window_mode = DisplayServer.window_get_mode()
+	_apply_display_resolution(_last_window_mode)
+
+func _update_screen_resolutions() -> void:
+	var screen := DisplayServer.window_get_current_screen()
+	var screen_size := DisplayServer.screen_get_size(screen)
+	if screen_size.x <= 0 or screen_size.y <= 0:
+		return
+
+	fullscreen_resolution = screen_size
+
+	var max_width := int(floor(float(screen_size.x) * MAX_WINDOWED_RATIO))
+	var max_height := int(floor(float(screen_size.y) * MAX_WINDOWED_RATIO))
+	var aspect := float(BASE_RESOLUTION.x) / float(BASE_RESOLUTION.y)
+
+	var win_width := max_width
+	var win_height := int(floor(float(win_width) / aspect))
+	if win_height > max_height:
+		win_height = max_height
+		win_width = int(floor(float(win_height) * aspect))
+
+	win_width = min(win_width, max_width)
+	win_height = min(win_height, max_height)
+	windowed_resolution = Vector2i(max(win_width, 640), max(win_height, 360))
+
+func _apply_display_resolution(mode: int) -> void:
+	if not _is_desktop_display:
+		return
+	_update_screen_resolutions()
+	var screen := DisplayServer.window_get_current_screen()
+	var screen_size := DisplayServer.screen_get_size(screen)
+	var screen_pos := DisplayServer.screen_get_position(screen)
+
+	if mode == DisplayServer.WINDOW_MODE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		if DisplayServer.window_get_mode() != mode:
+			DisplayServer.window_set_mode(mode)
+		DisplayServer.window_set_size(fullscreen_resolution)
+	elif mode == DisplayServer.WINDOW_MODE_WINDOWED:
+		if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_WINDOWED:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+		DisplayServer.window_set_size(windowed_resolution)
+		var usable_rect := DisplayServer.screen_get_usable_rect(screen)
+		var centered_pos: Vector2i
+		if usable_rect.size.x > 0 and usable_rect.size.y > 0:
+			centered_pos = usable_rect.position + (usable_rect.size - windowed_resolution) / 2
+			centered_pos.y = max(centered_pos.y, usable_rect.position.y + 24)
+		else:
+			centered_pos = screen_pos + (screen_size - windowed_resolution) / 2
+		DisplayServer.window_set_position(centered_pos)
+
+func toggle_fullscreen() -> void:
+	if not _is_desktop_display:
+		return
+	var current_mode := DisplayServer.window_get_mode()
+	if current_mode == DisplayServer.WINDOW_MODE_FULLSCREEN or current_mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		_last_window_mode = DisplayServer.WINDOW_MODE_WINDOWED
+		_apply_display_resolution(DisplayServer.WINDOW_MODE_WINDOWED)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		_last_window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
+		_apply_display_resolution(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 func _setup_fade_overlay() -> void:
 	_fade_layer = CanvasLayer.new()
@@ -94,6 +232,7 @@ func reset_run() -> void:
 	total_enemies = 0
 	score = 0
 	exp = 0.0
+	active_boss = null
 	level_changed.emit(current_level)
 	stats_changed.emit()
 
@@ -101,6 +240,22 @@ func set_wave_enemies(total: int) -> void:
 	enemies_killed = 0
 	total_enemies = max(total, 0)
 	stats_changed.emit()
+
+func register_boss(boss: Node) -> void:
+	active_boss = boss
+	var cur_hp: float = float(boss.get("health")) if "health" in boss else 0.0
+	var max_hp: float = float(boss.get("max_health")) if "max_health" in boss else 100.0
+	var title: String = str(boss.get("boss_title")) if "boss_title" in boss else "BOSS"
+	boss_spawned.emit(boss)
+	boss_health_changed.emit(cur_hp, max_hp, title)
+
+func update_boss_health(current_health: float, max_health: float, boss_name: String = "BOSS") -> void:
+	boss_health_changed.emit(current_health, max_health, boss_name)
+
+func unregister_boss(boss: Node = null) -> void:
+	if boss == null or active_boss == boss:
+		active_boss = null
+	boss_defeated.emit()
 
 func register_enemy_kill(points: int = 10) -> void:
 	enemies_killed += 1
@@ -136,6 +291,8 @@ func notify_level_started() -> void:
 		level_started.emit("Endless")
 	elif game_mode == "tutorial":
 		level_started.emit("Tutorial")
+	elif game_mode == "boss":
+		level_started.emit("Boss Fight")
 	else:
 		level_started.emit("Level " + get_level_code())
 
@@ -162,3 +319,40 @@ func restart_game() -> void:
 	AudioManager.fade_in(0.5)
 
 	get_tree().reload_current_scene()
+
+func set_virtual_gamepad_enabled(enabled: bool) -> void:
+	virtual_gamepad_enabled = enabled
+	_save_game_settings()
+	virtual_gamepad_changed.emit(virtual_gamepad_enabled)
+
+func set_hud_layout(layout_id: String) -> void:
+	var normalized := HUD_LAYOUT_BOTTOM_LEFT if layout_id == HUD_LAYOUT_BOTTOM_LEFT else HUD_LAYOUT_TOP_BAR
+	if hud_layout == normalized:
+		return
+	hud_layout = normalized
+	_save_game_settings()
+	hud_layout_changed.emit(hud_layout)
+
+func toggle_hud_layout() -> void:
+	set_hud_layout(HUD_LAYOUT_BOTTOM_LEFT if hud_layout == HUD_LAYOUT_TOP_BAR else HUD_LAYOUT_TOP_BAR)
+
+func get_hud_scene_path() -> String:
+	if hud_layout == HUD_LAYOUT_BOTTOM_LEFT:
+		return HUD_BOTTOM_LEFT_SCENE_PATH
+	return HUD_TOP_BAR_SCENE_PATH
+
+func _load_game_settings() -> void:
+	var config := ConfigFile.new()
+	if config.load(GAME_SETTINGS_PATH) != OK:
+		return
+	virtual_gamepad_enabled = bool(config.get_value("controls", "virtual_gamepad_enabled_v2", is_mobile_device()))
+	var saved_hud := str(config.get_value("ui", "hud_layout", HUD_LAYOUT_TOP_BAR))
+	hud_layout = HUD_LAYOUT_BOTTOM_LEFT if saved_hud == HUD_LAYOUT_BOTTOM_LEFT else HUD_LAYOUT_TOP_BAR
+
+func _save_game_settings() -> void:
+	var config := ConfigFile.new()
+	config.set_value("controls", "virtual_gamepad_enabled_v2", virtual_gamepad_enabled)
+	config.set_value("ui", "hud_layout", hud_layout)
+	var error := config.save(GAME_SETTINGS_PATH)
+	if error != OK:
+		push_warning("Could not save game settings: %s" % error_string(error))

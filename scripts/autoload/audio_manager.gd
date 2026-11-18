@@ -41,20 +41,24 @@ func play_music(track_name: String, volume_db: float = 0.0) -> void:
 	if not music_tracks.has(track_name):
 		push_warning("Musik tidak ditemukan: " + track_name)
 		return
-	
-	if current_track == track_name and bgm_player.playing:
-		return
-	
-	current_track = track_name
+
 	current_volume_offset = volume_db
 	current_volume = _volume_to_db(music_volume) + current_volume_offset
+	if music_tween:
+		music_tween.kill()
 
+	if current_track == track_name and bgm_player.playing:
+		bgm_player.volume_db = current_volume
+		bgm_player.stream_paused = false
+		return
+
+	current_track = track_name
 	var stream = music_tracks[track_name]
-	
 	stream.loop = true
-		
+
 	bgm_player.stream = stream
-	bgm_player.volume_db = volume_db
+	bgm_player.volume_db = current_volume
+	bgm_player.stream_paused = false
 	bgm_player.play()
 
 func pause_music() -> void:
@@ -71,7 +75,8 @@ func resume_music() -> void:
 	if bgm_player.playing and not bgm_player.stream_paused:
 		push_warning("Musik sedang dimainkan")
 		return
-	
+
+	bgm_player.volume_db = current_volume
 	bgm_player.stream_paused = false
 
 func is_playing() -> bool:
@@ -105,10 +110,19 @@ func set_music_volume(value: float) -> void:
 		music_tween.kill()
 	if bgm_player:
 		bgm_player.volume_db = current_volume
+	var dup := get_tree().root.get_node_or_null("Audiomanager")
+	if dup and dup != self:
+		dup.music_volume = music_volume
+		dup.current_volume = current_volume
+		if dup.bgm_player:
+			dup.bgm_player.volume_db = current_volume
 	_save_audio_settings()
 
 func set_sfx_volume(value: float) -> void:
 	sfx_volume = clampf(value, 0.0, 1.0)
+	var dup := get_tree().root.get_node_or_null("Audiomanager")
+	if dup and dup != self:
+		dup.sfx_volume = sfx_volume
 	_save_audio_settings()
 
 func _volume_to_db(value: float) -> float:
