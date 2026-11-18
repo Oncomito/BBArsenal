@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c4ncphasnbrkd"]
 
-[ext_resource type="Script" uid="uid://cfdp5gl5coie2" path="res://scenes/UI/menus/game_over.gd" id="1_fu4wh"]
+[ext_resource type="Script" uid="uid://cfdp5gl5coie2" path="res://scenes/ui/menus/game_over.gd" id="1_fu4wh"]
 [ext_resource type="FontFile" uid="uid://rj7dwdgpy2oc" path="res://assets/fonts/Sandra.ttf" id="2_x6o8e"]
 
 [sub_resource type="FontVariation" id="FontVariation_6tw0m"]

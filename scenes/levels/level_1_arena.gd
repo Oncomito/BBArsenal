@@ -1,11 +1,11 @@
 extends Node2D
 
-const WASD_UI_SCENE := preload("res://scenes/UI/tutorial/tutorial_wasd.tscn")
-const DASH_UI_SCENE := preload("res://scenes/UI/tutorial/tutorial_dash.tscn")
-const PARRY_UI_SCENE := preload("res://scenes/UI/tutorial/tutorial_parry.tscn")
-const SHIELD_UI_SCENE := preload("res://scenes/UI/tutorial/tutorial_shield.tscn")
-const OH_NO_UI_SCENE := preload("res://scenes/UI/tutorial/tutorial_oh_no.tscn")
-const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/UI/tutorial/tutorial_to_levels.tscn")
+const WASD_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_wasd.tscn")
+const DASH_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_dash.tscn")
+const PARRY_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_parry.tscn")
+const SHIELD_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_shield.tscn")
+const OH_NO_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_oh_no.tscn")
+const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_to_levels.tscn")
 
 @export var max_floor_in_scene: int = 10
 @export var next_level_scene: PackedScene = preload("res://scenes/levels/level_2_crossroads.tscn")

@@ -1,7 +1,7 @@
 extends Control
 
-const CHOOSE_GAMEPLAY_SCENE: String = "res://scenes/UI/menus/select_level.tscn"
-const SETTINGS_SCENE := preload("res://scenes/UI/menus/settings.tscn")
+const CHOOSE_GAMEPLAY_SCENE: String = "res://scenes/ui/menus/select_level.tscn"
+const SETTINGS_SCENE := preload("res://scenes/ui/menus/settings.tscn")
 
 @onready var start_button: Button = $VBoxContainer/Start
 

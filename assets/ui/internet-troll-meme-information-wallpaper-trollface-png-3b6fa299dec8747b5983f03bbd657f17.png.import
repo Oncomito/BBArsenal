@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmxsmxrqo25is"
-path="res://.godot/imported/FreeButtons.png-d9b005965a8f9d52ac68bac6123dc8e4.ctex"
+uid="uid://bcuejy34wb5rw"
+path="res://.godot/imported/internet-troll-meme-information-wallpaper-trollface-png-3b6fa299dec8747b5983f03bbd657f17.png-c9a0110c4d449adcca7826c3073249e5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/FreeButtons.png"
-dest_files=["res://.godot/imported/FreeButtons.png-d9b005965a8f9d52ac68bac6123dc8e4.ctex"]
+source_file="res://assets/ui/internet-troll-meme-information-wallpaper-trollface-png-3b6fa299dec8747b5983f03bbd657f17.png"
+dest_files=["res://.godot/imported/internet-troll-meme-information-wallpaper-trollface-png-3b6fa299dec8747b5983f03bbd657f17.png-c9a0110c4d449adcca7826c3073249e5.ctex"]
 
 [params]
 

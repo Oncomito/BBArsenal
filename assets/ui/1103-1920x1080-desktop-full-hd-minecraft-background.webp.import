@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f3jf1bjerrb4"
-path="res://.godot/imported/button_unpressed.png-99f0ad2cea30a340ecb52fbfe9621d3c.ctex"
+uid="uid://cqtpj4thcqvlg"
+path="res://.godot/imported/1103-1920x1080-desktop-full-hd-minecraft-background.webp-1a6b905c1bfb8672cf3a4f12dd1b590f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/button_unpressed.png"
-dest_files=["res://.godot/imported/button_unpressed.png-99f0ad2cea30a340ecb52fbfe9621d3c.ctex"]
+source_file="res://assets/ui/1103-1920x1080-desktop-full-hd-minecraft-background.webp"
+dest_files=["res://.godot/imported/1103-1920x1080-desktop-full-hd-minecraft-background.webp-1a6b905c1bfb8672cf3a4f12dd1b590f.ctex"]
 
 [params]
 

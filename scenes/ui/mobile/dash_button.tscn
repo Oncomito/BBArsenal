@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dcpn1ho5o8dp6"]
 
-[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/UI/energy.png" id="1_1h7fa"]
+[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/ui/energy.png" id="1_1h7fa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
 content_margin_left = 36.0

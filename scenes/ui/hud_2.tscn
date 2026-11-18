@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/ui/hud.gd" id="1_n3ctc"]
 [ext_resource type="FontFile" uid="uid://brr2jtpm3yhu3" path="res://assets/fonts/JetBrainsMono-VariableFont_wght.ttf" id="2_wcai5"]
-[ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/UI/—Pngtree—heart pixel art_8666747.png" id="3_w7rap"]
-[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/UI/energy.png" id="4_iveen"]
+[ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/ui/—Pngtree—heart pixel art_8666747.png" id="3_w7rap"]
+[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/ui/energy.png" id="4_iveen"]
 [ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="5_xgiq7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]

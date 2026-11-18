@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://i3oypb3myjbv" path="res://assets/map cyberpumk/neo_zero_tileset_03.png" id="3_sn5u3"]
 [ext_resource type="PackedScene" uid="uid://jg355rx0ga43" path="res://scenes/player/player_npc.tscn" id="5_fkd6t"]
 [ext_resource type="PackedScene" uid="uid://bhvd1xjol6d7v" path="res://scenes/obstacles/server.tscn" id="5_wko7x"]
-[ext_resource type="PackedScene" uid="uid://dejysd7bu3y7o" path="res://scenes/UI/menus/main_menu_ui.tscn" id="6_keln3"]
+[ext_resource type="PackedScene" uid="uid://dejysd7bu3y7o" path="res://scenes/ui/menus/main_menu_ui.tscn" id="6_keln3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qxqh0"]
 texture = ExtResource("1_keln3")
