@@ -6,7 +6,7 @@ const PAUSE_MENU_SCENE := preload("res://scenes/ui/pause_menu.tscn")
 @onready var energy_bar: ProgressBar = $energy
 @onready var pause_button: Button = $Button
 @onready var levels_label: Label = get_node_or_null("levels")
-@onready var enemy_label: Label = get_node_or_null("levels/levels")
+@onready var enemy_label: Label = get_node_or_null("EnemyCounter")
 
 var player: Node = null
 
@@ -85,12 +85,12 @@ func _update_labels() -> void:
 		if levels_label:
 			levels_label.text = "pts %d" % GameManager.score
 		if enemy_label:
-			enemy_label.text = "enemy %d/endless" % GameManager.enemies_killed
+			enemy_label.text = "enemy %d / endless" % GameManager.enemies_killed
 	elif GameManager.game_mode == "tutorial":
 		if levels_label:
 			levels_label.text = "tutorial"
 		if enemy_label:
-			enemy_label.text = "enemy %d/%d" % [GameManager.enemies_killed, GameManager.total_enemies]
+			enemy_label.text = "enemy %d / %d" % [GameManager.enemies_killed, GameManager.total_enemies]
 	else:
 		if levels_label:
 			levels_label.text = "lvl %s" % GameManager.get_level_code()
