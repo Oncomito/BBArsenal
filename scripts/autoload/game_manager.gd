@@ -7,6 +7,7 @@ signal level_started(level_code: String)
 signal level_cleared(level: int)
 signal stats_changed
 signal virtual_gamepad_changed(enabled: bool)
+signal hud_layout_changed(layout_id: String)
 
 var game_mode: String = "levels"
 var current_level: int = 1
@@ -17,11 +18,16 @@ var enemies_killed: int = 0
 var total_enemies: int = 0
 var score: int = 0
 var exp: float = 0.0
-var virtual_gamepad_enabled: bool = true
+var virtual_gamepad_enabled: bool = false
+var hud_layout: String = HUD_LAYOUT_TOP_BAR
 
 const BASE_RESOLUTION := Vector2i(1920, 1080)
 const MAX_WINDOWED_RATIO := 0.9
 const GAME_SETTINGS_PATH := "user://game_settings.cfg"
+const HUD_LAYOUT_TOP_BAR := "top_bar"
+const HUD_LAYOUT_BOTTOM_LEFT := "bottom_left"
+const HUD_TOP_BAR_SCENE_PATH := "res://scenes/ui/hud/hud_top_bar.tscn"
+const HUD_BOTTOM_LEFT_SCENE_PATH := "res://scenes/ui/hud/hud_bottom_left.tscn"
 
 var _fade_layer: CanvasLayer = null
 var _fade_rect: ColorRect = null
@@ -36,10 +42,15 @@ var _is_desktop_display: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	virtual_gamepad_enabled = is_mobile_device()
 	_load_game_settings()
 	if name == "GameManager":
 		_setup_fade_overlay()
 		detect_device()
+
+func is_mobile_device() -> bool:
+	var os_name := OS.get_name()
+	return OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios") or os_name in ["Android", "iOS"]
 
 func _process(_delta: float) -> void:
 	if name != "GameManager" or not _is_desktop_display:
@@ -291,15 +302,34 @@ func set_virtual_gamepad_enabled(enabled: bool) -> void:
 	_save_game_settings()
 	virtual_gamepad_changed.emit(virtual_gamepad_enabled)
 
+func set_hud_layout(layout_id: String) -> void:
+	var normalized := HUD_LAYOUT_BOTTOM_LEFT if layout_id == HUD_LAYOUT_BOTTOM_LEFT else HUD_LAYOUT_TOP_BAR
+	if hud_layout == normalized:
+		return
+	hud_layout = normalized
+	_save_game_settings()
+	hud_layout_changed.emit(hud_layout)
+
+func toggle_hud_layout() -> void:
+	set_hud_layout(HUD_LAYOUT_BOTTOM_LEFT if hud_layout == HUD_LAYOUT_TOP_BAR else HUD_LAYOUT_TOP_BAR)
+
+func get_hud_scene_path() -> String:
+	if hud_layout == HUD_LAYOUT_BOTTOM_LEFT:
+		return HUD_BOTTOM_LEFT_SCENE_PATH
+	return HUD_TOP_BAR_SCENE_PATH
+
 func _load_game_settings() -> void:
 	var config := ConfigFile.new()
 	if config.load(GAME_SETTINGS_PATH) != OK:
 		return
-	virtual_gamepad_enabled = bool(config.get_value("controls", "virtual_gamepad_enabled", virtual_gamepad_enabled))
+	virtual_gamepad_enabled = bool(config.get_value("controls", "virtual_gamepad_enabled_v2", is_mobile_device()))
+	var saved_hud := str(config.get_value("ui", "hud_layout", HUD_LAYOUT_TOP_BAR))
+	hud_layout = HUD_LAYOUT_BOTTOM_LEFT if saved_hud == HUD_LAYOUT_BOTTOM_LEFT else HUD_LAYOUT_TOP_BAR
 
 func _save_game_settings() -> void:
 	var config := ConfigFile.new()
-	config.set_value("controls", "virtual_gamepad_enabled", virtual_gamepad_enabled)
+	config.set_value("controls", "virtual_gamepad_enabled_v2", virtual_gamepad_enabled)
+	config.set_value("ui", "hud_layout", hud_layout)
 	var error := config.save(GAME_SETTINGS_PATH)
 	if error != OK:
 		push_warning("Could not save game settings: %s" % error_string(error))

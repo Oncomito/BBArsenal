@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://da0i0pif4tl10"]
+[gd_scene format=3 uid="uid://bhhq351yfhw6n"]
 
-[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/ui/energy.png" id="1_1h7fa"]
+[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/UI/energy.png" id="1_1h7fa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nxqmq"]
 corner_radius_top_left = 300

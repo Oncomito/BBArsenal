@@ -109,7 +109,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(540, 400)
+custom_minimum_size = Vector2(560, 450)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
@@ -178,6 +178,29 @@ theme_override_font_sizes/font_size = 22
 text = "100%"
 horizontal_alignment = 2
 
+[node name="HudRow" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="HudLabel" type="Label" parent="Center/Panel/Content/HudRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "HUD LAYOUT"
+
+[node name="HudButton" type="Button" parent="Center/Panel/Content/HudRow"]
+custom_minimum_size = Vector2(170, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_toggle_on")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_toggle_on")
+theme_override_styles/hover = SubResource("StyleBoxFlat_toggle_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_toggle_focus")
+text = "TOP BAR"
+
 [node name="GamepadRow" type="HBoxContainer" parent="Center/Panel/Content"]
 layout_mode = 2
 theme_override_constants/separation = 16
@@ -201,8 +224,8 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_toggle_hover")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_toggle_on")
 theme_override_styles/focus = SubResource("StyleBoxFlat_toggle_focus")
 toggle_mode = true
-button_pressed = true
-text = "ON"
+button_pressed = false
+text = "OFF"
 
 [node name="Back" type="Button" parent="Center/Panel/Content"]
 custom_minimum_size = Vector2(0, 48)
@@ -213,5 +236,6 @@ text = "BACK"
 
 [connection signal="value_changed" from="Center/Panel/Content/MusicRow/MusicSlider" to="." method="_on_music_slider_value_changed"]
 [connection signal="value_changed" from="Center/Panel/Content/SfxRow/SfxSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="pressed" from="Center/Panel/Content/HudRow/HudButton" to="." method="_on_hud_button_pressed"]
 [connection signal="toggled" from="Center/Panel/Content/GamepadRow/GamepadToggle" to="." method="_on_gamepad_toggle_toggled"]
 [connection signal="pressed" from="Center/Panel/Content/Back" to="." method="_on_back_pressed"]
