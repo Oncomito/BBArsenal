@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dybptjkwbk0xs"
-path="res://.godot/imported/noun_pixel_6195851_@700.png-969b3da0d1fed307924371e4c3d05c7c.ctex"
+uid="uid://cmxsmxrqo25is"
+path="res://.godot/imported/FreeButtons.png-473a43a67adee619ed8218a94d308c8a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/noun_pixel_6195851_@700.png"
-dest_files=["res://.godot/imported/noun_pixel_6195851_@700.png-969b3da0d1fed307924371e4c3d05c7c.ctex"]
+source_file="res://assets/ui/FreeButtons.png"
+dest_files=["res://.godot/imported/FreeButtons.png-473a43a67adee619ed8218a94d308c8a.ctex"]
 
 [params]
 

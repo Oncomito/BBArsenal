@@ -1,6 +1,6 @@
 extends Control
 
-const PAUSE_MENU_SCENE := preload("res://scenes/UI/menus/pause_menu.tscn")
+const PAUSE_MENU_SCENE := preload("res://scenes/ui/menus/pause_menu.tscn")
 
 @onready var health_bar: ProgressBar = %health
 @onready var energy_bar: ProgressBar = $Panel/energy

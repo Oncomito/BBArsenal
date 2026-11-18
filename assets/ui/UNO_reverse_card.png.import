@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3bpcx1sisncg"
-path="res://.godot/imported/energy.png-948aa619945ead9849505e91e5e916d2.ctex"
+uid="uid://46kuvgpi4jih"
+path="res://.godot/imported/UNO_reverse_card.png-8781f116c6d47857e91e1dd5737fe2d7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/energy.png"
-dest_files=["res://.godot/imported/energy.png-948aa619945ead9849505e91e5e916d2.ctex"]
+source_file="res://assets/ui/UNO_reverse_card.png"
+dest_files=["res://.godot/imported/UNO_reverse_card.png-8781f116c6d47857e91e1dd5737fe2d7.ctex"]
 
 [params]
 

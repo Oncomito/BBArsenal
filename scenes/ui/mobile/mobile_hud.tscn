@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bcsquxfpkvpsi"]
 
-[ext_resource type="Script" uid="uid://bhnoqhikgc678" path="res://scenes/UI/mobile/mobile_hud.gd" id="1_gsvga"]
-[ext_resource type="PackedScene" uid="uid://dcpn1ho5o8dp6" path="res://scenes/UI/mobile/dash_button.tscn" id="2_dash"]
-[ext_resource type="PackedScene" path="res://scenes/UI/mobile/shield_button.tscn" id="3_shield"]
-[ext_resource type="PackedScene" path="res://scenes/UI/mobile/parry_button.tscn" id="4_parry"]
+[ext_resource type="Script" uid="uid://bhnoqhikgc678" path="res://scenes/ui/mobile/mobile_hud.gd" id="1_gsvga"]
+[ext_resource type="PackedScene" uid="uid://dcpn1ho5o8dp6" path="res://scenes/ui/mobile/dash_button.tscn" id="2_dash"]
+[ext_resource type="PackedScene" path="res://scenes/ui/mobile/shield_button.tscn" id="3_shield"]
+[ext_resource type="PackedScene" path="res://scenes/ui/mobile/parry_button.tscn" id="4_parry"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joy_normal"]
 bg_color = Color(0.08, 0.11, 0.18, 0.45)
