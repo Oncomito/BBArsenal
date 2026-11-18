@@ -505,7 +505,7 @@ frame = 4
 frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=966692073]
-position = Vector2(2, -24)
+position = Vector2(0, -21)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_cpwp1")
 
@@ -520,14 +520,14 @@ unique_name_in_owner = true
 [node name="Hitbox" type="Area2D" parent="." unique_id=200786888 groups=["player_hitbox"]]
 
 [node name="Collision" type="CollisionShape2D" parent="Hitbox" unique_id=1009863355]
-position = Vector2(0, -57)
+position = Vector2(-2, -51)
 scale = Vector2(5.6718726, 5.6718726)
 shape = SubResource("CircleShape2D_behr0")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1924747312]
 
 [node name="Collision" type="CollisionShape2D" parent="Hurtbox" unique_id=269543325]
-position = Vector2(0, -54)
+position = Vector2(0, -46)
 shape = SubResource("CapsuleShape2D_1mmru")
 
 [node name="Shield" parent="." unique_id=828424897 instance=ExtResource("2_shield")]

@@ -66,20 +66,19 @@ func _shoot_at_player() -> void:
 	if not is_instance_valid(player):
 		return
 
-	var muzzle: Vector2 = global_position + Vector2(0.0, -115.0)
-	var dir: Vector2 = (player.global_position - muzzle).normalized()
-	if dir == Vector2.ZERO:
-		dir = Vector2.RIGHT
+	var muzzle := global_position + Vector2(0.0, -170)
+	var dir := muzzle.direction_to(player.global_position)
 
 	ProjectileManager.spawn_projectile(projectile_kind, {
 		"spawn_point": muzzle,
 		"direction": dir,
-		"target": player,
 		"speed": projectile_speed,
 		"damage": damage,
 		"element": projectile_element,
-		"parent": get_parent(),
+		"parent": get_tree().current_scene,
+		"scale": Vector2(5.0, 5.0)
 	})
+
 	AudioManager.play_sfx("fireball", randf_range(0.95, 1.05))
 
 

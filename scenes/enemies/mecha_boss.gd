@@ -95,15 +95,15 @@ func _attack_radial_nova(origin: Vector2, base_dir: Vector2) -> void:
 		var is_orb: bool = (i % 2) == 0
 		var kind: String = "orb" if is_orb else "shard"
 		var spd: float = 650.0 if is_orb else 860.0
-		_spawn_shot(kind, origin, Vector2.from_angle(angle), "plasma", spd, 10.0, 1.15)
+		_spawn_shot(kind, origin, Vector2.from_angle(angle), "plasma", spd, 10.0, 3.8)
 	AudioManager.play_sfx("blast", 0.85)
 
 
 func _attack_rocket_salvo(origin: Vector2, base_dir: Vector2) -> void:
 	for offset in [-0.36, -0.12, 0.12, 0.36]:
-		_spawn_shot("rocket", origin, base_dir.rotated(offset), "fire", 620.0, 14.0, 1.2)
+		_spawn_shot("rocket", origin, base_dir.rotated(offset), "fire", 620.0, 14.0, 4.0)
 	for offset in [-0.18, 0.0, 0.18]:
-		_spawn_shot("tracer", origin, base_dir.rotated(offset), "electric", 1150.0, 8.0, 1.0)
+		_spawn_shot("tracer", origin, base_dir.rotated(offset), "electric", 1150.0, 8.0, 3.0)
 	AudioManager.play_sfx("fireball", 0.75)
 
 
@@ -114,9 +114,9 @@ func _attack_wave_fan(origin: Vector2, base_dir: Vector2) -> void:
 		var kind: String = "wave" if is_wave else "disc"
 		var elem: String = "crimson" if is_wave else "arcane"
 		var spd: float = 780.0 if is_wave else 840.0
-		_spawn_shot(kind, origin, dir, elem, spd, 11.5, 1.15)
+		_spawn_shot(kind, origin, dir, elem, spd, 11.5, 3.0)
 	for side in [-0.5, 0.5]:
-		_spawn_shot("helix", origin, base_dir.rotated(side), "arcane", 700.0, 12.0, 1.1)
+		_spawn_shot("helix", origin, base_dir.rotated(side), "arcane", 700.0, 12.0, 4.0)
 	AudioManager.play_sfx("fireball", 1.1)
 
 
@@ -132,7 +132,7 @@ func _attack_laser_overload(origin: Vector2, base_dir: Vector2) -> void:
 		"parent": get_parent(),
 	})
 	for offset in [0.45, -0.45, 2.35, -2.35]:
-		_spawn_shot("spinner", origin, base_dir.rotated(offset), "electric", 540.0, 11.0, 1.2)
+		_spawn_shot("spinner", origin, base_dir.rotated(offset), "electric", 540.0, 11.0, 4.0)
 	AudioManager.play_sfx("blast", 1.2)
 
 
