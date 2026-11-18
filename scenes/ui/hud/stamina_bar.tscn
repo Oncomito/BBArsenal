@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bs6j3y8q2t5nw"]
 
-[ext_resource type="Script" path="res://scenes/ui/stamina_bar.gd" id="1_stamina"]
+[ext_resource type="Script" path="res://scenes/UI/hud/stamina_bar.gd" id="1_stamina"]
 [ext_resource type="FontFile" uid="uid://rj7dwdgpy2oc" path="res://assets/fonts/Sandra.ttf" id="2_font"]
 
 [node name="StaminaHUD" type="CanvasLayer"]

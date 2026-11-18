@@ -1,7 +1,7 @@
 extends Control
 
 const main_scene: String = "res://scenes/main/main.tscn"
-const main_menu_scene: String = "res://scenes/ui/main_menu.tscn"
+const main_menu_scene: String = "res://scenes/UI/menus/main_menu.tscn"
 
 @onready var tutorial_button: Button = $VBoxContainer/Start
 

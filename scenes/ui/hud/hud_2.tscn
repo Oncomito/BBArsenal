@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://d03ii60m8yxmg"]
+
+[ext_resource type="Script" uid="uid://ccsx05opowl0s" path="res://scenes/UI/hud/hud.gd" id="1_n3ctc"]
+[ext_resource type="FontFile" uid="uid://brr2jtpm3yhu3" path="res://assets/fonts/JetBrainsMono-VariableFont_wght.ttf" id="2_wcai5"]
+[ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/UI/—Pngtree—heart pixel art_8666747.png" id="3_w7rap"]
+[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/UI/energy.png" id="4_iveen"]
+[ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="5_xgiq7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1itfa"]
+font = ExtResource("2_wcai5")
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_energy_bg"]
+bg_color = Color(0.2, 0.16, 0.04, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_energy_fill"]
+bg_color = Color(0.95, 0.8, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
+bg_color = Color(0.18, 0.05, 0.05, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.9555598, 0.19983092, 0.19054687, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_8qguk"]
+font_size = 48
+
+[node name="HUD" type="Control" unique_id=1729188291]
+texture_filter = 6
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_n3ctc")
+
+[node name="Button" type="Button" parent="." unique_id=2020490796]
+layout_mode = 0
+offset_left = 1837.0001
+offset_top = 22.0
+offset_right = 1878.0001
+offset_bottom = 68.0
+scale = Vector2(1.6343701, 1.5321991)
+focus_mode = 0
+
+[node name="Label" type="Label" parent="Button" unique_id=1219445936]
+layout_mode = 0
+offset_left = 42.32293
+offset_top = 10.957552
+offset_right = 61.67008
+offset_bottom = 42.95755
+rotation = 1.5707964
+scale = Vector2(1.323325, 1.3811736)
+text = "="
+label_settings = SubResource("LabelSettings_1itfa")
+horizontal_alignment = 1
+
+[node name="energy" type="ProgressBar" parent="." unique_id=931576718]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 71.0
+offset_right = 1821.0
+offset_bottom = 93.50012
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_energy_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_energy_fill")
+value = 100.0
+show_percentage = false
+
+[node name="health" type="ProgressBar" parent="." unique_id=648273595]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 22.0
+offset_right = 1822.0
+offset_bottom = 71.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+value = 100.0
+show_percentage = false
+
+[node name="health_icon" type="Sprite2D" parent="." unique_id=1321744819]
+position = Vector2(35, 48)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_w7rap")
+
+[node name="energy_icon" type="Sprite2D" parent="." unique_id=955546948]
+position = Vector2(33, 88)
+scale = Vector2(0.13594192, 0.13594192)
+texture = ExtResource("4_iveen")
+
+[node name="levels" type="Label" parent="." unique_id=505111019]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 89.0
+offset_right = 421.0
+offset_bottom = 139.0
+theme_override_fonts/font = ExtResource("5_xgiq7")
+text = "lv. (levels here)"
+label_settings = SubResource("LabelSettings_8qguk")
+
+[node name="EnemyCounter" type="Label" parent="." unique_id=171649866]
+layout_mode = 0
+offset_left = 462.0
+offset_top = 88.0
+offset_right = 1447.0
+offset_bottom = 138.0
+theme_override_fonts/font = ExtResource("5_xgiq7")
+text = "enemy killed (enemy_killed) / (total_enemy)"
+label_settings = SubResource("LabelSettings_8qguk")
+
+[connection signal="pressed" from="Button" to="." method="_on_pause_button_pressed"]

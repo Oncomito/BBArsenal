@@ -1,7 +1,7 @@
 extends Control
 
-const main_menu_scene: String = "res://scenes/ui/main_menu.tscn"
-const SETTINGS_SCENE := preload("res://scenes/ui/settings.tscn")
+const main_menu_scene: String = "res://scenes/UI/menus/main_menu.tscn"
+const SETTINGS_SCENE := preload("res://scenes/UI/menus/settings.tscn")
 
 @onready var continue_button: Button = $VBoxContainer/Continue
 

@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://bi8t3umgrmt4y"]
+[gd_scene format=3 uid="uid://dppint15n4kn"]
 
 [ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/UI/—Pngtree—heart pixel art_8666747.png" id="1_hqnrr"]
 [ext_resource type="FontFile" uid="uid://brr2jtpm3yhu3" path="res://assets/fonts/JetBrainsMono-VariableFont_wght.ttf" id="2_136eg"]
 [ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/UI/energy.png" id="2_bo48s"]
-[ext_resource type="Script" uid="uid://ccsx05opowl0s" path="res://scenes/ui/hud.gd" id="3_hudgd"]
+[ext_resource type="Script" path="res://scenes/ui/hud.gd" id="3_hudgd"]
 [ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="4_8qguk"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_1itfa"]

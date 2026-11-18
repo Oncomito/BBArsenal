@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bgduf0ytwfbg5"]
 
-[ext_resource type="PackedScene" uid="uid://c4ryo5ntc7v3g" path="res://scenes/ui/pause_menu.tscn" id="1_hyk8p"]
+[ext_resource type="PackedScene" uid="uid://c4ryo5ntc7v3g" path="res://scenes/UI/menus/pause_menu.tscn" id="1_hyk8p"]
 [ext_resource type="PackedScene" uid="uid://cocfeg06dibmq" path="res://scenes/levels/level_1_arena_dev.tscn" id="1_iuonh"]
-[ext_resource type="PackedScene" uid="uid://bi8t3umgrmt4y" path="res://scenes/ui/hud.tscn" id="3_k2fmo"]
-[ext_resource type="PackedScene" uid="uid://c4ncphasnbrkd" path="res://scenes/ui/game_over.tscn" id="4_gameover"]
-[ext_resource type="PackedScene" uid="uid://chv5x6m8hkwa1" path="res://scenes/ui/levels_ui.tscn" id="5_lvlui"]
+[ext_resource type="PackedScene" uid="uid://bi8t3umgrmt4y" path="res://scenes/UI/hud/hud.tscn" id="3_k2fmo"]
+[ext_resource type="PackedScene" uid="uid://c4ncphasnbrkd" path="res://scenes/UI/menus/game_over.tscn" id="4_gameover"]
+[ext_resource type="PackedScene" uid="uid://chv5x6m8hkwa1" path="res://scenes/UI/hud/levels_ui.tscn" id="5_lvlui"]
 
 [node name="main" type="Node2D" unique_id=1102324276]
 

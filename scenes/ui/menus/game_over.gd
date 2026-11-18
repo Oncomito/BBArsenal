@@ -1,6 +1,6 @@
 extends Control
 
-const main_menu_scene: String = "res://scenes/ui/main_menu.tscn"
+const main_menu_scene: String = "res://scenes/UI/menus/main_menu.tscn"
 
 @onready var restart_button: Button = $VBoxContainer/Restart
 

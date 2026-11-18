@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://c41j1lyxekhew"]
+
+[ext_resource type="Texture2D" uid="uid://cmypo5mr71wx6" path="res://assets/VirtualJoystickPack/Joystick.png" id="1_xi2ug"]
+[ext_resource type="Texture2D" uid="uid://bhwlybbvxe0fu" path="res://assets/VirtualJoystickPack/SmallHandleFilledGrey.png" id="2_ih8wq"]
+
+[node name="VirtualJoystick" type="Control" unique_id=294217537]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Base" type="TextureRect" parent="." unique_id=640160194]
+layout_mode = 0
+offset_left = -150.0
+offset_top = -143.0
+offset_right = 150.0
+offset_bottom = 157.0
+texture = ExtResource("1_xi2ug")
+
+[node name="Knob" type="TextureRect" parent="." unique_id=1847782142]
+layout_mode = 0
+offset_left = -47.0
+offset_top = -49.0
+offset_right = 53.0
+offset_bottom = 51.0
+texture = ExtResource("2_ih8wq")

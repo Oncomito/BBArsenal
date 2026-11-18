@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cvbebrbh8kq0t"]
 
-[ext_resource type="Script" uid="uid://hikeguhpur5m" path="res://scenes/ui/splash.gd" id="1_10vqf"]
+[ext_resource type="Script" uid="uid://hikeguhpur5m" path="res://scenes/UI/menus/splash.gd" id="1_10vqf"]
 [ext_resource type="Texture2D" uid="uid://dy6ribvok6bor" path="res://icon.svg" id="1_86pdq"]
 [ext_resource type="FontFile" uid="uid://rj7dwdgpy2oc" path="res://assets/fonts/Sandra.ttf" id="3_fgod4"]
 
