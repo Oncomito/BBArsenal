@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://bcsquxfpkvpsi"]
 
-[ext_resource type="Script" uid="uid://bhnoqhikgc678" path="res://scenes/ui/mobile_hud.gd" id="1_gsvga"]
-
 [node name="MobileHUD" type="Control" unique_id=932176028]
 layout_mode = 3
 anchors_preset = 15
@@ -9,9 +7,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_gsvga")
 
 [node name="VirtualJoystick" type="VirtualJoystick" parent="." unique_id=513139276]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 265.0
+offset_top = 810.0
+offset_right = 305.0
+offset_bottom = 850.0
+joystick_mode = 1
+joystick_size = 420.0
+tip_size = 169.0
+deadzone_ratio = 0.04
+action_left = &"player_left"
+action_right = &"player_right"
+action_up = &"player_up"
+action_down = &"player_down"
