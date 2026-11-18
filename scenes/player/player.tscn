@@ -496,7 +496,7 @@ position_smoothing_enabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1813115174]
 texture_filter = 1
-position = Vector2(1, -60)
+position = Vector2(1, -59)
 scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_player")
 animation = &"parry_up"

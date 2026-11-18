@@ -15,4 +15,3 @@ Our game lives here
 [**Click Here!!**](https://itch.io/whyfren/havenjakarta)
 Feel free to play!
 Also if you have some ciritcs and suggestions, we are so grateful to hear that!
-

@@ -412,7 +412,3 @@ scale = Vector2(1.5971185, 1.0412697)
 zoom = Vector2(0.85, 0.85)
 
 [node name="Menu" parent="." unique_id=1317546458 instance=ExtResource("6_keln3")]
-offset_left = 1.0
-offset_top = 7.0
-offset_right = 1.0
-offset_bottom = 7.0
