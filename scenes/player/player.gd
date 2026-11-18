@@ -363,6 +363,11 @@ func _perform_dash(input_direction: Vector2) -> void:
 	if floor(energy / dash_energy_cost) < 1:
 		return
 
+func _perform_dashshssh() -> void:
+	get_viewport().set_input_as_handled()
+	var input_direction := Input.get_vector("player_left", "player_right", "player_up", "player_down")
+	_perform_dash(input_direction)
+
 	if is_shield_active:
 		_deactivate_shield()
 
