@@ -45,10 +45,16 @@ layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_6tw0m")
 text = "Continue"
 
+[node name="Settings" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_rxvc7")
+text = "settings"
+
 [node name="MainMenu" type="Button" parent="VBoxContainer" unique_id=176293138]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_rxvc7")
 text = "main menu"
 
 [connection signal="pressed" from="VBoxContainer/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]

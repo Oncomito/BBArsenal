@@ -6,7 +6,7 @@ signal all_enemies_cleared
 @export var enemy_scenes: Array[PackedScene] = [
 	preload("res://scenes/enemies/mecha.tscn")
 ]
-@export var max_enemies: int = 8
+@export var max_enemies: int = 2
 @export var min_player_distance: float = 250.0
 @export var base_enemies_per_level: int = 4
 @export var enemies_increase_per_level: int = 2

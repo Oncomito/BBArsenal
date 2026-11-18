@@ -61,7 +61,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fvs4a"]
-size = Vector2(58.79188, 50.364258)
+size = Vector2(17.89318, 46.777885)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3qjkr"]
 radius = 40.3907
@@ -83,7 +83,7 @@ autoplay = "walk"
 frame_progress = 0.6293927
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=695283538]
-position = Vector2(2.5151305, -116)
+position = Vector2(-3.5000043, -36)
 rotation = -1.5707964
 scale = Vector2(3.9121046, 3.9121046)
 shape = SubResource("RectangleShape2D_fvs4a")

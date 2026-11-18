@@ -1,11 +1,16 @@
 extends Control
 
-@onready var player = get_tree().get_nodes_in_group("player")
-# Called when the node enters the scene tree for the first time.
+var player: Player = null
+
 func _ready() -> void:
-	pass # Replace with function body.
+	_bind_player()
 
+func _bind_player() -> Player:
+	if not is_instance_valid(player):
+		player = get_tree().get_first_node_in_group("player") as Player
+	return player
 
-# Inside your Button's pressed signal handler or script
-func _on_dash_pressed():
-	player[0]._perform_dashshssh()
+func _on_dash_pressed() -> void:
+	var current_player := _bind_player()
+	if is_instance_valid(current_player):
+		current_player.perform_dash()
