@@ -1,5 +1,4 @@
 extends CharacterBody2D
-## Standard ranged Mecha enemy with one shooting attack and HUD stat bars.
 
 const HIT_EFFECT_SCENE: PackedScene = preload("res://scenes/projectiles/hit.tscn")
 

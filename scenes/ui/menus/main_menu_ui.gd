@@ -11,7 +11,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	if not AudioManager.is_playing():
 		AudioManager.play_music("menu")
-		AudioManager.fade_in(0.5)
+		AudioManager.fade_in(1.2)
 	if start_button:
 		start_button.grab_focus()
 	if GameManager.is_black_screen_active:

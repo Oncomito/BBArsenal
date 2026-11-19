@@ -89,10 +89,17 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(180, 210)
+size = Vector2(180, 62)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_behr0"]
+radius = 124.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sgj0o"]
+radius = 90.0
+height = 232.0
 
 [node name="Mecha" type="CharacterBody2D" unique_id=1926874390 groups=["enemy"]]
-collision_layer = 2
+collision_layer = 8
 collision_mask = 4
 script = ExtResource("2_mecha_script")
 
@@ -134,14 +141,21 @@ autoplay = "walk"
 frame_progress = 0.6293927
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1170252100]
-position = Vector2(0, -115)
+position = Vector2(-5, -32)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1894012301]
-collision_layer = 2
-collision_mask = 0
+collision_layer = 0
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1894012302]
-position = Vector2(0, -115)
-shape = SubResource("RectangleShape2D_body")
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_behr0")
+
+[node name="Bodybox" type="StaticBody2D" parent="." unique_id=23269828]
+collision_layer = 2
+collision_mask = 3
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Bodybox" unique_id=1484254094]
+position = Vector2(-5, -117)
+shape = SubResource("CapsuleShape2D_sgj0o")

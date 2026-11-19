@@ -31,10 +31,11 @@ var _tutorial_waiting_enemies: bool = false
 @onready var trap_door_zone: Area2D = get_node_or_null("TrapDoorZone")
 
 func _ready() -> void:
-	AudioManager.play_music("gameplay")
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("player") as CharacterBody2D
 	_setup_trapdoor_zone()
+	AudioManager.play_music("gameplay")
+	AudioManager.fade_in(0.5)
 
 	if spawner:
 		if "auto_start_on_ready" in spawner:

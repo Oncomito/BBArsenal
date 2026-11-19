@@ -3,6 +3,7 @@ extends Node2D
 signal all_enemies_cleared
 
 @export var enemy_scene: PackedScene = preload("res://scenes/enemies/mecha.tscn")
+@export var spawn_area: ReferenceRect
 @export var enemy_scenes: Array[PackedScene] = [
 	preload("res://scenes/enemies/mecha.tscn")
 ]
@@ -19,7 +20,6 @@ var wave_active: bool = false
 var wave_cleared: bool = false
 var is_endless: bool = false
 
-@onready var spawn_area: ReferenceRect = $ReferenceRect
 @onready var timer: Timer = $Timer
 @onready var layer: Node2D = self.get_parent()
 

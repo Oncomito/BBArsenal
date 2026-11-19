@@ -357,6 +357,15 @@ size = Vector2(480, 482.54855)
 [node name="Level1CyberArena" type="Node2D" unique_id=1847605930]
 script = ExtResource("7_lvl1")
 
+[node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=1910747858]
+offset_left = -1345.0027
+offset_top = -765.0
+offset_right = -1304.0042
+offset_bottom = -727.9722
+scale = Vector2(65.636604, 41.428394)
+border_width = 0.0
+editor_only = false
+
 [node name="TrapDoor" type="TileMapLayer" parent="." unique_id=1322914597]
 use_parent_material = true
 scale = Vector2(4, 4)
@@ -418,8 +427,9 @@ position = Vector2(-704, -320)
 
 [node name="Player" parent="Ordering" unique_id=770284520 instance=ExtResource("5_rsvrn")]
 
-[node name="Spawner" parent="." unique_id=2033225972 instance=ExtResource("6_c0kos")]
+[node name="Spawner" parent="." unique_id=2033225972 node_paths=PackedStringArray("spawn_area") instance=ExtResource("6_c0kos")]
 visible = false
+spawn_area = NodePath("../ReferenceRect")
 
 [node name="TrapDoorZone" type="Area2D" parent="." unique_id=1954001234]
 monitoring = false

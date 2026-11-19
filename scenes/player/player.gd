@@ -1,6 +1,14 @@
 class_name Player
-
 extends CharacterBody2D
+
+# INFO: So, yeah, I actually changed the structure to be Object-Oriented Programming.
+# Why? Because with OOP, all functions can be localized to specific uses.
+# For example, func input_move is now localized inside MovementController because its uses are only to do player movement.
+# You can say, it is like compartments for building, which makes the functions much more distinguishable.
+
+# All global variable exist after the classes definition.
+
+# WARN: This is not finished. I will probably refactor this again.
 
 const HIT_EFFECT_SCENE := preload("res://scenes/projectiles/hit.tscn")
 
@@ -9,8 +17,6 @@ signal energy_changed(current_energy: float, max_energy: float)
 signal player_died
 signal dash_count_changed(current_count: int, max_count: int)
 
-# var movement: PlayerMovement
-# var visual: PlayerVisualla
 
 class MovementController:
 	var actor: Variant
@@ -98,7 +104,7 @@ class MovementController:
 		if not did_bounce:
 			return
 
-		actor.energize(5.0)
+		actor.energize(ceilf(actor.dash_energy_cost / 4.0))
 		actor._bounce_lock_timer = actor.bounce_lockout
 
 		var incoming_speed := pre_collision_velocity.length()
@@ -622,10 +628,12 @@ class VisualController:
 @export var dash_speed_multiplier: float = 2.5
 @export_range(1.0, 2.0, 0.05) var dash_bounce_factor: float = 1.1
 @export var dash_bounce_acceleration_multiplier: float = 1.12
-@export var bounce_factor: float = 1.1
-@export var min_bounce_speed: float = 100.0
+@export var bounce_factor: float = 1.0
+@export var min_bounce_speed: float = 0.0
 @export var bounce_lockout: float = 0.06
-var _bounce_lock_timer: float = 0.0
+@export var max_bounce_speed: float = 4200.0
+@export var max_bounce_acceleration: float = 2800.0
+@export var bounce_boost_decay: float = 2000.0
 
 @export_group("Health")
 @export var max_health: float = 100.0
@@ -634,6 +642,7 @@ var _bounce_lock_timer: float = 0.0
 @export var max_energy: float = 100.0
 @export var dash_energy_cost: float = 20.0
 @export var dash_cooldown: float = 0.2
+@export var dash_duration: float = 0.16
 @export var energy_regen_rate: float = 10.0
 @export var energy_regen_delay: float = 1.0
 @export var energy_exhausted_regen_delay: float = 1.5
@@ -642,10 +651,29 @@ var _bounce_lock_timer: float = 0.0
 @export var parry_cooldown: float = 0.75
 @export_range(0.0, 1.0, 0.05) var speed_damage_min_speed_ratio: float = 0.5
 @export var dash_invulnerability_duration: float = 0.25
+@export var dash_chain_invulnerability_duration: float = 0.15
 @export var parry_invulnerability_duration: float = 0.2
+
+
+@export var dash_enemy_bounce_factor: float = 1.0
+@export var dash_final_bounce_factor: float = 1.02
+@export var dash_chain_max_speed: float = 4200.0
+@export var dash_chain_min_segment_time: float = 0.25
+@export var dash_chain_max_segment_time: float = 4.0
+@export var dash_chain_time_padding: float = 0.18
+
+
+@export_range(0.0, 180.0, 1.0) var dash_chain_max_angle: float = 75.0
+@export var dash_hit_radius: float = 200.0
+@export var parry_radius: float = 140.0
 
 @export_group("Shield")
 @export var shield_drain_rate: float = 10.0
+@export var shield_damage_energy_multiplier: float = 1.2
+
+@export_group("Hit Detection")
+@export var player_hit_center_offset: Vector2 = Vector2(0.0, -75.0)
+@export var enemy_hit_center_offset: Vector2 = Vector2(0.0, -115.0)
 
 @export_group("Camera Shake")
 @export_range(0.0, 5.0, 0.1) var shake_multiplier: float = 1.0
@@ -655,6 +683,7 @@ var _bounce_lock_timer: float = 0.0
 @export var damage_shake_intensity: float = 48.0
 @export var damage_shake_duration: float = 0.28
 
+
 var normal_speed: float = speed
 var base_acceleration: float = acceleration
 var health: float = 100.0
@@ -663,6 +692,8 @@ var energy_regen_wait_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
 var parry_cooldown_timer: float = 0.0
 var _invulnerability_timer: float = 0.0
+var _bounce_lock_timer: float = 0.0
+
 var is_exhausted: bool = false
 var is_dead: bool = false
 var is_dashing: bool = false
@@ -671,13 +702,16 @@ var is_invulnerable: bool = false
 var is_attacking: bool = false
 var is_shield_active: bool = false
 var is_transitioning: bool = false
+
+
 var _dash_hit_enemies: Array = []
+var _dash_chain_active: bool = false
+var _dash_chain_target: Node2D = null
 var _locked_animation: String = ""
 
 var _shake_intensity: float = 0.0
 var _shake_timer: float = 0.0
 var _shake_duration: float = 0.0
-
 var flash_material: ShaderMaterial
 
 
@@ -687,12 +721,12 @@ var resources_controller
 var visual_controller
 
 
-@onready var animated_sprite: AnimatedSprite2D = %Sprite
-@onready var camera: Camera2D = %Camera
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var camera: Camera2D = $Camera2D
 @onready var dash_timer: Timer = %DashTimer
 @onready var parry_timer: Timer = %ParryTimer
-@onready var hitbox: Area2D = %Hitbox
-@onready var shield: PlayerShield = %Shield
+@onready var hitbox: Area2D = $Hitbox
+@onready var shield: PlayerShield = $Shield
 
 
 func _ready() -> void:
@@ -718,21 +752,6 @@ func _ready() -> void:
 	visual_controller.setup_flash_shader()
 	health_changed.emit(health, max_health)
 	_emit_energy_changed()
-
-func _setup_flash_shader() -> void:
-	var shader := load("res://shaders/white_flash.gdshader") as Shader
-	if shader:
-		flash_material = ShaderMaterial.new()
-		flash_material.shader = shader
-		animated_sprite.material = flash_material
-
-func flash_white(duration: float = 0.1) -> void:
-	if flash_material:
-		flash_material.set_shader_parameter("flash", true)
-		get_tree().create_timer(duration).timeout.connect(func():
-			if is_instance_valid(flash_material):
-				flash_material.set_shader_parameter("flash", false)
-		)
 
 func _process(delta: float) -> void:
 	visual_controller.update_camera_shake(delta)
