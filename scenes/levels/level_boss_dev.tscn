@@ -5,9 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://i3oypb3myjbv" path="res://assets/map cyberpumk/neo_zero_tileset_03.png" id="3_go5vw"]
 [ext_resource type="PackedScene" uid="uid://bhvd1xjol6d7v" path="res://scenes/obstacles/server.tscn" id="4_dbe7w"]
 [ext_resource type="PackedScene" uid="uid://bmbs7r5mwg5av" path="res://scenes/player/player.tscn" id="5_rsvrn"]
-[ext_resource type="PackedScene" uid="uid://bak0col2suuby" path="res://scenes/spawner/spawner.tscn" id="6_c0kos"]
 [ext_resource type="Script" uid="uid://cb5la4y272qls" path="res://scenes/levels/level_1_arena.gd" id="7_lvl1"]
-[ext_resource type="PackedScene" uid="uid://d3mecha8boss1" path="res://scenes/enemies/mecha_boss.tscn" id="8_boss"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qxqh0"]
 texture = ExtResource("1_8uoes")
@@ -419,14 +417,6 @@ position = Vector2(-704, 512)
 position = Vector2(-704, -320)
 
 [node name="Player" parent="Ordering" unique_id=770284520 instance=ExtResource("5_rsvrn")]
-
-[node name="Spawner" parent="." unique_id=2033225972 instance=ExtResource("6_c0kos")]
-visible = false
-enemy_scene = ExtResource("8_boss")
-enemy_scenes = Array[PackedScene]([ExtResource("8_boss")])
-max_enemies = 1
-base_enemies_per_level = 1
-enemies_increase_per_level = 0
 
 [node name="TrapDoorZone" type="Area2D" parent="." unique_id=1954001234]
 monitoring = false

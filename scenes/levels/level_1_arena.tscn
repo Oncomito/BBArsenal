@@ -352,6 +352,15 @@ size = Vector2(128, 1920)
 
 [node name="Level1CyberArena" type="Node2D" unique_id=1847605930]
 
+[node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=1392435941]
+offset_left = -1345.0027
+offset_top = -765.0
+offset_right = -1304.0042
+offset_bottom = -727.9722
+scale = Vector2(65.636604, 41.428394)
+border_width = 0.0
+editor_only = false
+
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1263263212]
 use_parent_material = true
 scale = Vector2(4, 4)
@@ -393,7 +402,8 @@ shape = SubResource("RectangleShape2D_left_right")
 unique_name_in_owner = true
 y_sort_enabled = true
 
-[node name="Spawner" parent="Ordering" unique_id=775625807 instance=ExtResource("8_spawner")]
+[node name="Spawner" parent="Ordering" unique_id=775625807 node_paths=PackedStringArray("spawn_area") instance=ExtResource("8_spawner")]
+spawn_area = NodePath("../../ReferenceRect")
 
 [node name="ServerNE" parent="Ordering" unique_id=1208983105 instance=ExtResource("5_6w6pw")]
 position = Vector2(768, -320)
