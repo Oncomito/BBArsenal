@@ -11,7 +11,7 @@ Our game are compatible with: <br>
 - X Box Controller Input
 
 ## Playable
-Our game lives here
-[**Click Here!!**](https://itch.io/whyfren/havenjakarta)
+Our game lives in <https://itch.io>!
+[**Click Here!!**](https://oncomito.itch.io/bbarsenal)
 Feel free to play!
 Also if you have some ciritcs and suggestions, we are so grateful to hear that!
