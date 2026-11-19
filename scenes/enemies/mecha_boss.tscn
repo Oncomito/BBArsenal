@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d3mecha8boss1"]
 
 [ext_resource type="Texture2D" uid="uid://c2jdcvux4h58j" path="res://assets/mecha/mecha green.png" id="1_green_tex"]
-[ext_resource type="Script" path="res://scenes/enemies/mecha_boss.gd" id="2_boss_script"]
+[ext_resource type="Script" uid="uid://q4gu1u0wds8d" path="res://scenes/enemies/mecha_boss.gd" id="2_boss_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_bg"]
 bg_color = Color(0.06, 0.14, 0.08, 0.85)
@@ -69,7 +69,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_boss_6")
 }],
-"loop": true,
+"loop": 1,
 "name": &"walk",
 "speed": 8.0
 }]
@@ -77,19 +77,25 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_boss"]
 size = Vector2(260, 300)
 
-[node name="MechaBoss" type="CharacterBody2D" groups=["boss", "enemy"]]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uv4vu"]
+size = Vector2(318, 328)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_behr0"]
+radius = 190.09471
+
+[node name="MechaBoss" type="CharacterBody2D" unique_id=1254995930 groups=["boss", "enemy"]]
 collision_layer = 2
 collision_mask = 4
 script = ExtResource("2_boss_script")
 
-[node name="Stats" type="Control" parent="."]
+[node name="Stats" type="Control" parent="." unique_id=1065912969]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Health" type="ProgressBar" parent="Stats"]
+[node name="Health" type="ProgressBar" parent="Stats" unique_id=333979306]
 layout_mode = 0
 offset_left = -180.0
 offset_top = -390.0
@@ -101,22 +107,28 @@ max_value = 1200.0
 value = 1200.0
 show_percentage = false
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1114822324]
 position = Vector2(0, -175)
 scale = Vector2(5.5, 5.5)
 sprite_frames = SubResource("SpriteFrames_boss")
 animation = &"walk"
 autoplay = "walk"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1070735976]
 position = Vector2(0, -165)
 shape = SubResource("RectangleShape2D_boss")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=1919221395]
 collision_layer = 2
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1987042097]
 position = Vector2(0, -165)
-shape = SubResource("RectangleShape2D_boss")
+shape = SubResource("RectangleShape2D_uv4vu")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=41079694]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1712823529]
+position = Vector2(0, -165)
+shape = SubResource("CircleShape2D_behr0")
