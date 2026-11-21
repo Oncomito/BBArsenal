@@ -95,8 +95,8 @@ size = Vector2(180, 62)
 radius = 124.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sgj0o"]
-radius = 90.0
-height = 232.0
+radius = 80.0
+height = 212.0
 
 [node name="Mecha" type="CharacterBody2D" unique_id=1926874390 groups=["enemy"]]
 collision_layer = 8

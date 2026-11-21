@@ -104,7 +104,7 @@ class MovementController:
 		if not did_bounce:
 			return
 
-		actor.energize(ceilf(actor.dash_energy_cost / 4.0))
+		actor.energize(5.0)
 		actor._bounce_lock_timer = actor.bounce_lockout
 
 		var incoming_speed := pre_collision_velocity.length()
