@@ -11,10 +11,11 @@ config_version=5
 [application]
 
 config/name="BBArsenal"
+config/version="0.0.1"
 run/main_scene="uid://cvbebrbh8kq0t"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/image="uid://xnnc42dqews1"
-config/icon="res://icon.svg"
+config/icon="uid://cwkgbrssautdt"
 
 [autoload]
 
@@ -150,6 +151,7 @@ pointing/emulate_touch_from_mouse=true
 2d_physics/layer_1="player"
 2d_physics/layer_2="enemies"
 2d_physics/layer_3="environment"
+2d_physics/layer_4="entities"
 
 [physics]
 

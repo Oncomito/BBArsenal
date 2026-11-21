@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://hikeguhpur5m" path="res://scenes/ui/menus/splash.gd" id="1_10vqf"]
 [ext_resource type="Texture2D" uid="uid://dy6ribvok6bor" path="res://icon.svg" id="1_86pdq"]
-[ext_resource type="FontFile" uid="uid://rj7dwdgpy2oc" path="res://assets/fonts/Sandra.ttf" id="3_fgod4"]
+[ext_resource type="FontFile" uid="uid://o4aej1kltifw" path="res://assets/fonts/Pixellari.ttf" id="3_4j1hr"]
 
 [sub_resource type="FontVariation" id="FontVariation_behr0"]
-base_font = ExtResource("3_fgod4")
+base_font = ExtResource("3_4j1hr")
 spacing_glyph = 4
 
 [sub_resource type="Animation" id="Animation_86pdq"]
@@ -168,8 +168,8 @@ texture_filter = 6
 position = Vector2(578.79047, 331.0327)
 
 [node name="Icon" type="Sprite2D" parent="Logo" unique_id=282407759]
-position = Vector2(-3, -78)
-scale = Vector2(0.65, 0.65)
+position = Vector2(-3.0571117, -44.37809)
+scale = Vector2(0.78085285, 0.78085285)
 texture = ExtResource("1_86pdq")
 
 [node name="Label" type="Label" parent="Logo" unique_id=293350497]
@@ -182,7 +182,8 @@ theme_override_colors/font_shadow_color = Color(0.12, 0.75, 1, 0.4)
 theme_override_colors/font_outline_color = Color(0.03, 0.05, 0.12, 1)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 4
-theme_override_constants/outline_size = 8
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 12
 theme_override_fonts/font = SubResource("FontVariation_behr0")
 theme_override_font_sizes/font_size = 64
 text = "B. B. Arsenal"
