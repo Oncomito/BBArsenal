@@ -17,6 +17,8 @@ signal energy_changed(current_energy: float, max_energy: float)
 signal player_died
 signal dash_count_changed(current_count: int, max_count: int)
 
+# var movement: PlayerMovement
+# var visual: PlayerVisualla
 
 class MovementController:
 	var actor: Variant
@@ -721,12 +723,12 @@ var resources_controller
 var visual_controller
 
 
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var camera: Camera2D = $Camera2D
+@onready var animated_sprite: AnimatedSprite2D = %Sprite
+@onready var camera: Camera2D = %Camera
 @onready var dash_timer: Timer = %DashTimer
 @onready var parry_timer: Timer = %ParryTimer
-@onready var hitbox: Area2D = $Hitbox
-@onready var shield: PlayerShield = $Shield
+@onready var hitbox: Area2D = %Hitbox
+@onready var shield: PlayerShield = %Shield
 
 
 func _ready() -> void:
