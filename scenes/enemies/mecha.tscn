@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dy2eclfjpfkqu"]
 
-[ext_resource type="Texture2D" uid="uid://0oj75ljsqf5o" path="res://assets/mecha/mecha red.png" id="1_2n11x"]
+[ext_resource type="Texture2D" uid="uid://cjo3ua28fim8b" path="res://assets/sprites/entities/mecha_red.png" id="2_3qjkr"]
 [ext_resource type="Script" uid="uid://cmle2lvlapfdv" path="res://scenes/enemies/mecha.gd" id="2_mecha_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3qjkr"]
@@ -31,57 +31,57 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_0"]
-atlas = ExtResource("1_2n11x")
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgj0o"]
+atlas = ExtResource("2_3qjkr")
 region = Rect2(0, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_1"]
-atlas = ExtResource("1_2n11x")
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvs4a"]
+atlas = ExtResource("2_3qjkr")
 region = Rect2(70, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_2"]
-atlas = ExtResource("1_2n11x")
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1djm"]
+atlas = ExtResource("2_3qjkr")
 region = Rect2(140, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_3"]
-atlas = ExtResource("1_2n11x")
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdswb"]
+atlas = ExtResource("2_3qjkr")
 region = Rect2(210, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_4"]
-atlas = ExtResource("1_2n11x")
+[sub_resource type="AtlasTexture" id="AtlasTexture_l31gj"]
+atlas = ExtResource("2_3qjkr")
 region = Rect2(280, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_5"]
-atlas = ExtResource("1_2n11x")
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5bkd"]
+atlas = ExtResource("2_3qjkr")
 region = Rect2(350, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_walk_6"]
-atlas = ExtResource("1_2n11x")
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgf0i"]
+atlas = ExtResource("2_3qjkr")
 region = Rect2(420, 0, 70, 70)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_18yqj"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_walk_0")
+"texture": SubResource("AtlasTexture_sgj0o")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_walk_1")
+"texture": SubResource("AtlasTexture_fvs4a")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_walk_2")
+"texture": SubResource("AtlasTexture_t1djm")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_walk_3")
+"texture": SubResource("AtlasTexture_kdswb")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_walk_4")
+"texture": SubResource("AtlasTexture_l31gj")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_walk_5")
+"texture": SubResource("AtlasTexture_f5bkd")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_walk_6")
+"texture": SubResource("AtlasTexture_qgf0i")
 }],
 "loop": 1,
 "name": &"walk",

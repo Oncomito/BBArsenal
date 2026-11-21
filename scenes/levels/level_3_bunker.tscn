@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://qcyphbpcao4w"]
 
-[ext_resource type="Texture2D" uid="uid://dwdhrbtcy46h5" path="res://assets/map cyberpumk/neo_zero_buildings_02.png" id="4_ja4oh"]
-[ext_resource type="Texture2D" uid="uid://c32ec55v0ck7x" path="res://assets/map cyberpumk/neo_zero_props_02_free.png" id="5_w7jva"]
-[ext_resource type="Texture2D" uid="uid://i3oypb3myjbv" path="res://assets/map cyberpumk/neo_zero_tileset_03.png" id="6_4fe88"]
+[ext_resource type="Texture2D" uid="uid://8j80xajuke7s" path="res://assets/sprites/environment/neo_zero_02.png" id="4_ja4oh"]
+[ext_resource type="Texture2D" uid="uid://bjw207b6cyg5m" path="res://assets/sprites/props/neo_zero_02.png" id="5_w7jva"]
+[ext_resource type="Texture2D" uid="uid://crnyw87fqibnl" path="res://assets/sprites/environment/neo_zero_03.png" id="6_4fe88"]
 [ext_resource type="PackedScene" uid="uid://bmbs7r5mwg5av" path="res://scenes/player/player.tscn" id="7_player"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g5mkm"]
@@ -403,7 +403,7 @@ position = Vector2(576, 576)
 shape = SubResource("RectangleShape2D_divider")
 
 [node name="CenterCover" type="CollisionShape2D" parent="MapBorders" unique_id=1111437123]
-position = Vector2(-32, -32)
+position = Vector2(-1, 3)
 shape = SubResource("RectangleShape2D_center")
 
 [node name="Player" parent="." unique_id=851102910 instance=ExtResource("7_player")]

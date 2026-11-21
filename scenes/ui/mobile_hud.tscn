@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://clx7fgvhbmjy2"]
 
-[ext_resource type="Script" path="res://scenes/ui/mobile_hud.gd" id="1_gsvga"]
+[ext_resource type="Script" uid="uid://bhnoqhikgc678" path="res://scenes/ui/mobile/mobile_hud.gd" id="1_gsvga"]
 [ext_resource type="PackedScene" uid="uid://bhhq351yfhw6n" path="res://scenes/ui/dash_skill.tscn" id="2_smya3"]
 
 [node name="MobileHUD" type="Control" unique_id=932176028]

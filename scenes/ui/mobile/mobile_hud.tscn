@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bhnoqhikgc678" path="res://scenes/ui/mobile/mobile_hud.gd" id="1_gsvga"]
 [ext_resource type="PackedScene" uid="uid://dcpn1ho5o8dp6" path="res://scenes/ui/mobile/dash_button.tscn" id="2_dash"]
 [ext_resource type="PackedScene" path="res://scenes/ui/mobile/shield_button.tscn" id="3_shield"]
-[ext_resource type="PackedScene" path="res://scenes/ui/mobile/parry_button.tscn" id="4_parry"]
+[ext_resource type="PackedScene" uid="uid://bdhclpsb2pf87" path="res://scenes/ui/mobile/parry_button.tscn" id="4_parry"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joy_normal"]
 bg_color = Color(0.08, 0.11, 0.18, 0.45)
@@ -19,20 +19,6 @@ corner_radius_bottom_left = 300
 shadow_color = Color(0.05, 0.65, 0.95, 0.18)
 shadow_size = 12
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joy_pressed"]
-bg_color = Color(0.1, 0.16, 0.26, 0.62)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.35, 0.92, 1, 0.9)
-corner_radius_top_left = 300
-corner_radius_top_right = 300
-corner_radius_bottom_right = 300
-corner_radius_bottom_left = 300
-shadow_color = Color(0.15, 0.85, 1, 0.35)
-shadow_size = 16
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tip_normal"]
 bg_color = Color(0.28, 0.84, 1, 0.72)
 border_width_left = 4
@@ -46,6 +32,20 @@ corner_radius_bottom_right = 300
 corner_radius_bottom_left = 300
 shadow_color = Color(0.15, 0.8, 1, 0.32)
 shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joy_pressed"]
+bg_color = Color(0.1, 0.16, 0.26, 0.62)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.35, 0.92, 1, 0.9)
+corner_radius_top_left = 300
+corner_radius_top_right = 300
+corner_radius_bottom_right = 300
+corner_radius_bottom_left = 300
+shadow_color = Color(0.15, 0.85, 1, 0.35)
+shadow_size = 16
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tip_pressed"]
 bg_color = Color(0.45, 0.94, 1, 0.92)
@@ -77,6 +77,10 @@ offset_left = 265.0
 offset_top = 810.0
 offset_right = 305.0
 offset_bottom = 850.0
+theme_override_styles/normal_joystick = SubResource("StyleBoxFlat_joy_normal")
+theme_override_styles/normal_tip = SubResource("StyleBoxFlat_tip_normal")
+theme_override_styles/pressed_joystick = SubResource("StyleBoxFlat_joy_pressed")
+theme_override_styles/pressed_tip = SubResource("StyleBoxFlat_tip_pressed")
 joystick_mode = 1
 joystick_size = 420.0
 tip_size = 169.0
@@ -85,10 +89,6 @@ action_left = &"player_left"
 action_right = &"player_right"
 action_up = &"player_up"
 action_down = &"player_down"
-theme_override_styles/normal_joystick = SubResource("StyleBoxFlat_joy_normal")
-theme_override_styles/pressed_joystick = SubResource("StyleBoxFlat_joy_pressed")
-theme_override_styles/normal_tip = SubResource("StyleBoxFlat_tip_normal")
-theme_override_styles/pressed_tip = SubResource("StyleBoxFlat_tip_pressed")
 
 [node name="Dash" parent="." unique_id=660694269 instance=ExtResource("2_dash")]
 layout_mode = 0

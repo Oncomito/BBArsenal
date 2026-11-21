@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://cocfeg06dibmq"]
 
-[ext_resource type="Texture2D" uid="uid://dwdhrbtcy46h5" path="res://assets/map cyberpumk/neo_zero_buildings_02.png" id="1_8uoes"]
-[ext_resource type="Texture2D" uid="uid://c32ec55v0ck7x" path="res://assets/map cyberpumk/neo_zero_props_02_free.png" id="2_kqrm6"]
-[ext_resource type="Texture2D" uid="uid://i3oypb3myjbv" path="res://assets/map cyberpumk/neo_zero_tileset_03.png" id="3_go5vw"]
+[ext_resource type="Texture2D" uid="uid://8j80xajuke7s" path="res://assets/sprites/environment/neo_zero_02.png" id="1_8uoes"]
+[ext_resource type="Texture2D" uid="uid://bjw207b6cyg5m" path="res://assets/sprites/props/neo_zero_02.png" id="2_kqrm6"]
+[ext_resource type="Texture2D" uid="uid://crnyw87fqibnl" path="res://assets/sprites/environment/neo_zero_03.png" id="3_go5vw"]
 [ext_resource type="PackedScene" uid="uid://bhvd1xjol6d7v" path="res://scenes/obstacles/server.tscn" id="4_dbe7w"]
 [ext_resource type="PackedScene" uid="uid://bmbs7r5mwg5av" path="res://scenes/player/player.tscn" id="5_rsvrn"]
 [ext_resource type="PackedScene" uid="uid://bak0col2suuby" path="res://scenes/spawner/spawner.tscn" id="6_c0kos"]

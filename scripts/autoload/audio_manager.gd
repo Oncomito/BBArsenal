@@ -3,16 +3,16 @@ extends Node
 const SETTINGS_PATH := "user://audio_settings.cfg"
 
 var sounds = {
-	"fireball": preload("res://assets/sound/floraphonic-fireball-whoosh-1-179125.mp3"),
-	"blast": preload("res://assets/sound/yodguard-fire-magic-6-378641.mp3"),
-	"click": preload("res://assets/sound/universfield-click-button-140881.mp3"),
-	"ting": preload("res://assets/sound/freesound_community-glass-ting-89283.mp3"),
-	"explode": preload("res://assets/sound/synthetic_explosion_1.wav")
+	"fireball": preload("res://assets/audio/sfx_fireball_01.mp3"),
+	"blast": preload("res://assets/audio/sfx_fireball_02.mp3"),
+	"click": preload("res://assets/audio/sfx_click_01.mp3"),
+	"ting": preload("res://assets/audio/sfx_ting.mp3"),
+	"explode": preload("res://assets/audio/sfx_explosion_01.wav")
 }
 
 var music_tracks = {
-	"menu": preload("res://assets/sound/menu.ogg"),
-	"gameplay": preload("res://assets/sound/defide.mp3")
+	"menu": preload("res://assets/audio/ost_menu.ogg"),
+	"gameplay": preload("res://assets/audio/ost_gameplay_defide.mp3")
 }
 
 var bgm_player: AudioStreamPlayer

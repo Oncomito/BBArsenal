@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d3mecha8boss1"]
 
-[ext_resource type="Texture2D" uid="uid://c2jdcvux4h58j" path="res://assets/mecha/mecha green.png" id="1_green_tex"]
 [ext_resource type="Script" uid="uid://q4gu1u0wds8d" path="res://scenes/enemies/mecha_boss.gd" id="2_boss_script"]
+[ext_resource type="Texture2D" uid="uid://cvx0eenk5xtyc" path="res://assets/sprites/entities/mecha_green.png" id="2_uv4vu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_bg"]
 bg_color = Color(0.06, 0.14, 0.08, 0.85)
@@ -17,57 +17,71 @@ corner_radius_top_right = 9
 corner_radius_bottom_right = 9
 corner_radius_bottom_left = 9
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_boss_0"]
-atlas = ExtResource("1_green_tex")
+[sub_resource type="AtlasTexture" id="AtlasTexture_mefgi"]
+atlas = ExtResource("2_uv4vu")
 region = Rect2(0, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_boss_1"]
-atlas = ExtResource("1_green_tex")
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2dfl"]
+atlas = ExtResource("2_uv4vu")
 region = Rect2(70, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_boss_2"]
-atlas = ExtResource("1_green_tex")
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3fg2"]
+atlas = ExtResource("2_uv4vu")
 region = Rect2(140, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_boss_3"]
-atlas = ExtResource("1_green_tex")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ooybv"]
+atlas = ExtResource("2_uv4vu")
 region = Rect2(210, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_boss_4"]
-atlas = ExtResource("1_green_tex")
+[sub_resource type="AtlasTexture" id="AtlasTexture_uihfo"]
+atlas = ExtResource("2_uv4vu")
 region = Rect2(280, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_boss_5"]
-atlas = ExtResource("1_green_tex")
+[sub_resource type="AtlasTexture" id="AtlasTexture_afd5c"]
+atlas = ExtResource("2_uv4vu")
 region = Rect2(350, 0, 70, 70)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_boss_6"]
-atlas = ExtResource("1_green_tex")
+[sub_resource type="AtlasTexture" id="AtlasTexture_5q8wv"]
+atlas = ExtResource("2_uv4vu")
 region = Rect2(420, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wsv8m"]
+atlas = ExtResource("2_uv4vu")
+region = Rect2(490, 0, 70, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3pus5"]
+atlas = ExtResource("2_uv4vu")
+region = Rect2(0, 70, 70, 70)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_boss"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_boss_0")
+"texture": SubResource("AtlasTexture_mefgi")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_boss_1")
+"texture": SubResource("AtlasTexture_o2dfl")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_boss_2")
+"texture": SubResource("AtlasTexture_x3fg2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_boss_3")
+"texture": SubResource("AtlasTexture_ooybv")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_boss_4")
+"texture": SubResource("AtlasTexture_uihfo")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_boss_5")
+"texture": SubResource("AtlasTexture_afd5c")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_boss_6")
+"texture": SubResource("AtlasTexture_5q8wv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wsv8m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3pus5")
 }],
 "loop": 1,
 "name": &"walk",
@@ -113,6 +127,7 @@ scale = Vector2(5.5, 5.5)
 sprite_frames = SubResource("SpriteFrames_boss")
 animation = &"walk"
 autoplay = "walk"
+frame_progress = 0.6471594
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1070735976]
 position = Vector2(0, -165)

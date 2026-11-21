@@ -1,52 +1,28 @@
 [gd_scene format=3 uid="uid://df5q2n7kwv8bx"]
 
 [ext_resource type="Script" uid="uid://bj7v5c8vqt1tf" path="res://scenes/player/shield.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://dn6ieg1wv8co0" path="res://assets/shield player/shield mas.png" id="2_shield_tex"]
-[ext_resource type="Texture2D" uid="uid://d0r25sxwj5hek" path="res://assets/projectile-arsenal_v1.0.0/sheets/projectile-arsenal_hit_electric_32.png" id="tex_hit"]
+[ext_resource type="Texture2D" uid="uid://gkihuv3a36gf" path="res://assets/sprites/vfx/shield.png" id="2_shield_tex"]
+[ext_resource type="Texture2D" uid="uid://dweoldo5e2lge" path="res://assets/sprites/projectiles/hits.png" id="tex_hit"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_0"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(0, 0, 192, 192)
+[sub_resource type="AtlasTexture" id="AtlasTexture_m61gp"]
+atlas = ExtResource("tex_hit")
+region = Rect2(0, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_1"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(192, 0, 192, 192)
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6x5r"]
+atlas = ExtResource("tex_hit")
+region = Rect2(32, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_2"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(384, 0, 192, 192)
+[sub_resource type="AtlasTexture" id="AtlasTexture_3h12n"]
+atlas = ExtResource("tex_hit")
+region = Rect2(64, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_3"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(576, 0, 192, 192)
+[sub_resource type="AtlasTexture" id="AtlasTexture_5yl6w"]
+atlas = ExtResource("tex_hit")
+region = Rect2(96, 64, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_4"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(768, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_5"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(0, 192, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_6"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(192, 192, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_7"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(384, 192, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_8"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(576, 192, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_9"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(768, 192, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_10"]
-atlas = ExtResource("2_shield_tex")
-region = Rect2(0, 384, 192, 192)
+[sub_resource type="AtlasTexture" id="AtlasTexture_cua4h"]
+atlas = ExtResource("tex_hit")
+region = Rect2(128, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_active_0"]
 atlas = ExtResource("2_shield_tex")
@@ -100,43 +76,67 @@ region = Rect2(192, 0, 192, 192)
 atlas = ExtResource("2_shield_tex")
 region = Rect2(0, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bounce_0"]
-atlas = ExtResource("tex_hit")
-region = Rect2(0, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_0"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(0, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bounce_1"]
-atlas = ExtResource("tex_hit")
-region = Rect2(32, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_1"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(192, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bounce_2"]
-atlas = ExtResource("tex_hit")
-region = Rect2(64, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_2"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(384, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bounce_3"]
-atlas = ExtResource("tex_hit")
-region = Rect2(96, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_3"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(576, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bounce_4"]
-atlas = ExtResource("tex_hit")
-region = Rect2(128, 0, 32, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_4"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_5"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_6"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(192, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_7"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(384, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_8"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(576, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_9"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(768, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spawn_10"]
+atlas = ExtResource("2_shield_tex")
+region = Rect2(0, 384, 192, 192)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_shield"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bounce_0")
+"texture": SubResource("AtlasTexture_m61gp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bounce_1")
+"texture": SubResource("AtlasTexture_e6x5r")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bounce_2")
+"texture": SubResource("AtlasTexture_3h12n")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bounce_3")
+"texture": SubResource("AtlasTexture_5yl6w")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bounce_4")
+"texture": SubResource("AtlasTexture_cua4h")
 }],
 "loop": 0,
 "name": &"bounce",
@@ -243,7 +243,7 @@ script = ExtResource("1_script")
 modulate = Color(1, 1, 1, 0.5)
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_shield")
-animation = &"shield_active"
+animation = &"bounce"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=255359867]
 position = Vector2(0, 4)

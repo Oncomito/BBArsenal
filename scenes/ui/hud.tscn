@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dyttos3pkbk7e"]
 
-[ext_resource type="Texture2D" uid="uid://bygdrucx1s0y1" path="res://assets/ui/—Pngtree—heart pixel art_8666747.png" id="1_hqnrr"]
+[ext_resource type="Texture2D" uid="uid://66use0i0lqwl" path="res://assets/sprites/ui/heart.png" id="1_hqnrr"]
 [ext_resource type="FontFile" uid="uid://brr2jtpm3yhu3" path="res://assets/fonts/JetBrainsMono-VariableFont_wght.ttf" id="2_136eg"]
-[ext_resource type="Texture2D" uid="uid://d3bpcx1sisncg" path="res://assets/ui/energy.png" id="2_bo48s"]
+[ext_resource type="Texture2D" uid="uid://broapego2pxx5" path="res://assets/sprites/ui/energy.png" id="2_bo48s"]
 [ext_resource type="Script" uid="uid://berybs57oaid1" path="res://scenes/ui/hud/hud.gd" id="3_hudgd"]
 [ext_resource type="FontFile" uid="uid://0nl0h6dyic3e" path="res://assets/fonts/Cybero Personal Use Only.ttf" id="4_8qguk"]
 

@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://bhvd1xjol6d7v"]
 
-[ext_resource type="Texture2D" uid="uid://dwdhrbtcy46h5" path="res://assets/map cyberpumk/neo_zero_buildings_02.png" id="1_gsron"]
-[ext_resource type="Texture2D" uid="uid://c32ec55v0ck7x" path="res://assets/map cyberpumk/neo_zero_props_02_free.png" id="2_1sr6j"]
-[ext_resource type="Texture2D" uid="uid://i3oypb3myjbv" path="res://assets/map cyberpumk/neo_zero_tileset_03.png" id="3_xm7f8"]
+[ext_resource type="Texture2D" uid="uid://8j80xajuke7s" path="res://assets/sprites/environment/neo_zero_02.png" id="1_gsron"]
+[ext_resource type="Texture2D" uid="uid://bjw207b6cyg5m" path="res://assets/sprites/props/neo_zero_02.png" id="2_1sr6j"]
+[ext_resource type="Texture2D" uid="uid://crnyw87fqibnl" path="res://assets/sprites/environment/neo_zero_03.png" id="3_xm7f8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vg2pr"]
 size = Vector2(192, 56)

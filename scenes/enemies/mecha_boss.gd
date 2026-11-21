@@ -13,6 +13,7 @@ const HIT_EFFECT_SCENE: PackedScene = preload("res://scenes/projectiles/hit.tscn
 @export var attack_range: float = 1500.0
 @export var stop_distance: float = 320.0
 
+
 var health: float = 1200.0
 var player: Node2D = null
 var _cooldown_timer: float = 1.0
