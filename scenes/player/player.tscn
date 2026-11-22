@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://dnx5bn74u03sp" path="res://assets/sprites/entities/player_interact.png" id="4_je7p5"]
 [ext_resource type="Texture2D" uid="uid://bjh7xo70y54gk" path="res://assets/sprites/entities/player_run.png" id="5_fm80t"]
 [ext_resource type="Texture2D" uid="uid://cfyy412qg6sns" path="res://assets/sprites/entities/player_walk.png" id="6_gx1jg"]
+[ext_resource type="Script" uid="uid://stjj62kfx2ja" path="res://scenes/player/hitbox.gd" id="10_fm80t"]
+[ext_resource type="Script" uid="uid://b04vsgu4sdfex" path="res://scenes/player/hurtbox.gd" id="12_gx1jg"]
 [ext_resource type="Script" uid="uid://dtyjkljak3my1" path="res://scenes/player/combat.gd" id="96_i6ap2"]
 [ext_resource type="Script" uid="uid://cu7ciodfgy1vo" path="res://scenes/player/resource.gd" id="98_88c1f"]
 
@@ -607,7 +609,6 @@ collision_mask = 6
 script = ExtResource("1_dovo2")
 
 [node name="Camera" type="Camera2D" parent="." unique_id=615915563]
-unique_name_in_owner = true
 position = Vector2(1, -60)
 zoom = Vector2(0.5, 0.5)
 position_smoothing_enabled = true
@@ -621,7 +622,6 @@ shape = SubResource("CapsuleShape2D_cpwp1")
 script = ExtResource("3_vlhku")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="Visual" unique_id=1813115174]
-unique_name_in_owner = true
 texture_filter = 1
 position = Vector2(1, -59)
 scale = Vector2(4, 4)
@@ -634,7 +634,6 @@ frame_progress = 0.2777772
 script = ExtResource("2_0ioy2")
 
 [node name="DashTimer" type="Timer" parent="Movement" unique_id=1126209666]
-unique_name_in_owner = true
 wait_time = 0.55
 one_shot = true
 
@@ -642,15 +641,13 @@ one_shot = true
 script = ExtResource("96_i6ap2")
 
 [node name="ParryTimer" type="Timer" parent="Combat" unique_id=855689762]
-unique_name_in_owner = true
 
 [node name="Shield" parent="Combat" unique_id=828424897 instance=ExtResource("2_shield")]
-unique_name_in_owner = true
 visible = false
 position = Vector2(0, -54)
 
 [node name="Hitbox" type="Area2D" parent="Combat" unique_id=200786888 groups=["player_hitbox"]]
-unique_name_in_owner = true
+script = ExtResource("10_fm80t")
 
 [node name="Area" type="CollisionShape2D" parent="Combat/Hitbox" unique_id=1009863355]
 position = Vector2(-2, -51)
@@ -661,6 +658,7 @@ shape = SubResource("CircleShape2D_behr0")
 script = ExtResource("98_88c1f")
 
 [node name="Hurtbox" type="Area2D" parent="Resource" unique_id=1924747312]
+script = ExtResource("12_gx1jg")
 
 [node name="Area" type="CollisionShape2D" parent="Resource/Hurtbox" unique_id=269543325]
 position = Vector2(0, -46)

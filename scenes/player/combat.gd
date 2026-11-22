@@ -1,3 +1,4 @@
+@icon("res://assets/_project/node/combat.svg")
 class_name PlayerCombat
 extends Node2D
 

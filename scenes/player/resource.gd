@@ -1,3 +1,4 @@
+@icon("res://assets/_project/node/resource.svg")
 class_name PlayerResource
 extends Node2D
 

@@ -1,3 +1,4 @@
+@icon("res://assets/_project/node/player.svg")
 class_name Player
 extends CharacterBody2D
 
@@ -115,14 +116,13 @@ var _shake_timer: float = 0.0
 var _shake_duration: float = 0.0
 var flash_material: ShaderMaterial
 
-
-@onready var animated_sprite: AnimatedSprite2D = %Sprite
-@onready var camera: Camera2D = %Camera
-@onready var dash_timer: Timer = %DashTimer
-@onready var parry_timer: Timer = %ParryTimer
-@onready var hitbox: Area2D = %Hitbox
-@onready var shield: PlayerShield = %Shield
-
+@onready var animated_sprite: AnimatedSprite2D = $Visual/Sprite
+@onready var camera: Camera2D = $Camera
+@onready var dash_timer: Timer = $Movement/DashTimer
+@onready var parry_timer: Timer = $Combat/ParryTimer
+@onready var hitbox: Area2D = $Combat/Hitbox
+@onready var hurtbox: Area2D = $Resource/Hurtbox
+@onready var shield: PlayerShield = $Combat/Shield
 
 func _ready() -> void:
 	movement.setup(self)

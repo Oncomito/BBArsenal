@@ -1,3 +1,4 @@
+@icon("res://assets/_project/node/movement.svg")
 class_name PlayerMovement
 extends Node
 

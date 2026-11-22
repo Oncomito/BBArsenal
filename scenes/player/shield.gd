@@ -1,3 +1,4 @@
+@icon("res://assets/_project/node/shield.svg")
 extends Area2D
 class_name PlayerShield
 
