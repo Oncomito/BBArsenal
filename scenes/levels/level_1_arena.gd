@@ -7,7 +7,7 @@ const SHIELD_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_shield.tscn"
 const OH_NO_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_oh_no.tscn")
 const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_to_levels.tscn")
 
-const BOSS_SCENE := preload("res://scenes/enemies/mecha_boss.tscn")
+const BOSS_SCENE := preload("res://scenes/entities/enemies/bosses/mecha_overlord/mecha_overlord.tscn")
 const HUD_TOP_BAR_UI_SCENE := preload("res://scenes/ui/hud/hud_top_bar.tscn")
 const MOBILE_HUD_UI_SCENE := preload("res://scenes/ui/mobile/mobile_hud.tscn")
 const LEVELS_UI_SCENE := preload("res://scenes/ui/hud/levels_ui.tscn")

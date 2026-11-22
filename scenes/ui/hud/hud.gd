@@ -2,7 +2,7 @@ extends Control
 
 const PAUSE_MENU_SCENE := preload("res://scenes/ui/menus/pause_menu.tscn")
 
-@export var layout_id: String = "top_bar"
+@export var layout_id: GameManager.HUD_LAYOUT = GameManager.HUD_LAYOUT.TOP
 
 @onready var health_bar: ProgressBar = get_node_or_null("%health") if get_node_or_null("%health") != null else get_node_or_null("health")
 @onready var top_energy_bar: ProgressBar = get_node_or_null("energy")
@@ -46,7 +46,7 @@ func _ready() -> void:
 	_bind_boss()
 	_update_labels()
 
-func _on_hud_layout_changed(_new_layout: String) -> void:
+func _on_hud_layout_changed(_new_layout: GameManager.HUD_LAYOUT) -> void:
 	if _is_swapping or is_queued_for_deletion():
 		return
 	_check_layout_match()

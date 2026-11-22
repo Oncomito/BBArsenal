@@ -1,0 +1,2 @@
+class_name PlayerHurtbox
+extends Hurtbox2D

@@ -1,0 +1,2 @@
+class_name PlayerHitbox
+extends Hitbox2D

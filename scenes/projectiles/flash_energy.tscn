@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/projectiles/effect.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://coa7k1eh4e6ou" path="res://assets/sprites/projectiles/flash_energies.png" id="2_popoka"]
+[ext_resource type="Script" uid="uid://cwycm81sgvhor" path="res://scenes/entities/projectiles/effect.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://c232ius4qpxqc" path="res://assets/sprites/projectiles/flash_energies.png" id="2_popoka"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_arcane_0"]
 atlas = ExtResource("2_popoka")

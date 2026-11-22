@@ -96,7 +96,7 @@ func _on_area_entered(area: Area2D) -> void:
 				parry(area.get("player_ref"))
 			return
 		if area.name == "Hurtbox" or area.is_in_group("player_hurtbox"):
-			var player := area.get_parent() as Node2D
+			var player := _find_player_for_area(area)
 			if is_instance_valid(player) and player.is_in_group("player"):
 				if player.get("is_attacking"):
 					parry(player)
@@ -105,7 +105,7 @@ func _on_area_entered(area: Area2D) -> void:
 					_explode()
 			return
 		if area.name == "Hitbox" or area.is_in_group("player_hitbox"):
-			var player := area.get_parent()
+			var player := _find_player_for_area(area)
 			if is_instance_valid(player) and player.get("is_attacking"):
 				parry(player)
 				return
@@ -113,6 +113,14 @@ func _on_area_entered(area: Area2D) -> void:
 		var target := area.get_parent()
 		if is_instance_valid(target) and not target.is_in_group("player") and target.has_method("take_damage"):
 			_hit_enemy(target)
+
+func _find_player_for_area(area: Area2D) -> Node2D:
+	var ancestor := area.get_parent()
+	while is_instance_valid(ancestor):
+		if ancestor.is_in_group("player"):
+			return ancestor as Node2D
+		ancestor = ancestor.get_parent()
+	return null
 
 func _hit_enemy(target: Node) -> void:
 	if _exploded:

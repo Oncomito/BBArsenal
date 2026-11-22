@@ -50,8 +50,8 @@ func _on_hud_button_pressed() -> void:
 func _update_hud_button_visual() -> void:
 	if not is_instance_valid(hud_button):
 		return
-	var current_layout := GameManager.hud_layout if GameManager else "top_bar"
-	hud_button.text = "BOTTOM LEFT" if current_layout == GameManager.HUD_LAYOUT_BOTTOM_LEFT else "TOP BAR"
+	var current_layout := GameManager.hud_layout if GameManager else GameManager.HUD_LAYOUT.TOP
+	hud_button.text = "BOTTOM LEFT" if current_layout == GameManager.HUD_LAYOUT.BOTTOM else "TOP BAR"
 	var text_color := Color(0.55, 1.0, 0.92, 1.0)
 	hud_button.add_theme_color_override("font_color", text_color)
 	hud_button.add_theme_color_override("font_pressed_color", text_color)
