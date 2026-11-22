@@ -40,8 +40,16 @@ func _physics_process(delta: float) -> void:
 		var player := get_tree().get_first_node_in_group("player") as Node2D
 		if is_instance_valid(player):
 			var dist := global_position.distance_to(player.global_position)
-			var is_shield_active: bool = bool(player.get("is_shield_active"))
-			var shield_node := player.get_node_or_null("Shield") as Node2D
+			var player_combat := player.get("combat") as Node
+			var is_shield_active: bool = (
+				is_instance_valid(player_combat)
+				and bool(player_combat.get("is_shield_active"))
+			)
+			var shield_node := (
+				player_combat.get("shield") as Node2D
+				if is_instance_valid(player_combat)
+				else null
+			)
 			var shield_pos := shield_node.global_position if shield_node else player.global_position
 			if is_shield_active and (dist < 70.0 or global_position.distance_to(shield_pos) < 70.0):
 				if shield_node and shield_node.has_method("bounce_projectile"):
@@ -50,7 +58,10 @@ func _physics_process(delta: float) -> void:
 					parry(player)
 				return
 
-			var is_attacking: bool = bool(player.get("is_attacking"))
+			var is_attacking: bool = (
+				is_instance_valid(player_combat)
+				and bool(player_combat.get("is_attacking"))
+			)
 			if is_attacking and dist < 110.0:
 				var to_proj := global_position - player.global_position
 				var facing_left: bool = false
@@ -98,7 +109,7 @@ func _on_area_entered(area: Area2D) -> void:
 		if area.name == "Hurtbox" or area.is_in_group("player_hurtbox"):
 			var player := _find_player_for_area(area)
 			if is_instance_valid(player) and player.is_in_group("player"):
-				if player.get("is_attacking"):
+				if _is_player_attacking(player):
 					parry(player)
 				else:
 					Gamemanager.take_damage(damage)
@@ -106,7 +117,7 @@ func _on_area_entered(area: Area2D) -> void:
 			return
 		if area.name == "Hitbox" or area.is_in_group("player_hitbox"):
 			var player := _find_player_for_area(area)
-			if is_instance_valid(player) and player.get("is_attacking"):
+			if is_instance_valid(player) and _is_player_attacking(player):
 				parry(player)
 				return
 	else:
@@ -121,6 +132,12 @@ func _find_player_for_area(area: Area2D) -> Node2D:
 			return ancestor as Node2D
 		ancestor = ancestor.get_parent()
 	return null
+
+func _is_player_attacking(player: Node) -> bool:
+	if not is_instance_valid(player):
+		return false
+	var player_combat := player.get("combat") as Node
+	return is_instance_valid(player_combat) and bool(player_combat.get("is_attacking"))
 
 func _hit_enemy(target: Node) -> void:
 	if _exploded:
@@ -163,8 +180,10 @@ func parry(player: Node2D) -> void:
 	if AudioManager:
 		AudioManager.play_sfx("blast", 2.2)
 
-	if player and player.has_method("camera_shake"):
-		player.camera_shake(7.0, 0.15)
+	if is_instance_valid(player):
+		var player_visual := player.get("visual") as Node
+		if is_instance_valid(player_visual) and player_visual.has_method("camera_shake"):
+			player_visual.call("camera_shake", 7.0, 0.15)
 
 func _explode() -> void:
 	if _exploded:

@@ -16,8 +16,8 @@ const PAUSE_MENU_SCENE := preload("res://scenes/ui/menus/pause_menu.tscn")
 @onready var boss_bar: ProgressBar = get_node_or_null("BossFight/Boss")
 @onready var boss_hp_label: Label = get_node_or_null("BossFight/BossHp")
 
-var player: Node = null
-var boss: Node = null
+var player: Player = null
+var boss: Enemy = null
 var _is_swapping: bool = false
 
 func _ready() -> void:
@@ -85,12 +85,10 @@ func _process(_delta: float) -> void:
 		_bind_player()
 		return
 
-	if "health" in player and "max_health" in player and is_instance_valid(health_bar):
-		health_bar.max_value = player.max_health
-		health_bar.value = player.health
+	health_bar.max_value = player.max_health
+	health_bar.value = player.health
 
-	if "energy" in player and "max_energy" in player:
-		_apply_energy_value(player.energy, player.max_energy)
+	_apply_energy_value(player.energy, player.movement.max_energy)
 
 
 func _bind_boss() -> void:
@@ -171,15 +169,12 @@ func _bind_player() -> void:
 	if not is_instance_valid(player):
 		return
 
-	if player.has_signal("health_changed") and not player.health_changed.is_connected(_on_player_health_changed):
-		player.health_changed.connect(_on_player_health_changed)
-	if player.has_signal("energy_changed") and not player.energy_changed.is_connected(_on_player_energy_changed):
-		player.energy_changed.connect(_on_player_energy_changed)
+	player.health_changed.connect(_on_player_health_changed)
+	player.energy_changed.connect(_on_player_energy_changed)
 
-	if "health" in player and "max_health" in player:
-		_on_player_health_changed(player.health, player.max_health)
-	if "energy" in player and "max_energy" in player:
-		_on_player_energy_changed(player.energy, player.max_energy)
+	
+	_on_player_health_changed(player.health, player.max_health)
+	_on_player_energy_changed(player.energy, player.movement.max_energy)
 
 func _on_player_health_changed(current_health: float, max_health_val: float) -> void:
 	if is_instance_valid(health_bar):

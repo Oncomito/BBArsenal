@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://bmbs7r5mwg5av"]
 
 [ext_resource type="Script" uid="uid://diow2kbva581p" path="res://scenes/entities/player/player.gd" id="1_dovo2"]
-[ext_resource type="Script" uid="uid://clvah8ou2bpn5" path="res://scenes/entities/player/components/movement.gd" id="2_0ioy2"]
-[ext_resource type="PackedScene" uid="uid://df5q2n7kwv8bx" path="res://scenes/entities/player/player_shield.tscn" id="2_shield"]
+[ext_resource type="Script" uid="uid://clvah8ou2bpn5" path="res://scenes/entities/player/components/player_movement.gd" id="2_0ioy2"]
+[ext_resource type="PackedScene" uid="uid://df5q2n7kwv8bx" path="res://scenes/entities/player/components/player_shield.tscn" id="2_shield"]
 [ext_resource type="Texture2D" uid="uid://b1rlyp1ve0bxb" path="res://assets/sprites/entities/player_idle.png" id="3_h17s1"]
-[ext_resource type="Script" uid="uid://opjkc17hxgcl" path="res://scenes/entities/player/components/visual.gd" id="3_vlhku"]
+[ext_resource type="Script" uid="uid://opjkc17hxgcl" path="res://scenes/entities/player/components/player_visual.gd" id="3_vlhku"]
 [ext_resource type="Texture2D" uid="uid://dnx5bn74u03sp" path="res://assets/sprites/entities/player_interact.png" id="4_je7p5"]
 [ext_resource type="Texture2D" uid="uid://bjh7xo70y54gk" path="res://assets/sprites/entities/player_run.png" id="5_fm80t"]
 [ext_resource type="Texture2D" uid="uid://cfyy412qg6sns" path="res://assets/sprites/entities/player_walk.png" id="6_gx1jg"]
-[ext_resource type="Script" uid="uid://stjj62kfx2ja" path="res://scenes/entities/player/player_hitbox.gd" id="10_fm80t"]
-[ext_resource type="Script" uid="uid://b04vsgu4sdfex" path="res://scenes/entities/player/player_hurtbox.gd" id="12_gx1jg"]
-[ext_resource type="Script" uid="uid://dfs3okclp6mxo" path="res://scenes/entities/bodybox2d.gd" id="13_bodybox"]
-[ext_resource type="Script" uid="uid://dtyjkljak3my1" path="res://scenes/entities/player/components/combat.gd" id="96_i6ap2"]
-[ext_resource type="Script" uid="uid://cu7ciodfgy1vo" path="res://scenes/entities/player/components/resource.gd" id="98_88c1f"]
+[ext_resource type="Script" uid="uid://stjj62kfx2ja" path="res://scenes/entities/player/components/player_hitbox.gd" id="10_fm80t"]
+[ext_resource type="Script" uid="uid://b04vsgu4sdfex" path="res://scenes/entities/player/components/player_hurtbox.gd" id="12_gx1jg"]
+[ext_resource type="Script" uid="uid://dfs3okclp6mxo" path="res://scenes/entities/components/bodybox2d.gd" id="13_bodybox"]
+[ext_resource type="Script" uid="uid://dtyjkljak3my1" path="res://scenes/entities/player/components/player_combat.gd" id="96_i6ap2"]
+[ext_resource type="Script" uid="uid://cu7ciodfgy1vo" path="res://scenes/entities/player/components/player_resource.gd" id="98_88c1f"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cpwp1"]
 radius = 21.0
@@ -609,9 +609,16 @@ radius = 11.81794
 radius = 34.0
 height = 108.0
 
-[node name="Player" type="CharacterBody2D" unique_id=1797968289 groups=["player"]]
+[node name="Player" type="CharacterBody2D" unique_id=1797968289 node_paths=PackedStringArray("movement", "visual", "combat", "resource", "camera") groups=["player"]]
 collision_mask = 6
 script = ExtResource("1_dovo2")
+controllable = true
+movement = NodePath("Movement")
+visual = NodePath("Visual")
+combat = NodePath("Combat")
+resource = NodePath("Resource")
+has_camera = true
+camera = NodePath("Camera")
 
 [node name="Camera" type="Camera2D" parent="." unique_id=615915563]
 position = Vector2(1, -60)
@@ -623,8 +630,9 @@ position = Vector2(0, -21)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_cpwp1")
 
-[node name="Visual" type="Node2D" parent="." unique_id=489736720]
+[node name="Visual" type="Node2D" parent="." unique_id=489736720 node_paths=PackedStringArray("sprite")]
 script = ExtResource("3_vlhku")
+sprite = NodePath("Sprite")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="Visual" unique_id=1813115174]
 texture_filter = 1
@@ -635,8 +643,9 @@ animation = &"walk_up"
 autoplay = "idle_down"
 frame_progress = 0.2777772
 
-[node name="Movement" type="Node2D" parent="." unique_id=1565010811]
+[node name="Movement" type="Node2D" parent="." unique_id=1565010811 node_paths=PackedStringArray("bodybox")]
 script = ExtResource("2_0ioy2")
+bodybox = NodePath("Bodybox")
 
 [node name="DashTimer" type="Timer" parent="Movement" unique_id=1126209666]
 wait_time = 0.55
@@ -649,8 +658,10 @@ script = ExtResource("13_bodybox")
 position = Vector2(0, -55)
 shape = SubResource("CapsuleShape2D_behr0")
 
-[node name="Combat" type="Node2D" parent="." unique_id=230784090]
+[node name="Combat" type="Node2D" parent="." unique_id=230784090 node_paths=PackedStringArray("shield", "hitbox")]
 script = ExtResource("96_i6ap2")
+shield = NodePath("Shield")
+hitbox = NodePath("Hitbox")
 
 [node name="ParryTimer" type="Timer" parent="Combat" unique_id=855689762]
 
@@ -666,8 +677,9 @@ position = Vector2(-2, -51)
 scale = Vector2(5.6718726, 5.6718726)
 shape = SubResource("CircleShape2D_behr0")
 
-[node name="Resource" type="Node2D" parent="." unique_id=47659580]
+[node name="Resource" type="Node2D" parent="." unique_id=47659580 node_paths=PackedStringArray("hurtbox")]
 script = ExtResource("98_88c1f")
+hurtbox = NodePath("Hurtbox")
 
 [node name="Hurtbox" type="Area2D" parent="Resource" unique_id=1924747312]
 script = ExtResource("12_gx1jg")
@@ -676,6 +688,6 @@ script = ExtResource("12_gx1jg")
 position = Vector2(0, -46)
 shape = SubResource("CapsuleShape2D_1mmru")
 
-[connection signal="animation_finished" from="Visual/Sprite" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="timeout" from="Movement/DashTimer" to="." method="_on_dash_timer_timeout"]
-[connection signal="timeout" from="Combat/ParryTimer" to="." method="_on_parry_timer_timeout"]
+[connection signal="animation_finished" from="Visual/Sprite" to="Visual" method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="timeout" from="Movement/DashTimer" to="Movement" method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="Combat/ParryTimer" to="Combat" method="_on_parry_timer_timeout"]

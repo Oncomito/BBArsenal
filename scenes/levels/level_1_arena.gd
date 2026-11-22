@@ -235,7 +235,7 @@ func _start_tutorial() -> void:
 	ui_parent.add_child(dash_ui)
 	while is_inside_tree():
 		await get_tree().process_frame
-		if is_instance_valid(player) and bool(player.get("is_dashing")):
+		if is_instance_valid(player) and bool(player.movement.is_dashing):
 			break
 	await get_tree().create_timer(0.35).timeout
 	if is_instance_valid(dash_ui):
@@ -248,7 +248,7 @@ func _start_tutorial() -> void:
 	ui_parent.add_child(parry_ui)
 	while is_inside_tree():
 		await get_tree().process_frame
-		if is_instance_valid(player) and bool(player.get("is_attacking")):
+		if is_instance_valid(player) and bool(player.combat.is_attacking):
 			break
 	await get_tree().create_timer(0.35).timeout
 	if is_instance_valid(parry_ui):
@@ -261,7 +261,7 @@ func _start_tutorial() -> void:
 	ui_parent.add_child(shield_ui)
 	while is_inside_tree():
 		await get_tree().process_frame
-		if is_instance_valid(player) and bool(player.get("is_shield_active")):
+		if is_instance_valid(player) and bool(player.combat.is_shield_active):
 			break
 	await get_tree().create_timer(0.35).timeout
 	if is_instance_valid(shield_ui):
@@ -324,8 +324,8 @@ func _on_all_enemies_cleared() -> void:
 		trap_door.visible = false
 
 	AudioManager.play_sfx("blast", 0.75, 2.0)
-	if is_instance_valid(player) and player.has_method("camera_shake"):
-		player.camera_shake(14.0, 0.3)
+	if is_instance_valid(player):
+		player.visual.camera_shake(14.0, 0.3)
 
 	if trap_door_zone:
 		trap_door_zone.set_deferred("monitoring", true)

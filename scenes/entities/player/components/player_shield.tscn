@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://df5q2n7kwv8bx"]
 
-[ext_resource type="Script" uid="uid://bj7v5c8vqt1tf" path="res://scenes/entities/player/player_shield.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bj7v5c8vqt1tf" path="res://scenes/entities/player/components/player_shield.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://gkihuv3a36gf" path="res://assets/sprites/vfx/shield.png" id="2_shield_tex"]
 [ext_resource type="Texture2D" uid="uid://dweoldo5e2lge" path="res://assets/sprites/projectiles/hits.png" id="tex_hit"]
 

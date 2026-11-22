@@ -94,10 +94,10 @@ tracks/1/path = NodePath("Logo/Label:theme_override_fonts/font:spacing_glyph")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.35, 0.55, 1.1, 1.6, 2.2),
-"transitions": PackedFloat32Array(-2, -2, -2, -2, -2, -2, -2),
+"times": PackedFloat32Array(0, 0.2, 0.55, 2.2),
+"transitions": PackedFloat32Array(2, 2, 2, -2),
 "update": 1,
-"values": [0, 8, 6, 4, 6, 4, 12]
+"values": [0, 6, 2, 12]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -158,8 +158,8 @@ metadata/_edit_use_anchors_ = true
 [node name="BackdropGlow" type="ColorRect" parent="." unique_id=1600740123]
 offset_left = 578.7635
 offset_top = 330.89517
-offset_right = 1378.7638
-offset_bottom = 765.8949
+offset_right = 1378.7622
+offset_bottom = 765.89734
 color = Color(0.09, 0.14, 0.26, 0.45)
 metadata/_edit_use_anchors_ = true
 
