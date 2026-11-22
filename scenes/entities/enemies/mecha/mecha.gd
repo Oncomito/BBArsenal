@@ -1,3 +1,5 @@
+@tool
+class_name Mecha
 extends Enemy
 
 @export var stop_distance: float = 220.0
@@ -10,6 +12,10 @@ var _cooldown_elapsed: float = 0.0
 
 func _ready() -> void:
 	super._ready()
+	
+	if Engine.is_editor_hint():
+		return
+
 	is_boss = false
 	speed = 180.0
 	health_bar = $Stats/Health

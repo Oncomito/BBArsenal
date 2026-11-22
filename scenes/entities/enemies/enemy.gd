@@ -1,24 +1,28 @@
+@tool
+@icon("res://assets/_project/node/enemy.svg")
 class_name Enemy
-extends Entity
+extends Entity2D
 
-var player: Node2D = null
 var _flash_timer: float = 0.0
-@export var is_boss: bool = false
+@export var player: Player
 @export var speed: float = 100.0
 @export var health_bar: ProgressBar
 @export var cooldown_bar: ProgressBar
 @export var attack_cooldown: float = 2.0
 @export var attack_range: float = 1000.0
 @export var damage: float = 5.0
-
-@onready var animated_sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
+@export var is_boss: bool = false
 
 
 func _ready() -> void:
 	super._ready()
+	
+	if Engine.is_editor_hint():
+		return
+
 	player = get_tree().get_first_node_in_group("player")
-	if is_instance_valid(animated_sprite):
-		animated_sprite.play("walk")
+	if is_instance_valid(sprite):
+		sprite.play("walk")
 
 
 func _update_enemy_movement(move_speed: float, stop_distance: float) -> float:
@@ -28,8 +32,8 @@ func _update_enemy_movement(move_speed: float, stop_distance: float) -> float:
 
 	var to_player: Vector2 = player.global_position - global_position
 	var distance: float = to_player.length()
-	if is_instance_valid(animated_sprite) and absf(to_player.x) > 10.0:
-		animated_sprite.flip_h = to_player.x < 0.0
+	if is_instance_valid(sprite) and absf(to_player.x) > 10.0:
+		sprite.flip_h = to_player.x < 0.0
 
 	if distance > stop_distance:
 		velocity = to_player.normalized() * move_speed
@@ -40,9 +44,9 @@ func _update_enemy_movement(move_speed: float, stop_distance: float) -> float:
 
 
 func _flash_on_hit(color: Color, duration: float) -> void:
-	if not is_instance_valid(animated_sprite):
+	if not is_instance_valid(sprite):
 		return
-	animated_sprite.modulate = color
+	sprite.modulate = color
 	_flash_timer = duration
 
 
@@ -50,8 +54,8 @@ func _update_hit_flash(delta: float) -> void:
 	if _flash_timer <= 0.0:
 		return
 	_flash_timer -= delta
-	if _flash_timer <= 0.0 and is_instance_valid(animated_sprite):
-		animated_sprite.modulate = Color.WHITE
+	if _flash_timer <= 0.0 and is_instance_valid(sprite):
+		sprite.modulate = Color.WHITE
 
 func _die() -> void:
 	if is_dead:

@@ -1,9 +1,8 @@
-@icon("res://assets/_project/node/visual.svg")
+@tool
 class_name PlayerVisual
-extends Node2D
+extends Visual2D
 
-
-const HIT_EFFECT_SCENE := preload("res://scenes/projectiles/hit.tscn")
+var _locked_animation: String = ""
 
 var actor: Player
 
@@ -15,7 +14,7 @@ func setup_flash_shader() -> void:
 	if shader:
 		actor.flash_material = ShaderMaterial.new()
 		actor.flash_material.shader = shader
-		actor.animated_sprite.material = actor.flash_material
+		actor.sprite.material = actor.flash_material
 
 func flash_white(duration: float = 0.1) -> void:
 	if actor.flash_material == null:
@@ -63,8 +62,42 @@ func spawn_hit_effect(
 	if current_scene == null:
 		return
 
-	var hit := HIT_EFFECT_SCENE.instantiate()
+	var hit := actor.HIT_EFFECT_SCENE.instantiate()
 	hit.global_position = world_position
 	hit.scale = effect_scale
 	hit.animation_name = animation_name
 	current_scene.call_deferred("add_child", hit)
+
+func _play_animation(animation_name: String) -> void:
+	if not _locked_animation.is_empty():
+		return
+	if sprite.animation != animation_name:
+		sprite.play(animation_name)
+
+func _play_locked_animation(animation_name: String) -> void:
+	_locked_animation = animation_name
+	sprite.play(animation_name)
+
+func _update_movement_animation() -> void:
+	if actor.is_dead or actor.is_transitioning:
+		return
+
+	var input_direction := Input.get_vector(
+		"player_left", "player_right", "player_up", "player_down"
+	)
+	if actor.movement.is_dashing:
+		_play_animation("run_" + actor.facing_direction)
+	elif not actor.combat.is_attacking:
+		if input_direction != Vector2.ZERO:
+			_play_animation("run_" + actor.facing_direction)
+		else:
+			_play_animation("idle_" + actor.facing_direction)
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	if _locked_animation.is_empty() or sprite.animation != _locked_animation:
+		return
+
+	_locked_animation = ""
+	if actor.is_dead or actor.is_transitioning or actor.combat.is_attacking:
+		return
+	_update_movement_animation()

@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://crnyw87fqibnl" path="res://assets/sprites/environment/neo_zero_03.png" id="4_cbqr1"]
 [ext_resource type="PackedScene" uid="uid://bhvd1xjol6d7v" path="res://scenes/obstacles/server.tscn" id="5_ayho6"]
 [ext_resource type="PackedScene" uid="uid://bmbs7r5mwg5av" path="res://scenes/entities/player/player.tscn" id="6_a1j43"]
-[ext_resource type="PackedScene" uid="uid://bak0col2suuby" path="res://scenes/entities/enemies/spawner.tscn" id="7_0vq7m"]
+[ext_resource type="PackedScene" uid="uid://bak0col2suuby" path="res://scenes/entities/enemies/components/spawner.tscn" id="7_0vq7m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qxqh0"]
 texture = ExtResource("2_8n3d0")
