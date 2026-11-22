@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/projectiles/effect.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cwycm81sgvhor" path="res://scenes/projectiles/effect.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dweoldo5e2lge" path="res://assets/sprites/projectiles/hits.png" id="2_ijabqabul"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_arcane_0"]

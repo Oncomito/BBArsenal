@@ -74,7 +74,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("3_hudgd")
-layout_id = "bottom_left"
+layout_id = 1
 
 [node name="Button" type="Button" parent="." unique_id=2020490796]
 layout_mode = 0

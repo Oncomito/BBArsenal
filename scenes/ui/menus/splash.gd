@@ -33,9 +33,10 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if viewport and viewport.get_texture():
 		var img: Image = viewport.get_texture().get_image()
 		if img:
-			var err := img.save_png("res://assets/_project/splash_screen.png")
-			if err != OK:
-				push_error("Failed to save screenshot: " + str(err))
+			pass
+			# var err := img.save_png("res://assets/_project/splash_screen.png")
+			# if err != OK:
+			# 	push_error("Failed to save screenshot: " + str(err))
 				
 	_go_to_main_menu()
 

@@ -81,7 +81,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_n3ctc")
-layout_id = "top_bar"
+layout_id = 0
 
 [node name="BossFight" type="Control" parent="." unique_id=1317237785]
 visible = false

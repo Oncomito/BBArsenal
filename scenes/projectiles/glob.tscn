@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scenes/projectiles/projectile.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bobvgcrli7fia" path="res://scenes/projectiles/projectile.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://0jn2aae67dsq" path="res://assets/sprites/projectiles/globs.png" id="2_glbo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_arcane_0"]

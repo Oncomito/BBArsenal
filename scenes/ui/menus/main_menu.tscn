@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://8j80xajuke7s" path="res://assets/sprites/environment/neo_zero_02.png" id="1_keln3"]
 [ext_resource type="Texture2D" uid="uid://bjw207b6cyg5m" path="res://assets/sprites/props/neo_zero_02.png" id="2_crctu"]
 [ext_resource type="Texture2D" uid="uid://crnyw87fqibnl" path="res://assets/sprites/environment/neo_zero_03.png" id="3_sn5u3"]
-[ext_resource type="PackedScene" uid="uid://jg355rx0ga43" path="res://scenes/player/player_npc.tscn" id="5_fkd6t"]
+[ext_resource type="PackedScene" uid="uid://jg355rx0ga43" path="res://scenes/entities/npc/player_npc.tscn" id="5_fkd6t"]
 [ext_resource type="PackedScene" uid="uid://bhvd1xjol6d7v" path="res://scenes/obstacles/server.tscn" id="5_wko7x"]
 [ext_resource type="PackedScene" uid="uid://dejysd7bu3y7o" path="res://scenes/ui/menus/main_menu_ui.tscn" id="6_keln3"]
 

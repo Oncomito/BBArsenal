@@ -7,7 +7,7 @@ const SHIELD_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_shield.tscn"
 const OH_NO_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_oh_no.tscn")
 const TO_THE_LEVELS_UI_SCENE := preload("res://scenes/ui/tutorial/tutorial_to_levels.tscn")
 
-const BOSS_SCENE := preload("res://scenes/enemies/mecha_boss.tscn")
+const BOSS_SCENE := preload("res://scenes/entities/enemies/bosses/mecha_overlord/mecha_overlord.tscn")
 const HUD_TOP_BAR_UI_SCENE := preload("res://scenes/ui/hud/hud_top_bar.tscn")
 const MOBILE_HUD_UI_SCENE := preload("res://scenes/ui/mobile/mobile_hud.tscn")
 const LEVELS_UI_SCENE := preload("res://scenes/ui/hud/levels_ui.tscn")
@@ -31,10 +31,11 @@ var _tutorial_waiting_enemies: bool = false
 @onready var trap_door_zone: Area2D = get_node_or_null("TrapDoorZone")
 
 func _ready() -> void:
-	AudioManager.play_music("gameplay")
 	if not is_instance_valid(player):
 		player = get_tree().get_first_node_in_group("player") as CharacterBody2D
 	_setup_trapdoor_zone()
+	AudioManager.play_music("gameplay")
+	AudioManager.fade_in(0.5)
 
 	if spawner:
 		if "auto_start_on_ready" in spawner:

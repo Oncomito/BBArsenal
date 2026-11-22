@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://dlfjxu6q6eaop"]
+[gd_scene format=3 uid="uid://baqgm8b5saa13"]
 
-[ext_resource type="Script" uid="uid://bj7v5c8vqt1tf" path="res://scenes/player/shield.gd" id="1_fsxwr"]
+[ext_resource type="Script" uid="uid://bj7v5c8vqt1tf" path="res://scenes/entities/player/player_shield.gd" id="1_fsxwr"]
 [ext_resource type="Texture2D" uid="uid://gkihuv3a36gf" path="res://assets/sprites/vfx/shield.png" id="2_gel85"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xn2la"]

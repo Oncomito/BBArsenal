@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://8j80xajuke7s" path="res://assets/sprites/environment/neo_zero_02.png" id="4_ja4oh"]
 [ext_resource type="Texture2D" uid="uid://bjw207b6cyg5m" path="res://assets/sprites/props/neo_zero_02.png" id="5_w7jva"]
 [ext_resource type="Texture2D" uid="uid://crnyw87fqibnl" path="res://assets/sprites/environment/neo_zero_03.png" id="6_4fe88"]
-[ext_resource type="PackedScene" uid="uid://bmbs7r5mwg5av" path="res://scenes/player/player.tscn" id="7_player"]
+[ext_resource type="PackedScene" uid="uid://bmbs7r5mwg5av" path="res://scenes/entities/player/player.tscn" id="7_player"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g5mkm"]
 texture = ExtResource("4_ja4oh")
