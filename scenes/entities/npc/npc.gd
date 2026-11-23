@@ -2,8 +2,9 @@
 @icon("res://assets/_project/node/npc.svg")
 class_name NPC
 extends Entity2D
-
+var _knockback_velocity: Vector2 = Vector2.ZERO
 var _flash_timer: float = 0.0
+@export var knockback_friction: float = 2800.0
 @export var player: Player
 @export var speed: float = 100.0
 @export var health_bar: ProgressBar
@@ -31,6 +32,10 @@ func _ready() -> void:
 	if is_instance_valid(sprite):
 		sprite.play("walk")
 
+func apply_knockback(impulse: Vector2) -> void:
+	if is_boss:
+		impulse *= 0.25 
+	_knockback_velocity = impulse
 
 func _update_enemy_movement(move_speed: float, stop_distance: float) -> float:
 	if not is_instance_valid(player):
@@ -46,6 +51,12 @@ func _update_enemy_movement(move_speed: float, stop_distance: float) -> float:
 		velocity = to_player.normalized() * move_speed
 	else:
 		velocity = Vector2.ZERO
+
+	if _knockback_velocity.length() > 10.0:
+		velocity += _knockback_velocity
+		_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, knockback_friction * get_physics_process_delta_time())
+	else:
+		_knockback_velocity = Vector2.ZERO
 	move_and_slide()
 	return distance
 
