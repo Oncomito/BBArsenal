@@ -2,10 +2,10 @@ extends Node2D
 
 signal all_enemies_cleared
 
-@export var enemy_scene: PackedScene = preload("res://scenes/entities/enemies/mecha/mecha.tscn")
+@export var enemy_scene: PackedScene = preload("res://scenes/entities/npc/enemies/mecha.tscn")
 @export var spawn_area: ReferenceRect
 @export var enemy_scenes: Array[PackedScene] = [
-	preload("res://scenes/entities/enemies/mecha/mecha.tscn")
+	preload("res://scenes/entities/npc/enemies/mecha.tscn")
 ]
 @export var max_enemies: int = 2
 @export var min_player_distance: float = 250.0

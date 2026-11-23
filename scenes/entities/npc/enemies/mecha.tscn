@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dy2eclfjpfkqu"]
 
-[ext_resource type="Script" uid="uid://cmle2lvlapfdv" path="res://scenes/entities/enemies/mecha/mecha.gd" id="1_f0rex"]
+[ext_resource type="Script" uid="uid://cmle2lvlapfdv" path="res://scenes/entities/npc/enemies/mecha.gd" id="1_f0rex"]
 [ext_resource type="Script" uid="uid://olu1e3l3kwms" path="res://scenes/entities/components/visual2d.gd" id="2_fxiv2"]
 [ext_resource type="Texture2D" uid="uid://cjo3ua28fim8b" path="res://assets/sprites/entities/mecha_red.png" id="2_nk2bs"]
-[ext_resource type="Script" uid="uid://bwu86crptewsa" path="res://scenes/entities/enemies/components/enemy_hitbox.gd" id="3_rl1l3"]
-[ext_resource type="Script" uid="uid://djy5vv6jhlbux" path="res://scenes/entities/enemies/components/enemy_hurtbox.gd" id="4_nw3om"]
+[ext_resource type="Script" uid="uid://bwu86crptewsa" path="res://scenes/entities/npc/enemies/components/enemy_hitbox.gd" id="3_rl1l3"]
+[ext_resource type="Script" uid="uid://djy5vv6jhlbux" path="res://scenes/entities/npc/enemies/components/enemy_hurtbox.gd" id="4_nw3om"]
 [ext_resource type="Script" uid="uid://c4iqnodqkp4gg" path="res://scenes/entities/components/movement2d.gd" id="4_tqxph"]
 [ext_resource type="Script" uid="uid://dfs3okclp6mxo" path="res://scenes/entities/components/bodybox2d.gd" id="5_nw3om"]
 [ext_resource type="Script" uid="uid://bc5y5abfxfry2" path="res://scenes/entities/components/combat2d.gd" id="6_q5tny"]
@@ -109,11 +109,12 @@ radius = 124.0
 radius = 90.0
 height = 234.0
 
-[node name="Mecha" type="CharacterBody2D" unique_id=1926874390 node_paths=PackedStringArray("movement", "visual", "combat", "resource") groups=["enemy"]]
+[node name="Mecha" type="CharacterBody2D" unique_id=1926874390 node_paths=PackedStringArray("health_bar", "cooldown_bar", "movement", "visual", "combat", "resource") groups=["enemy"]]
 collision_layer = 8
 collision_mask = 4
 script = ExtResource("1_f0rex")
-max_health = 180.0
+health_bar = NodePath("Stats/Health")
+cooldown_bar = NodePath("Stats/Cooldown")
 movement = NodePath("Movement")
 visual = NodePath("Visual")
 combat = NodePath("Combat")

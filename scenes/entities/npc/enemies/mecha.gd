@@ -1,6 +1,6 @@
 @tool
 class_name Mecha
-extends Enemy
+extends NPC
 
 @export var stop_distance: float = 220.0
 @export var projectile_kind: String = "fireball"

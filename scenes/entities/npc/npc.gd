@@ -1,6 +1,6 @@
 @tool
-@icon("res://assets/_project/node/enemy.svg")
-class_name Enemy
+@icon("res://assets/_project/node/npc.svg")
+class_name NPC
 extends Entity2D
 
 var _flash_timer: float = 0.0
@@ -13,6 +13,13 @@ var _flash_timer: float = 0.0
 @export var damage: float = 5.0
 @export var is_boss: bool = false
 
+enum Faction {NEUTRAL, FRIENDLY, HOSTILE}
+
+const FACTION_ICONS := {
+	Faction.NEUTRAL: preload("res://assets/_project/node/neutral.svg"),
+	Faction.FRIENDLY: preload("res://assets/_project/node/friendly.svg"),
+	Faction.HOSTILE: preload("res://assets/_project/node/enemy.svg"),
+}
 
 func _ready() -> void:
 	super._ready()

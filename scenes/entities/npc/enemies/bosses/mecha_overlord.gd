@@ -1,5 +1,6 @@
-extends Enemy
-## Boss Mecha enemy cycling through multi-type ProjectileManager barrage patterns.
+@tool
+class_name MechaOverlord
+extends NPC
 
 signal health_changed(current_health: float, max_health: float)
 signal boss_defeated
@@ -14,6 +15,10 @@ var _pattern_index: int = 0
 
 func _ready() -> void:
 	super._ready()
+	
+	if Engine.is_editor_hint():
+		return
+
 	is_boss = true
 	speed = 135.0
 	health_bar = $Stats/Health
