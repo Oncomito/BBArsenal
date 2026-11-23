@@ -17,7 +17,7 @@ const PAUSE_MENU_SCENE := preload("res://scenes/ui/menus/pause_menu.tscn")
 @onready var boss_hp_label: Label = get_node_or_null("BossFight/BossHp")
 
 var player: Player = null
-var boss: Enemy = null
+var boss: NPC = null
 var _is_swapping: bool = false
 
 func _ready() -> void:

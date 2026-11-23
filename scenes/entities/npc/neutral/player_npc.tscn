@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://jg355rx0ga43"]
 
-[ext_resource type="Script" uid="uid://codk3jkcciu5" path="res://scenes/entities/npc/player_npc.gd" id="1_1v3s0"]
+[ext_resource type="Script" uid="uid://codk3jkcciu5" path="res://scenes/entities/npc/neutral/player_npc.gd" id="1_1v3s0"]
 [ext_resource type="Texture2D" uid="uid://b1rlyp1ve0bxb" path="res://assets/sprites/entities/player_idle.png" id="2_elj4x"]
 [ext_resource type="Texture2D" uid="uid://dnx5bn74u03sp" path="res://assets/sprites/entities/player_interact.png" id="3_yq3kr"]
 [ext_resource type="Texture2D" uid="uid://bjh7xo70y54gk" path="res://assets/sprites/entities/player_run.png" id="4_t276l"]

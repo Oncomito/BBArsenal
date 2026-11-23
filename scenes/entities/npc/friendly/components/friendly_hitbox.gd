@@ -1,0 +1,2 @@
+class_name FriendlyHitbox
+extends Hitbox2D

@@ -1,0 +1,2 @@
+class_name FriendlyHurtbox
+extends Hurtbox2D
