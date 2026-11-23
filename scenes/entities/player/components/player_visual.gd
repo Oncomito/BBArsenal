@@ -53,6 +53,11 @@ func update_camera_shake(delta: float) -> void:
 		actor.camera.offset = Vector2.ZERO
 		actor._shake_intensity = 0.0
 
+func hitstop(time_scale: float = 0.05, duration: float = 0.05) -> void:
+	Engine.time_scale = time_scale
+	await actor.get_tree().create_timer(duration, true, false, true).timeout
+	Engine.time_scale = 1.0
+
 func spawn_hit_effect(
 	world_position: Vector2,
 	effect_scale: Vector2,

@@ -92,6 +92,7 @@ func _physics_process(delta: float) -> void:
 		combat.handle_speed_damage(current_speed)
 	elif combat._bounce_attack_timer <= 0.0:
 		combat._dash_hit_enemies.clear()
+		combat.bounce_combo = 0
 
 	if combat.is_attacking:
 		combat.check_parry()
