@@ -1,6 +1,7 @@
+@tool
 @icon("res://assets/_project/node/player.svg")
 class_name Player
-extends Entity
+extends Entity2D
 
 # INFO: So, yeah, I actually changed the structure to be Object-Oriented Programming.
 # Why? Because with OOP, all functions can be localized to specific uses.
@@ -11,67 +12,81 @@ extends Entity
 
 # WARN: This is not finished. I will probably refactor this again.
 
-const HIT_EFFECT_SCENE := preload("res://scenes/projectiles/hit.tscn")
-
 signal health_changed(current_health: float, max_health: float)
 signal energy_changed(current_energy: float, max_energy: float)
 signal player_died
 signal dash_count_changed(current_count: int, max_count: int)
 
-@onready var movement: PlayerMovement = $Movement
-@onready var visual: PlayerVisual = $Visual
-@onready var combat: PlayerCombat = $Combat
-@onready var resource: PlayerResource = $Resource
 
-@export_group("Movement")
+@export_category("Movement")
+@export_subgroup("Normal")
 @export var speed: float = 1945.0
 @export var acceleration: float = 1945.0
 @export var friction: float = 1800.0
+
+@export_subgroup("Dash")
 @export var dash_speed_multiplier: float = 2.5
+@export var dash_cooldown: float = 0.2
+@export var dash_duration: float = 0.16
+
+@export_subgroup("Bounce")
 @export_range(1.0, 2.0, 0.05) var dash_bounce_factor: float = 1.1
 @export var dash_bounce_acceleration_multiplier: float = 1.12
 @export var bounce_factor: float = 1.0
-@export var min_bounce_speed: float = 0.0
 @export var bounce_lockout: float = 0.06
+@export var min_bounce_speed: float = 0.0
 @export var max_bounce_speed: float = 4200.0
 @export var max_bounce_acceleration: float = 2800.0
 @export var bounce_boost_decay: float = 2000.0
 
-@export_group("Energy & Dash")
+@export_category("Energy & Shield")
+@export_subgroup("Energy")
 @export var max_energy: float = 100.0
 @export var dash_energy_cost: float = 20.0
-@export var dash_cooldown: float = 0.2
-@export var dash_duration: float = 0.16
+
+@export_subgroup("Energy Regeneration")
 @export var energy_regen_rate: float = 10.0
 @export var energy_regen_delay: float = 1.0
 @export var energy_exhausted_regen_delay: float = 1.5
+
+@export_subgroup("Exhausted Movement")
 @export_range(0.1, 1.0, 0.05) var exhausted_speed_multiplier: float = 0.1
-@export var dash_damage: float = 35.0
-@export var parry_cooldown: float = 0.75
-@export_range(0.0, 1.0, 0.05) var speed_damage_min_speed_ratio: float = 0.5
-@export var dash_invulnerability_duration: float = 0.25
-@export var parry_invulnerability_duration: float = 0.2
 
-
-@export var dash_final_bounce_factor: float = 1.02
-@export var bounce_attack_window: float = 0.75
-
-@export var dash_hit_radius: float = 200.0
-@export var parry_radius: float = 140.0
-
-@export_group("Shield")
+@export_subgroup("Shield")
 @export var shield_drain_rate: float = 10.0
 @export var shield_damage_energy_multiplier: float = 1.2
 
-@export_group("Hit Detection")
+@export_category("Combat")
+@export_subgroup("Dash Attack")
+@export var dash_damage: float = 35.0
+@export_range(0.0, 1.0, 0.05) var speed_damage_min_speed_ratio: float = 0.5
+@export var dash_hit_radius: float = 200.0
+@export var dash_final_bounce_factor: float = 1.02
+@export var bounce_attack_window: float = 0.75
+
+@export_subgroup("Dash Defense")
+@export var dash_invulnerability_duration: float = 0.25
+
+@export_subgroup("Parry")
+@export var parry_cooldown: float = 0.75
+@export var parry_radius: float = 140.0
+@export var parry_invulnerability_duration: float = 0.2
+
+@export_category("Targeting")
+@export_subgroup("Hit Centers")
 @export var player_hit_center_offset: Vector2 = Vector2(0.0, -75.0)
 @export var enemy_hit_center_offset: Vector2 = Vector2(0.0, -115.0)
 
-@export_group("Camera Shake")
+@export_category("Feedback")
+@export_subgroup("Camera Shake")
 @export_range(0.0, 5.0, 0.1) var shake_multiplier: float = 1.0
+
+@export_subgroup("Wall Impact Shake")
 @export var wall_hit_shake_min: float = 10.0
 @export var wall_hit_shake_max: float = 28.0
 @export var wall_hit_shake_duration: float = 0.15
+
+@export_subgroup("Damage Shake")
 @export var damage_shake_intensity: float = 48.0
 @export var damage_shake_duration: float = 0.28
 
@@ -83,7 +98,6 @@ var energy_regen_wait_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
 var parry_cooldown_timer: float = 0.0
 var _invulnerability_timer: float = 0.0
-var _bounce_lock_timer: float = 0.0
 var _bounce_attack_timer: float = 0.0
 
 var is_exhausted: bool = false
@@ -94,30 +108,15 @@ var is_attacking: bool = false
 var is_shield_active: bool = false
 var is_transitioning: bool = false
 
-
 var _dash_hit_enemies: Array = []
-var _locked_animation: String = ""
 
-var _shake_intensity: float = 0.0
-var _shake_timer: float = 0.0
-var _shake_duration: float = 0.0
 var flash_material: ShaderMaterial
 
-@onready var animated_sprite: AnimatedSprite2D = $Visual/Sprite
-@onready var camera: Camera2D = $Camera
-@onready var dash_timer: Timer = $Movement/DashTimer
-@onready var parry_timer: Timer = $Combat/ParryTimer
-@onready var shield: PlayerShield = $Combat/Shield
-@onready var hitbox: PlayerHitbox = $Combat/Hitbox
-@onready var hurtbox: PlayerHurtbox = $Resource/Hurtbox
-@onready var bodybox: Bodybox2D = $Movement/Bodybox
-
 func _ready() -> void:
-	entity_hitbox = hitbox
-	entity_hurtbox = hurtbox
-	entity_bodybox = bodybox
-
 	super._ready()
+
+	if Engine.is_editor_hint():
+		return
 
 	movement.setup(self)
 	combat.setup(self)
@@ -128,8 +127,8 @@ func _ready() -> void:
 	GameManager.player_heal.connect(heal)
 	GameManager.player_energize.connect(energize)
 
-	if has_node("Shield") and is_instance_valid(shield):
-		shield.setup(self)
+	if is_instance_valid(combat.shield):
+		combat.shield.setup(self)
 
 	normal_speed = speed
 	base_acceleration = acceleration
@@ -333,45 +332,22 @@ func _update_timers(delta: float) -> void:
 
 
 func _update_movement_animation() -> void:
-	if is_dead or is_transitioning:
-		return
-
-	var input_direction := Input.get_vector(
-		"player_left", "player_right", "player_up", "player_down"
-	)
-	if is_dashing:
-		_play_animation("run_" + facing_direction)
-	elif not is_attacking:
-		if input_direction != Vector2.ZERO:
-			_play_animation("run_" + facing_direction)
-		else:
-			_play_animation("idle_" + facing_direction)
+	visual._update_movement_animation()
 
 func _play_animation(animation_name: String) -> void:
-	if not _locked_animation.is_empty():
-		return
-	if animated_sprite.animation != animation_name:
-		animated_sprite.play(animation_name)
+	visual._play_animation(animation_name)
 
 func _play_locked_animation(animation_name: String) -> void:
-	_locked_animation = animation_name
-	animated_sprite.play(animation_name)
+	visual._play_locked_animation(animation_name)
 
 func _on_dash_timer_timeout() -> void:
 	movement.on_dash_timer_timeout()
 
 func _on_parry_timer_timeout() -> void:
-	is_attacking = false
-	_update_movement_animation()
+	combat._on_parry_timer_timeout()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
-	if _locked_animation.is_empty() or animated_sprite.animation != _locked_animation:
-		return
-
-	_locked_animation = ""
-	if is_dead or is_transitioning or is_attacking:
-		return
-	_update_movement_animation()
+	visual._on_animated_sprite_2d_animation_finished()
 
 
 func _begin_transition_state() -> void:
@@ -381,10 +357,10 @@ func _begin_transition_state() -> void:
 	_invulnerability_timer = 0.0
 	is_dashing = false
 	is_attacking = false
-	_locked_animation = ""
+	visual._locked_animation = ""
 	velocity = Vector2.ZERO
-	dash_timer.stop()
-	parry_timer.stop()
+	movement.dash_timer.stop()
+	combat.parry_timer.stop()
 
 func prepare_drop_in(target_global_position: Vector2) -> void:
 	_begin_transition_state()
@@ -393,17 +369,17 @@ func prepare_drop_in(target_global_position: Vector2) -> void:
 	facing_direction = "down"
 	_play_animation("idle_down")
 
-	animated_sprite.visible = true
-	animated_sprite.modulate = Color.WHITE
-	animated_sprite.scale = Vector2(3.6, 4.5)
-	animated_sprite.position = Vector2(1.0, -2000.0)
+	sprite.visible = true
+	sprite.modulate = Color.WHITE
+	sprite.scale = Vector2(3.6, 4.5)
+	sprite.position = Vector2(1.0, -2000.0)
 
 func play_drop_in_animation(target_global_position: Vector2) -> void:
 	prepare_drop_in(target_global_position)
 
 	var drop_tween := create_tween()
 	drop_tween.tween_property(
-		animated_sprite,
+		sprite,
 		"position",
 		Vector2(1.0, -60.0),
 		0.45
@@ -416,16 +392,16 @@ func play_drop_in_animation(target_global_position: Vector2) -> void:
 	camera_shake(18.0, 0.25)
 	_spawn_hit_effect(global_position, Vector2(5.0, 5.0), "holy")
 
-	animated_sprite.scale = Vector2(4.7, 3.3)
+	sprite.scale = Vector2(4.7, 3.3)
 	var bounce_tween := create_tween().set_parallel(true)
 	bounce_tween.tween_property(
-		animated_sprite,
+		sprite,
 		"scale",
 		Vector2(3.8, 4.2),
 		0.12
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	bounce_tween.tween_property(
-		animated_sprite,
+		sprite,
 		"position",
 		Vector2(1.0, -240.0),
 		0.12
@@ -436,13 +412,13 @@ func play_drop_in_animation(target_global_position: Vector2) -> void:
 
 	var settle_tween := create_tween().set_parallel(true)
 	settle_tween.tween_property(
-		animated_sprite,
+		sprite,
 		"scale",
 		Vector2(4.0, 4.0),
 		0.1
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	settle_tween.tween_property(
-		animated_sprite,
+		sprite,
 		"position",
 		Vector2(1.0, -60.0),
 		0.1
@@ -466,13 +442,13 @@ func play_jump_into_trapdoor(trapdoor_global_position: Vector2) -> void:
 		0.28
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	jump_up.tween_property(
-		animated_sprite,
+		sprite,
 		"position",
 		Vector2(1.0, -210.0),
 		0.26
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	jump_up.tween_property(
-		animated_sprite,
+		sprite,
 		"scale",
 		Vector2(4.4, 4.4),
 		0.26
@@ -483,19 +459,19 @@ func play_jump_into_trapdoor(trapdoor_global_position: Vector2) -> void:
 
 	var fall_in := create_tween().set_parallel(true)
 	fall_in.tween_property(
-		animated_sprite,
+		sprite,
 		"position",
 		Vector2(1.0, 30.0),
 		0.30
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	fall_in.tween_property(
-		animated_sprite,
+		sprite,
 		"scale",
 		Vector2.ZERO,
 		0.30
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	fall_in.tween_property(
-		animated_sprite,
+		sprite,
 		"modulate:a",
 		0.0,
 		0.28

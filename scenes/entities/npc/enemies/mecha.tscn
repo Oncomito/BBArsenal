@@ -113,8 +113,11 @@ height = 234.0
 collision_layer = 8
 collision_mask = 4
 script = ExtResource("1_f0rex")
+speed = 180.0
 health_bar = NodePath("Stats/Health")
 cooldown_bar = NodePath("Stats/Cooldown")
+damage = 10.0
+max_health = 360.0
 movement = NodePath("Movement")
 visual = NodePath("Visual")
 combat = NodePath("Combat")
@@ -134,8 +137,8 @@ offset_right = 147.0
 offset_bottom = -266.0
 theme_override_styles/background = SubResource("StyleBoxFlat_3qjkr")
 theme_override_styles/fill = SubResource("StyleBoxFlat_sgj0o")
-max_value = 180.0
-value = 180.0
+max_value = 360.0
+value = 100.0
 show_percentage = false
 
 [node name="Cooldown" type="ProgressBar" parent="Stats" unique_id=793550227]
@@ -147,6 +150,7 @@ offset_bottom = -260.0
 theme_override_styles/background = SubResource("StyleBoxFlat_fvs4a")
 theme_override_styles/fill = SubResource("StyleBoxFlat_t1djm")
 max_value = 2.0
+value = 2.0
 show_percentage = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1170252100]

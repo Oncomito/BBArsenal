@@ -38,15 +38,15 @@ func _process(_delta: float) -> void:
 		return
 
 	if is_instance_valid(dash_button):
-		dash_button.modulate = READY_MODULATE if current_player.movement.can_dash() else UNAVAILABLE_MODULATE
+		dash_button.modulate = READY_MODULATE if current_player.can_dash() else UNAVAILABLE_MODULATE
 
 	if is_instance_valid(parry_button):
-		parry_button.modulate = READY_MODULATE if current_player.combat.can_parry() else UNAVAILABLE_MODULATE
+		parry_button.modulate = READY_MODULATE if current_player.can_parry() else UNAVAILABLE_MODULATE
 
 	if is_instance_valid(shield_button):
-		if current_player.combat.is_shield_active:
+		if current_player.is_shield_active:
 			shield_button.modulate = SHIELD_ACTIVE_MODULATE
-		elif current_player.energy > 0.0 and not current_player.is_exhausted and not current_player.movement.is_dashing and not current_player.is_dead:
+		elif current_player.energy > 0.0 and not current_player.is_exhausted and not current_player.is_dashing and not current_player.is_dead:
 			shield_button.modulate = READY_MODULATE
 		else:
 			shield_button.modulate = UNAVAILABLE_MODULATE
@@ -72,16 +72,16 @@ func _on_dash_pressed() -> void:
 	_play_button_bounce(dash_button)
 	var current_player := _bind_player()
 	if is_instance_valid(current_player):
-		current_player.movement.perform_dash()
+		current_player.perform_dash()
 
 func _on_shield_pressed() -> void:
 	_play_button_bounce(shield_button)
 	var current_player := _bind_player()
 	if is_instance_valid(current_player):
-		current_player.combat.toggle_shield()
+		current_player.toggle_shield()
 
 func _on_parry_pressed() -> void:
 	_play_button_bounce(parry_button)
 	var current_player := _bind_player()
 	if is_instance_valid(current_player):
-		current_player.combat.perform_parry()
+		current_player.perform_parry()

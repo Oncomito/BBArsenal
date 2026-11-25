@@ -88,7 +88,7 @@ func _process(_delta: float) -> void:
 	health_bar.max_value = player.max_health
 	health_bar.value = player.health
 
-	_apply_energy_value(player.energy, player.movement.max_energy)
+	_apply_energy_value(player.energy, player.max_energy)
 
 
 func _bind_boss() -> void:
@@ -174,7 +174,7 @@ func _bind_player() -> void:
 
 	
 	_on_player_health_changed(player.health, player.max_health)
-	_on_player_energy_changed(player.energy, player.movement.max_energy)
+	_on_player_energy_changed(player.energy, player.max_energy)
 
 func _on_player_health_changed(current_health: float, max_health_val: float) -> void:
 	if is_instance_valid(health_bar):

@@ -17,9 +17,6 @@ func _ready() -> void:
 		return
 
 	is_boss = false
-	speed = 180.0
-	health_bar = $Stats/Health
-	cooldown_bar = $Stats/Cooldown
 	attack_cooldown = 2.0
 	attack_range = 1000.0
 	damage = 5.0
